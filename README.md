@@ -2,6 +2,25 @@
 
 A Moodle block plugin that provides real-time learning analytics, engagement prediction, and AI-powered pedagogical intervention tools for instructors.
 
+## Screenshots
+
+### Action Center — Urgent alerts and daily priorities
+![Action Center](screenshots/01-action-center.png)
+
+### Class List — Participation, time on course and last access
+![Class List](screenshots/02-class-list.png)
+
+### Activities — Per-resource breakdown with submission tracking
+![Activities](screenshots/03-activities.png)
+
+### Grades — Progress tracking with per-activity detail
+![Grades](screenshots/04-grades.png)
+
+### Contact Report — Intervention history and CRM
+![Contact Report](screenshots/05-contact-report.png)
+
+---
+
 ## Features
 
 - **Action Center** — Urgent alerts: students at risk of dropout, missing submissions, sudden engagement drops
@@ -13,7 +32,8 @@ A Moodle block plugin that provides real-time learning analytics, engagement pre
 - **Heatmap** — Access patterns by day/hour with student names on hover
 - **AI Recommendations** — GPT-powered suggestions for course design and individual student intervention
 - **Email Integration** — Send personalized emails via Gmail API with auto-logging to contact history
-- **Export** — XLSX export for grades, contact reports, and student lists
+- **Contact Report** — Full CRM with filters, timeline and XLSX export
+- **Export** — XLSX export for grades, contact reports and student lists
 
 ## Requirements
 
@@ -41,15 +61,14 @@ This plugin reads existing Moodle log and grade data for analysis purposes. It d
 
 ## Third-party libraries
 
-- [Chart.js](https://www.chartjs.org/) v4.4.7 (MIT License) — Charts and gauges
-- [SheetJS](https://sheetjs.com/) v0.20.3 (Apache-2.0 License) — XLSX import/export
+- [Chart.js](https://www.chartjs.org/) v4.4.7 — MIT License
+- [SheetJS](https://sheetjs.com/) v0.20.3 — Apache-2.0 License
 
 ## License
 
-This plugin is licensed under the GNU General Public License v3 or later.
-See [LICENSE](https://www.gnu.org/licenses/gpl-3.0.html) for details.
+GNU General Public License v3 or later — see [LICENSE](LICENSE) for details.
 
 ## Author
 
-Bruno Porto - 2026
-Educimat/IFES - 2026
+Bruno Porto — 2026
+Educimat/IFES — 2026
