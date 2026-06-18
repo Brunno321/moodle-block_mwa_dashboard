@@ -72,7 +72,7 @@ GNU General Public License v3 or later — see [LICENSE](LICENSE) for details.
 
 ## Documentation
 
-📖 [Full User Manual](https://brunno321.github.io/moodle-block_mwa_dashboard/) — step-by-step guide covering all features, installation and configuration.
+📖 [Full User Manual]([https://brunno321.github.io/moodle-block_mwa_dashboard/]) — step-by-step guide covering all features, installation and configuration.
 
 ## Author
 
