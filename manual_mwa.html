@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MWA Analytics Dashboard — Manual do Usuário</title>
+<style>
+  :root {
+    --blue: #2563eb;
+    --blue-light: #eff6ff;
+    --green: #16a34a;
+    --green-light: #f0fdf4;
+    --amber: #d97706;
+    --amber-light: #fffbeb;
+    --purple: #7c3aed;
+    --purple-light: #f5f3ff;
+    --teal: #0891b2;
+    --teal-light: #ecfeff;
+    --red: #dc2626;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text: #1e293b;
+    --muted: #64748b;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ── Header ── */
+  .hero {
+    background: linear-gradient(135deg, #1e3a5f 0%, #1e40af 50%, #1d4ed8 100%);
+    color: white;
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+  .hero-logo {
+    width: 80px;
+    margin-bottom: 1.5rem;
+    filter: brightness(0) invert(1);
+  }
+  .hero h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin-bottom: .5rem;
+    letter-spacing: -.03em;
+  }
+  .hero h1 span { color: #93c5fd; }
+  .hero p {
+    font-size: 1.1rem;
+    opacity: .85;
+    max-width: 580px;
+    margin: 0 auto 2rem;
+  }
+  .hero-badges {
+    display: flex;
+    gap: .75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .badge {
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 99px;
+    padding: .35rem 1rem;
+    font-size: .78rem;
+    font-weight: 600;
+  }
+
+  /* ── Layout ── */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* ── Nav ── */
+  .toc {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 8px rgba(0,0,0,.06);
+  }
+  .toc-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    gap: .25rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .toc-inner::-webkit-scrollbar { display: none; }
+  .toc-link {
+    display: inline-block;
+    padding: .85rem .9rem;
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all .15s;
+  }
+  .toc-link:hover { color: var(--blue); border-bottom-color: var(--blue); }
+
+  /* ── Sections ── */
+  .section {
+    padding: 4rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-child { border-bottom: none; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .section-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+  .section-title h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -.02em;
+  }
+  .section-title p {
+    color: var(--muted);
+    font-size: .9rem;
+    margin-top: .2rem;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: .5rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .card p { color: var(--muted); font-size: .9rem; }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 1.7rem; }
+  }
+
+  /* ── Feature cards ── */
+  .feature-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    border-left: 4px solid var(--blue);
+    transition: box-shadow .15s;
+  }
+  .feature-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.08); }
+  .feature-card.green { border-left-color: var(--green); }
+  .feature-card.amber { border-left-color: var(--amber); }
+  .feature-card.purple { border-left-color: var(--purple); }
+  .feature-card.teal { border-left-color: var(--teal); }
+  .feature-card.red { border-left-color: var(--red); }
+
+  .feature-icon { font-size: 1.8rem; margin-bottom: .75rem; }
+  .feature-title { font-size: 1rem; font-weight: 700; margin-bottom: .4rem; }
+  .feature-desc { font-size: .85rem; color: var(--muted); line-height: 1.55; }
+
+  /* ── Steps ── */
+  .steps { counter-reset: step; }
+  .step {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: flex-start;
+  }
+  .step-num {
+    background: var(--blue);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: .1rem;
+  }
+  .step-content h4 { font-size: .95rem; font-weight: 700; margin-bottom: .25rem; }
+  .step-content p { font-size: .85rem; color: var(--muted); }
+
+  /* ── Tags ── */
+  .tag {
+    display: inline-block;
+    background: var(--blue-light);
+    color: var(--blue);
+    border-radius: 6px;
+    padding: .15rem .55rem;
+    font-size: .72rem;
+    font-weight: 700;
+    margin-right: .3rem;
+    margin-bottom: .3rem;
+  }
+  .tag.green { background: var(--green-light); color: var(--green); }
+  .tag.amber { background: var(--amber-light); color: var(--amber); }
+  .tag.purple { background: var(--purple-light); color: var(--purple); }
+
+  /* ── Info box ── */
+  .info-box {
+    background: var(--blue-light);
+    border: 1px solid #bfdbfe;
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    font-size: .88rem;
+    color: #1e40af;
+    margin: 1rem 0;
+    display: flex;
+    gap: .75rem;
+    align-items: flex-start;
+  }
+  .info-box.green { background: var(--green-light); border-color: #bbf7d0; color: #166534; }
+  .info-box.amber { background: var(--amber-light); border-color: #fde68a; color: #92400e; }
+
+  /* ── Table ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .88rem;
+    margin: 1rem 0;
+  }
+  th {
+    background: var(--bg);
+    font-weight: 700;
+    text-align: left;
+    padding: .75rem 1rem;
+    border-bottom: 2px solid var(--border);
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--muted);
+  }
+  td {
+    padding: .75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg); }
+
+  /* ── Code ── */
+  code {
+    background: #f1f5f9;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: .1rem .4rem;
+    font-size: .82rem;
+    font-family: 'Courier New', monospace;
+    color: #be123c;
+  }
+
+  /* ── Score formula ── */
+  .formula {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    font-family: 'Courier New', monospace;
+    font-size: .9rem;
+    margin: 1rem 0;
+    line-height: 1.8;
+  }
+  .formula .comment { color: #64748b; }
+  .formula .num { color: #93c5fd; }
+  .formula .var { color: #86efac; }
+
+  /* ── Footer ── */
+  .footer {
+    background: #0f172a;
+    color: #94a3b8;
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    font-size: .85rem;
+  }
+  .footer a { color: #60a5fa; text-decoration: none; }
+  .footer strong { color: white; }
+
+  /* ── Divider ── */
+  .divider { height: 1px; background: var(--border); margin: 2rem 0; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <img class="hero-logo" src="https://raw.githubusercontent.com/Brunno321/moodle-block_mwa_dashboard/main/screenshots/logo.png" alt="MWA" onerror="this.style.display='none'" />
+  <h1>MWA <span>Analytics</span> Dashboard</h1>
+  <p>Manual completo do usuário — aprenda a usar cada função da dashboard para tomar decisões pedagógicas com dados.</p>
+  <div class="hero-badges">
+    <span class="badge">🎓 Para professores e tutores</span>
+    <span class="badge">📊 Learning Analytics</span>
+    <span class="badge">🤖 IA integrada</span>
+    <span class="badge">🔗 Moodle 4.1+</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="toc">
+  <div class="toc-inner">
+    <a class="toc-link" href="#visao-geral">Visão Geral</a>
+    <a class="toc-link" href="#central-acoes">Central de Ações</a>
+    <a class="toc-link" href="#lista-turma">Lista da Turma</a>
+    <a class="toc-link" href="#atividades">Atividades</a>
+    <a class="toc-link" href="#notas">Notas</a>
+    <a class="toc-link" href="#heatmap">Heatmap</a>
+    <a class="toc-link" href="#predicao">Predição</a>
+    <a class="toc-link" href="#perfil">Perfil do Aluno</a>
+    <a class="toc-link" href="#email">Email com IA</a>
+    <a class="toc-link" href="#relatorio">Relatório</a>
+    <a class="toc-link" href="#ia">IA & Planos</a>
+    <a class="toc-link" href="#instalacao">Instalação</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ════════════════════════════════════════ -->
+<!-- VISÃO GERAL -->
+<!-- ════════════════════════════════════════ -->
+<section class="section" id="visao-geral">
+  <div class="section-header">
+    <div class="section-icon" style="background:#eff6ff;">🗺️</div>
+    <div class="section-title">
+      <h2>Visão Geral</h2>
+      <p>O que é o MWA Dashboard e como ele funciona</p>
+    </div>
+  </div>
+
+  <p style="font-size:1rem;margin-bottom:1.5rem;max-width:700px;">O <strong>MWA Analytics Dashboard</strong> é uma ferramenta de análise de aprendizado que transforma os logs de acesso e as notas do Moodle em informações acionáveis para o professor. Em vez de apenas mostrar números, ele indica <em>o que fazer</em> com cada dado.</p>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">📥 De onde vêm os dados?</div>
+      <p>Os dados são carregados diretamente do Moodle via integração automática (plugin) ou por exportação manual dos logs em JSON e das notas em XLSX.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">👥 Para quem é?</div>
+      <p>Professores, tutores e coordenadores que precisam acompanhar o engajamento, identificar alunos em risco e registrar intervenções pedagógicas.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🔒 Privacidade</div>
+      <p>Nenhum dado é enviado para servidores externos. Tudo roda no seu Moodle. As anotações e histórico de contatos ficam salvos localmente no navegador.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3 style="margin-bottom:1rem;">Estrutura da navegação</h3>
+  <table>
+    <thead>
+      <tr><th>Seção</th><th>O que faz</th><th>Melhor usar quando</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>🎯 Central de Ações</strong></td><td>Lista as ações urgentes do dia</td><td>Ao abrir a dashboard</td></tr>
+      <tr><td><strong>🔔 Alertas</strong></td><td>Padrões de risco detectados automaticamente</td><td>Revisão semanal</td></tr>
+      <tr><td><strong>👥 Lista da Turma</strong></td><td>Todos os alunos com engajamento e tempo</td><td>Análise individual</td></tr>
+      <tr><td><strong>📚 Atividades</strong></td><td>Quem acessou, entregou ou não por recurso</td><td>Após prazo de entrega</td></tr>
+      <tr><td><strong>🏆 Notas</strong></td><td>Notas com progresso e detalhes por atividade</td><td>Análise de desempenho</td></tr>
+      <tr><td><strong>🔥 Heatmap</strong></td><td>Quando os alunos acessam o curso</td><td>Planejar conteúdo</td></tr>
+      <tr><td><strong>🔮 Predição</strong></td><td>Score de engajamento e risco de evasão</td><td>Intervir preventivamente</td></tr>
+      <tr><td><strong>👤 Perfil Individual</strong></td><td>CRM completo de cada aluno</td><td>Antes de ligar ou enviar email</td></tr>
+      <tr><td><strong>✦ Plano Personalizado</strong></td><td>Recomendações de IA por aluno</td><td>Intervenção individualizada</td></tr>
+      <tr><td><strong>📋 Relatório de Contatos</strong></td><td>Histórico de todas as intervenções</td><td>Reuniões de coordenação</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- CENTRAL DE AÇÕES -->
+<!-- ════════════════════════════════════════ -->
+<section class="section" id="central-acoes">
+  <div class="section-header">
+    <div class="section-icon" style="background:#fff1f2;">🎯</div>
+    <div class="section-title">
+      <h2>Central de Ações</h2>
+      <p>Página inicial — o que precisa ser feito hoje</p>
+    </div>
+  </div>
+
+  <p style="margin-bottom:1.5rem;">A Central de Ações é a primeira tela que o professor vê ao abrir a dashboard. Em vez de dados brutos, ela apresenta diretamente <strong>as ações que precisam ser tomadas</strong>, organizadas por urgência.</p>
+
+  <div class="grid-3" style="margin-bottom:1.5rem;">
+    <div class="feature-card red">
+      <div class="feature-icon">🔴</div>
+      <div class="feature-title">URGENTE — Alunos em risco</div>
+      <div class="feature-desc">Alunos sem acesso há mais de 7 dias. Cada aluno aparece como badge clicável. Botão de email com IA integrado para intervir imediatamente.</div>
+    </div>
+    <div class="feature-card amber">
+      <div class="feature-icon">🟡</div>
+      <div class="feature-title">ATENÇÃO — Atividades com baixo engajamento</div>
+      <div class="feature-desc">Atividades com menos de 50% de alcance dos alunos. Lista cada recurso com o percentual e botão para analisar.</div>
+    </div>
+    <div class="feature-card" style="border-left-color:#7c3aed">
+      <div class="feature-icon">💡</div>
+      <div class="feature-title">OPORTUNIDADE — Insight da IA</div>
+      <div class="feature-desc">Sugestão de ação baseada nos padrões de acesso. Ex: "Pico às 16h — publique conteúdo antes desse horário."</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 KPIs da turma</div>
+    <p>Abaixo dos cards de ação aparecem os indicadores gerais: <strong>Alunos no log</strong>, <strong>Interações totais</strong>, <strong>Média por aluno</strong>, <strong>Em risco</strong> e <strong>Nota média</strong>. Cada um tem um ícone <code>?</code> com explicação de como o valor é calculado. As setas mostram variação em relação à semana anterior.</p>
+  </div>
+
+  <div class="info-box">
+    💡 <div><strong>Dica:</strong> Use o filtro de aluno no topo da tela para focar em um único aluno. Todos os KPIs, atividades e gráficos são recalculados para aquele aluno específico.</div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- LISTA DA TURMA -->
+<!-- ════════════════════════════════════════ -->
+<section class="section" id="lista-turma">
+  <div class="section-header">
+    <div class="section-icon" style="background:#f0fdf4;">👥</div>
+    <div class="section-title">
+      <h2>Lista da Turma</h2>
+      <p>Visão geral de todos os alunos com métricas de participação</p>
+    </div>
+  </div>
+
+  <p style="margin-bottom:1.5rem;">Tabela com todos os alunos do curso ordenados por interações (padrão). Cada linha mostra um resumo completo do aluno.</p>
+
+  <table>
+    <thead>
+      <tr><th>Coluna</th><th>O que significa</th><th>Como interpretar</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Avatar + Nome</strong></td>
+        <td>Iniciais coloridas + nome completo + email</td>
+        <td>Clique no nome ou no ícone 👤 para abrir o perfil CRM do aluno</td>
+      </tr>
+      <tr>
+        <td><strong>Último acesso</strong></td>
+        <td>Data e hora do último evento no log</td>
+        <td>Vermelho = mais de 7 dias. Verde = recente. Mostra também total de interações.</td>
+      </tr>
+      <tr>
+        <td><strong>Dias sem acesso</strong></td>
+        <td>Quantidade de dias desde o último acesso</td>
+        <td>Acima de 7 dias acende alerta. Acima de 21 dias = risco crítico.</td>
+      </tr>
+      <tr>
+        <td><strong>Participação no curso</strong></td>
+        <td>Barra de progresso + percentual de engajamento</td>
+        <td>Combina nota (50%), cobertura de atividades (30%) e entregas (20%).</td>
+      </tr>
+      <tr>
+        <td><strong>Tempo total</strong></td>
+        <td>Tempo estimado de estudo (baseado em sessões)</td>
+        <td>Calculado por gaps de acesso: gap &gt;5min = nova sessão, teto de 30min por sessão.</td>
+      </tr>
+      <tr>
+        <td><strong>Interações</strong></td>
+        <td>Total de eventos no log do Moodle</td>
+        <td>Inclui acessos, visualizações e entregas. Não indica qualidade, só quantidade.</td>
+      </tr>
+      <tr>
+        <td><strong>Badges coloridas</strong></td>
+        <td>Atividades com entrega pendente</td>
+        <td>Números 1, 2, 3 indicam as tarefas/quizzes que o aluno viu mas não entregou.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="info-box amber">
+    ⚠️ <div><strong>Score de participação:</strong> quando o XLSX de notas está carregado e o aluno não tem nenhuma nota lançada, o score é limitado a no máximo 35% (Baixa participação), independente do número de interações. Isso evita que tutores ou alunos inativos apareçam como "Média".</div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- ATIVIDADES -->
+<!-- ════════════════════════════════════════ -->
+<section class="section" id="atividades">
+  <div class="section-header">
+    <div class="section-icon" style="background:#ecfeff;">📚</div>
+    <div class="section-title">
+      <h2>Atividades Acessadas</h2>
+      <p>Quem acessou, quem entregou e quem não apareceu — por recurso</p>
+    </div>
+  </div>
+
+  <p style="margin-bottom:1.5rem;">Cards para cada recurso do curso (fórum, tarefa, quiz, H5P, livro, etc.) mostrando o alcance e a situação de cada aluno.</p>
+
+  <div class="grid-2" style="margin-bottom:1.5rem;">
+    <div>
+      <h3 style="margin-bottom:.75rem;">Filtros por tipo</h3>
+      <p style="margin-bottom:.75rem;font-size:.9rem;color:var(--muted);">Use as abas abaixo dos KPIs para filtrar por tipo de recurso:</p>
+      <div>
+        <span class="tag">🗂 Todos</span>
+        <span class="tag">💬 Fóruns</span>
+        <span class="tag">📝 Tarefas</span>
+        <span class="tag">❓ Quiz / H5P / SCORM</span>
+        <span class="tag">📖 Conteúdo / Recursos</span>
+      </div>
+    </div>
+    <div>
+      <h3 style="margin-bottom:.75rem;">KPIs da aba</h3>
+      <div class="card" style="padding:1rem;">
+        <p style="font-size:.85rem;"><strong>Recursos únicos</strong> — total de atividades distintas no log<br>
+        <strong>Total de acessos</strong> — soma de todos os eventos<br>
+        <strong>Alunos distintos</strong> — quantos alunos diferentes acessaram<br>
+        <strong>Média por recurso</strong> — média de alunos por atividade</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:.75rem;">Modal de detalhe (clique em qualquer card)</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">✅ Entregaram / Acessaram</div>
+      <p>Alunos que realizaram a entrega (tarefas/quizzes) ou postaram (fóruns). Badges verdes com ✓. Clique no nome para ir ao perfil do aluno.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">❌ Viu mas não entregou</div>
+      <p>Alunos que acessaram a atividade mas não entregaram. Badges vermelhos com ✗. Candidatos prioritários para intervenção.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">⬜ Sem acesso registrado</div>
+      <p>Alunos que nunca acessaram aquela atividade. Podem nem saber que ela existe.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">⏱️ Tempo por aluno</div>
+      <p>Tempo estimado que cada aluno passou naquele recurso, ordenado do maior para o menor. Cor verde = alta dedicação, âmbar = média, vermelho = baixa.</p>
+    </div>
+  </div>
+
+  <div class="info-box green">
+    ✅ <div><strong>Lógica de entrega:</strong> para tarefas e quizzes, só é contado como "entregou" quem de fato submeteu. O Moodle às vezes marca "conclusão automática" sem entrega real — o MWA ignora essa marcação e usa apenas eventos de submissão explícita.</div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- NOTAS -->
+<!-- ════════════════════════════════════════ -->
+<section class="section" id="notas">
+  <div class="section-header">
+    <div class="section-icon" style="background:#fffbeb;">🏆</div>
+    <div class="section-title">
+      <h2>Notas</h2>
+      <p>Análise de desempenho cruzada com engajamento</p>
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:1.5rem;">
+    <div class="feature-card green">
+      <div class="feature-icon">✅</div>
+      <div class="feature-title">Aprovados</div>
+      <div class="feature-desc">Alunos com nota total ≥ 60 pts. Nome clicável (azul) abre o perfil individual.</div>
+    </div>
+    <div class="feature-card amber">
+      <div class="feature-icon">⏳</div>
+      <div class="feature-title">Em Progresso</div>
+      <div class="feature-desc">Abaixo de 60 pts mas com notas lançadas. Botão 👤 abre o perfil. Mostra nota atual e quanto falta para aprovação.</div>
+    </div>
+    <div class="feature-card" style="border-left-color:#94a3b8">
+      <div class="feature-icon">⬜</div>
+      <div class="feature-title">Sem Nota</div>
+      <div class="feature-desc">Alunos sem nenhuma nota lançada no XLSX. Botão 👤 abre o perfil.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem;">
+    <div class="card-title">📋 Modal de detalhes de nota</div>
+    <p>Clique no botão <code>X/Y lançadas 📋</code> em qualquer linha para abrir um modal com a nota de cada atividade individualmente. Verde ≥ 6pts, âmbar &gt; 0pts, vermelho = 0pts, traço = não lançada.</p>
+  </div>
+
+  <h3 style="margin-bottom:.75rem;">Filtros e exportação</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🔍 Buscar aluno</div>
+      <p>Campo de texto que filtra em tempo real os nomes nas três tabelas simultaneamente.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 Exportar planilha</div>
+      <p>Gera um arquivo .xlsx com: Aluno, Nota Total, Status e uma coluna para cada atividade avaliada. O nome do arquivo inclui o curso e a data.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- HEATMAP -->
+<!-- ════════════════════════════════════════ -->
+<section class="section" id="heatmap">
+  <div class="section-header">
+    <div class="section-icon" style="background:#fff7ed;">🔥</div>
+    <div class="section-title">
+      <h2>Heatmap de Acesso</h2>
+      <p>Quando sua turma está mais ativa</p>
+    </div>
+  </div>
+
+  <p style="margin-bottom:1.5rem;">Mapa de calor mostrando os acessos distribuídos por hora (0h–23h) e dia (últimos 14 dias). Quanto mais azul a célula, mais acessos naquele horário.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">📌 Como usar</div>
+      <p>Passe o mouse sobre qualquer célula azul para ver o número de interações e os primeiros nomes dos alunos que acessaram naquele momento. Ideal para decidir quando publicar novos conteúdos ou abrir fóruns.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">💡 Insight prático</div>
+      <p>Se o pico de acessos é terça às 16h, publique conteúdo novo na segunda à tarde. Alunos tendem a acessar logo após a notificação chegar no horário que já estão no ambiente.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- PREDIÇÃO -->
+<!-- ════════════════════════════════════════ -->
+<section class="section" id="predicao">
+  <div class="section-header">
+    <div class="section-icon" style="background:#f5f3ff;">🔮</div>
+    <div class="section-title">
+      <h2>Predição de Engajamento</h2>
+      <p>Score multidimensional e risco de evasão</p>
+    </div>
+  </div>
+
+  <p style="margin-bottom:1.5rem;">O velocímetro de engajamento calcula um score de 0 a 100 para cada aluno e classifica a turma em três faixas.</p>
+
+  <h3 style="margin-bottom:1rem;">Fórmula do score</h3>
+  <div class="formula">
+    <span class="comment">// Com XLSX de notas carregado e aluno com nota:</span><br>
+    <span class="var">score</span> = <span class="num">gradeScore × 50%</span> + <span class="num">coverScore × 30%</span> + <span class="num">delivery × 20%</span><br><br>
+    <span class="comment">// Com XLSX mas aluno sem nota (ou nota não lançada):</span><br>
+    <span class="var">score</span> = min(<span class="num">35</span>, <span class="num">coverScore × 30%</span>) <span class="comment">→ sempre Baixa</span><br><br>
+    <span class="comment">// Sem XLSX:</span><br>
+    <span class="var">score</span> = <span class="num">coverScore × 60%</span> + <span class="num">delivery × 40%</span>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:1.5rem;">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <div class="card-title" style="color:var(--red);">🔴 Baixa participação</div>
+      <p>Score &lt; 40. Alunos que precisam de intervenção imediata. Sem nota lançada sempre cai nessa faixa.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--blue);">
+      <div class="card-title" style="color:var(--blue);">🔵 Participação média</div>
+      <p>Score entre 40 e 69. Contribuem mas há espaço para melhorar. Bons candidatos para incentivo.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green);">
+      <div class="card-title" style="color:var(--green);">🟢 Alta participação</div>
+      <p>Score ≥ 70. Alunos mais engajados — completam atividades e têm boa cobertura de conteúdo.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚠️ Alerta de evasão</div>
+    <p>Alunos sem acesso há mais de <strong>7 dias</strong> são marcados como risco de evasão. O score de risco cresce progressivamente até 14 dias (score máximo = 100). Prioridade: &gt;21 dias = urgente, &gt;7 dias = médio.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- PERFIL DO ALUNO -->
+<!-- ════════════════════════════════════════ -->
+<section class="section" id="perfil">
+  <div class="section-header">
+    <div class="section-icon" style="background:#f0fdf4;">👤</div>
+    <div class="section-title">
+      <h2>Perfil Individual do Aluno</h2>
+      <p>CRM completo — histórico, notas e intervenções</p>
+    </div>
+  </div>
+
+  <p style="margin-bottom:1.5rem;">Painel lateral (slide panel) que abre ao clicar no ícone 👤 em qualquer lugar da dashboard. Centraliza tudo sobre um aluno em um só lugar.</p>
+
+  <div class="grid-2">
+    <div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Resumo do aluno</h4>
+            <p>Avatar, nome, email, último acesso, total de interações, tempo estimado de estudo e score de participação.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Atividade recente (7 dias)</h4>
+            <p>Gráfico de barras com os acessos dos últimos 7 dias. Permite ver se o aluno está ativo ou inativo na semana.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Anotações privadas</h4>
+            <p>Campo de texto para notas do professor sobre o aluno. Salvo localmente no navegador. Não visível para o aluno.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>Histórico de contatos</h4>
+            <p>Linha do tempo de todas as intervenções: emails enviados, ligações, reuniões. Com data, tipo e resultado.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-title">📝 Registrar contato manual</div>
+        <p>Botão para registrar uma ligação, reunião ou mensagem que não passou pelo email da dashboard. Permite marcar o resultado: Respondeu / Não respondeu / Em acompanhamento.</p>
+      </div>
+      <div class="card" style="margin-top:1rem;">
+        <div class="card-title">🤖 Botão CRM</div>
+        <p>Abre o painel de CRM diretamente do perfil. Permite ver todas as interações históricas e adicionar novas intervenções sem sair da tela.</p>
+      </div>
+      <div class="info-box" style="margin-top:1rem;">
+        💡 <div>Acesse o perfil por qualquer badge de aluno nas telas de Atividades, Notas, Predição ou pela Lista da Turma.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- EMAIL COM IA -->
+<!-- ════════════════════════════════════════ -->
+<section class="section" id="email">
+  <div class="section-header">
+    <div class="section-icon" style="background:#eff6ff;">✉️</div>
+    <div class="section-title">
+      <h2>Email com IA</h2>
+      <p>Envie mensagens personalizadas para alunos em risco via Gmail</p>
+    </div>
+  </div>
+
+  <div class="steps" style="max-width:600px;">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Conectar Gmail</h4>
+        <p>Clique em "Entrar com Google" no topo da dashboard. A autenticação usa OAuth2 — nenhuma senha é armazenada.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Escolher modelo</h4>
+        <p>Selecione o tipo de email: Reengajamento, Incentivo, Alerta de prazo ou Personalizado.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Gerar com IA</h4>
+        <p>Clique em "✦ Gerar com IA" para criar um email personalizado com os dados do aluno (nome, dias sem acesso, atividades pendentes).</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Revisar e enviar</h4>
+        <p>Edite o texto se necessário, adicione CC e clique em Enviar. O envio é registrado automaticamente no histórico de contatos do aluno.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box amber">
+    ⚠️ <div><strong>Requisito:</strong> o email do aluno precisa estar cadastrado no Moodle. Alunos sem email aparecem como "sem email" no perfil e não recebem emails pela dashboard.</div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- RELATÓRIO DE CONTATOS -->
+<!-- ════════════════════════════════════════ -->
+<section class="section" id="relatorio">
+  <div class="section-header">
+    <div class="section-icon" style="background:#f0fdf4;">📋</div>
+    <div class="section-title">
+      <h2>Relatório de Contatos</h2>
+      <p>Histórico consolidado de todas as intervenções pedagógicas</p>
+    </div>
+  </div>
+
+  <p style="margin-bottom:1.5rem;">Visão completa de todas as intervenções feitas com os alunos — emails enviados, ligações registradas e reuniões — com filtros e exportação.</p>
+
+  <div class="grid-2">
+    <div>
+      <h3 style="margin-bottom:.75rem;">Filtros disponíveis</h3>
+      <div class="card">
+        <p>
+          <span class="tag">📚 Por curso</span>
+          <span class="tag">📋 Por tipo</span>
+          <span class="tag">✅ Por resultado</span>
+          <span class="tag">🔍 Por aluno</span>
+        </p>
+        <p style="margin-top:.75rem;">Combine filtros para encontrar, por exemplo, todos os alunos que não responderam ao contato neste mês.</p>
+      </div>
+    </div>
+    <div>
+      <h3 style="margin-bottom:.75rem;">Exportar planilha</h3>
+      <div class="card">
+        <p>Gera um arquivo .xlsx com todas as colunas: Aluno, Curso, Tipo de contato, Resultado, Data e Observações. Ideal para relatórios de coordenação ou reuniões pedagógicas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- IA & PLANOS -->
+<!-- ════════════════════════════════════════ -->
+<section class="section" id="ia">
+  <div class="section-header">
+    <div class="section-icon" style="background:#faf5ff;">🤖</div>
+    <div class="section-title">
+      <h2>IA & Planos Personalizados</h2>
+      <p>Recomendações geradas por inteligência artificial</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem;">
+    <div class="feature-card purple">
+      <div class="feature-icon">✦</div>
+      <div class="feature-title">Análise Prescritiva da Turma</div>
+      <div class="feature-desc">Identifica automaticamente padrões problemáticos: conteúdos com muito acesso mas sem entrega, queda brusca de engajamento, alunos "fantasma" que pararam de acessar. Sugere ações para cada padrão.</div>
+    </div>
+    <div class="feature-card purple">
+      <div class="feature-icon">📋</div>
+      <div class="feature-title">Plano Personalizado por Aluno</div>
+      <div class="feature-desc">Gera um plano de estudo individualizado baseado nos dados do aluno: atividades pendentes, tempo de estudo, padrão de acesso e notas. Inclui sugestões de cronograma e estratégias de engajamento.</div>
+    </div>
+    <div class="feature-card purple">
+      <div class="feature-icon">💬</div>
+      <div class="feature-title">Chat com a Turma</div>
+      <div class="feature-desc">Interface de chat onde o professor pode fazer perguntas sobre os dados da turma em linguagem natural. Ex: "Quem são os alunos com mais risco de evasão esta semana?"</div>
+    </div>
+    <div class="feature-card purple">
+      <div class="feature-icon">🔔</div>
+      <div class="feature-title">Alertas Inteligentes</div>
+      <div class="feature-desc">Detecta automaticamente padrões críticos: viu mas não entregou, queda brusca de engajamento, alunos que desapareceram. Cada alerta vem com uma sugestão de intervenção.</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    💡 <div><strong>Como a IA funciona:</strong> os dados do curso (logs anonimizados e estatísticas agregadas) são enviados para a API do GPT para gerar as análises. Nenhum dado pessoal identificável é enviado — apenas contagens, percentuais e padrões comportamentais.</div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- INSTALAÇÃO -->
+<!-- ════════════════════════════════════════ -->
+<section class="section" id="instalacao">
+  <div class="section-header">
+    <div class="section-icon" style="background:#f0fdf4;">⚙️</div>
+    <div class="section-title">
+      <h2>Instalação e Configuração</h2>
+      <p>Como instalar no Moodle e usar localmente</p>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <h3 style="margin-bottom:1rem;">🔌 Plugin Moodle (recomendado)</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Baixar o plugin</h4>
+            <p>Faça download do ZIP em <a href="https://github.com/Brunno321/moodle-block_mwa_dashboard" style="color:var(--blue)">GitHub</a> ou no Moodle Plugins Directory.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Instalar no Moodle</h4>
+            <p>Administração do Site → Plugins → Instalar plugins → Upload do ZIP.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Adicionar o bloco</h4>
+            <p>Na página do curso, ative a edição e adicione o bloco "MWA Analytics Dashboard".</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>Abrir a dashboard</h4>
+            <p>Clique em "Abrir Dashboard" no bloco. Os dados são carregados automaticamente.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3 style="margin-bottom:1rem;">📁 Uso local (sem Moodle)</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Abrir o arquivo</h4>
+            <p>Baixe o <code>dashboard.html</code> e abra diretamente no navegador (Chrome recomendado).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Exportar o log do Moodle</h4>
+            <p>No Moodle: Administração → Relatórios → Logs → Selecione o curso → Baixar como JSON.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Exportar as notas</h4>
+            <p>Notas → Exportar → Formato Excel (.xlsx) → Exportar.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>Fazer upload na dashboard</h4>
+            <p>Arraste o JSON e o XLSX para as áreas de upload na tela inicial. Os dados são processados localmente.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:1rem;">
+        <div class="card-title">📋 Requisitos mínimos</div>
+        <p>
+          <span class="tag green">Moodle 4.1+</span>
+          <span class="tag green">PHP 7.4+</span>
+          <span class="tag green">logstore_standard ativo</span><br><br>
+          Navegador: Chrome 90+, Firefox 88+, Edge 90+, Safari 14+
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <p style="margin-bottom:.5rem;"><strong>MWA Analytics Dashboard</strong> — Manual do Usuário</p>
+  <p>Plugin open source licenciado sob <strong>GNU GPL v3</strong> · <a href="https://github.com/Brunno321/moodle-block_mwa_dashboard">GitHub</a> · <a href="https://github.com/Brunno321/moodle-block_mwa_dashboard/issues">Reportar problema</a></p>
+  <p style="margin-top:.5rem;font-size:.78rem;opacity:.6;">Desenvolvido por Bruno Porto · 2026</p>
+</div>
+
+</body>
+</html>
