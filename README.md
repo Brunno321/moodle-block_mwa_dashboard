@@ -29,7 +29,6 @@ A Moodle block plugin that provides real-time learning analytics, engagement pre
 - **Student Profiles** — Individual CRM with contact history, private notes, and engagement timeline
 - **Activity Analysis** — Per-resource breakdown showing who accessed, who submitted, who didn't
 - **Time-on-Resource** — Session-based time estimation per student per activity
-- **Grade Analytics** — Import XLSX grade files for cross-referencing with engagement data
 - **Heatmap** — Access patterns by day/hour with student names on hover
 - **AI Recommendations** — GPT-powered suggestions for course design and individual student intervention
 - **Email Integration** — Send personalized emails via Gmail API with auto-logging to contact history
@@ -74,3 +73,4 @@ GNU General Public License v3 or later — see [LICENSE](LICENSE) for details.
 ## Author
 
 Bruno Porto — 2026
+Educimat/IFES - 2026
