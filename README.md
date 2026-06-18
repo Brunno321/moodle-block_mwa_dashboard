@@ -1,4 +1,4 @@
-# moodle-block_mwa_dashboard
+# MWA Analytics Dashboard
 
 A Moodle block plugin that provides real-time learning analytics, engagement prediction, and AI-powered pedagogical intervention tools for instructors.
 
@@ -29,6 +29,7 @@ A Moodle block plugin that provides real-time learning analytics, engagement pre
 - **Student Profiles** — Individual CRM with contact history, private notes, and engagement timeline
 - **Activity Analysis** — Per-resource breakdown showing who accessed, who submitted, who didn't
 - **Time-on-Resource** — Session-based time estimation per student per activity
+- **Grade Analytics** — Import XLSX grade files for cross-referencing with engagement data
 - **Heatmap** — Access patterns by day/hour with student names on hover
 - **AI Recommendations** — GPT-powered suggestions for course design and individual student intervention
 - **Email Integration** — Send personalized emails via Gmail API with auto-logging to contact history
@@ -54,6 +55,8 @@ Alternatively, extract the ZIP into `/blocks/mwa_dashboard/` and visit the admin
 
 1. Navigate to a course where you have teacher/manager role
 2. Click **Open Dashboard** in the MWA block
+3. The plugin automatically fetches logs and grades from Moodle
+4. Optionally connect Gmail for AI-assisted email sending
 
 ## Privacy
 
@@ -71,4 +74,3 @@ GNU General Public License v3 or later — see [LICENSE](LICENSE) for details.
 ## Author
 
 Bruno Porto — 2026
-Educimat/IFES — 2026
