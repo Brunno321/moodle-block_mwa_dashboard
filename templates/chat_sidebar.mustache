@@ -1,0 +1,12 @@
+{{#conversations}}
+  <div style="display:flex;align-items:center;border-radius:var(--radius);{{#active}}background:var(--blue-dim){{/active}}">
+    <div style="flex:1;padding:.4rem .5rem;cursor:pointer;font-size:.76rem;overflow:hidden;{{#active}}color:var(--blue);font-weight:700;{{/active}}" data-chat-load="{{id}}">
+      <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{title}}</div>
+      <div style="font-size:.63rem;opacity:.6;">{{date}}</div>
+    </div>
+    <span data-chat-del="{{id}}" title="Excluir" style="cursor:pointer;padding:.2rem .35rem;font-size:.75rem;opacity:.4;flex-shrink:0;" onmouseenter="this.style.opacity=1" onmouseleave="this.style.opacity=.4">✕</span>
+  </div>
+{{/conversations}}
+{{^conversations}}
+  <div style="font-size:.75rem;color:var(--muted);padding:.5rem;">{{emptylabel}}</div>
+{{/conversations}}

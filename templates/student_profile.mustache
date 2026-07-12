@@ -1,0 +1,61 @@
+<div class="sp-header-card">
+  <div class="sp-avatar" style="background:{{avatarcolor}};">{{initials}}</div>
+  <div class="sp-header-info">
+    <h2 class="sp-header-name">{{name}}</h2>
+    <div class="sp-header-email">{{email}}</div>
+    <div class="sp-header-tags">
+      <span class="sp-tag">📅 {{firstdate}} – {{lastdate}}</span>
+      <span class="sp-tag">💡 {{totalinteractions}} {{interactionslabel}}</span>
+    </div>
+  </div>
+  <div class="sp-header-actions">
+    <button class="sp-btn-email" data-sname="{{name}}" data-semail="{{rawemail}}" onclick="window.MWAInterventions&&window.MWAInterventions.openByEl(this)">✉️ Mensagem</button>
+    <button class="sp-btn-crm" onclick="window.showPage&&window.showPage('interventions')">📊 Histórico</button>
+  </div>
+</div>
+<div class="sp-kpi-row">
+  <div class="sp-kpi">
+    <div class="sp-kpi-label">{{lastaccesslabel}}</div>
+    <div class="sp-kpi-val" style="color:{{agocolor}};">{{ago}}d</div>
+    <div class="sp-kpi-sub">{{lastdate}}</div>
+  </div>
+  <div class="sp-kpi">
+    <div class="sp-kpi-label">{{activedayslabel}}</div>
+    <div class="sp-kpi-val" style="color:var(--teal);">{{uniquedays}}</div>
+    <div class="sp-kpi-sub">{{total}} {{interactionslabel}}</div>
+  </div>
+  <div class="sp-kpi">
+    <div class="sp-kpi-label">{{gradelabel}}</div>
+    <div class="sp-kpi-val" style="color:{{gradecolor}};">{{gradevalue}}</div>
+    <div class="sp-kpi-sub">{{gradesub}}</div>
+  </div>
+  <div class="sp-kpi">
+    <div class="sp-kpi-label">{{engagementkpilabel}}</div>
+    <div class="sp-kpi-val" style="color:{{engcolor}};font-size:1.1rem;">{{englabel}}</div>
+    <div class="sp-kpi-sub">score {{score}}/100</div>
+  </div>
+</div>
+<div class="sp-section">
+  <div class="sp-section-head">
+    📊 {{activity7d}}
+    <div class="sp-section-right">{{{trendhtml}}}</div>
+  </div>
+  <div class="sp-section-body">
+    <div class="sp-sparkline-wrap">
+      <svg width="70" height="36" viewBox="0 0 70 36" style="display:block;">{{{sparksvg}}}</svg>
+      <span style="font-size:.78rem;color:var(--muted);padding-bottom:2px;">{{weekinteractions}} {{weeklabel}}</span>
+    </div>
+  </div>
+</div>
+<div class="sp-section">
+  <div class="sp-section-head">📅 Timeline — últimos 30 dias</div>
+  <div class="sp-section-body"><div id="spTimeline_{{calendarid}}"></div></div>
+</div>
+<div class="sp-section">
+  <div class="sp-section-head">📈 {{dailyjourney}}</div>
+  <div class="sp-section-body"><div style="height:180px;"><canvas id="spDailyChart"></canvas></div></div>
+</div>
+<div class="sp-section" style="margin-top:18px;">
+  <div class="sp-section-head">📅 {{activitycalendar}}</div>
+  <div class="sp-section-body"><div id="{{calendarid}}"></div></div>
+</div>
