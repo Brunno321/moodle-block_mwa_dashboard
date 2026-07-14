@@ -1,0 +1,254 @@
+.block-mwa-dashboard-app /* ── PERFIL DO ALUNO ── block_mwa_dashboard */
+
+/* Selector de aluno */
+.sp-selector-bar{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow);
+}.block-mwa-dashboard-app .sp-selector-label{
+  font-size: .82rem;
+  font-weight: 800;
+  color: var(--muted);
+  white-space: nowrap;
+}.block-mwa-dashboard-app .sp-selector-select{
+  flex: 1;
+  background: var(--panel);
+  border: 1px solid var(--line2);
+  border-radius: 12px;
+  padding: 9px 14px;
+  font-family: inherit;
+  font-size: .88rem;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  outline: none;
+  max-width: 400px;
+  transition: border-color .15s;
+}.block-mwa-dashboard-app .sp-selector-select:focus{ border-color: var(--blue); }.block-mwa-dashboard-app /* Header do perfil */
+.sp-header-card{
+  background: linear-gradient(135deg, var(--panel2), var(--panel3));
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  padding: 22px 24px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: var(--shadow);
+}.block-mwa-dashboard-app .sp-avatar{
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(91,155,213,.3);
+}.block-mwa-dashboard-app .sp-header-info{ flex: 1; min-width: 0; }.block-mwa-dashboard-app .sp-header-name{
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--text);
+  margin: 0 0 3px;
+}.block-mwa-dashboard-app .sp-header-email{
+  font-size: .8rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+}.block-mwa-dashboard-app .sp-header-tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}.block-mwa-dashboard-app .sp-tag{
+  background: var(--panel3);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: .72rem;
+  font-weight: 700;
+}.block-mwa-dashboard-app .sp-header-actions{
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}.block-mwa-dashboard-app .sp-btn-email{
+  background: linear-gradient(135deg, var(--blue2), var(--blue));
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 9px 16px;
+  font-family: inherit;
+  font-size: .8rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(91,155,213,.28);
+  transition: transform .15s;
+}.block-mwa-dashboard-app .sp-btn-email:hover{ transform: translateY(-1px); }.block-mwa-dashboard-app .sp-btn-crm{
+  background: var(--panel);
+  color: var(--muted);
+  border: 1px solid var(--line2);
+  border-radius: 12px;
+  padding: 9px 16px;
+  font-family: inherit;
+  font-size: .8rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}.block-mwa-dashboard-app .sp-btn-crm:hover{ border-color: var(--blue); color: var(--blue); }.block-mwa-dashboard-app /* KPI row */
+.sp-kpi-row{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+@media (max-width: 900px) {.block-mwa-dashboard-app .sp-kpi-row{ grid-template-columns: repeat(2, 1fr); } }.block-mwa-dashboard-app .sp-kpi{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+}.block-mwa-dashboard-app .sp-kpi-label{
+  font-size: .65rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--muted);
+  margin-bottom: 6px;
+}.block-mwa-dashboard-app .sp-kpi-val{
+  font-size: 1.5rem;
+  font-weight: 900;
+  line-height: 1;
+  font-family: 'DM Mono', ui-monospace, monospace;
+}.block-mwa-dashboard-app .sp-kpi-sub{
+  font-size: .72rem;
+  color: var(--muted);
+  margin-top: 4px;
+}.block-mwa-dashboard-app /* Bloco genérico de seção */
+.sp-section{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow);
+}.block-mwa-dashboard-app .sp-section-head{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 18px;
+  background: var(--panel2);
+  border-bottom: 1px solid var(--line);
+  font-size: .82rem;
+  font-weight: 900;
+  color: var(--text);
+}.block-mwa-dashboard-app .sp-section-head .sp-section-right{
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}.block-mwa-dashboard-app .sp-section-body{ padding: 16px 18px; }.block-mwa-dashboard-app /* Atividade 7 dias — sparkline */
+.sp-sparkline-wrap{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}.block-mwa-dashboard-app .sp-trend{
+  font-size: .72rem;
+  color: var(--muted);
+}.block-mwa-dashboard-app .sp-trend.up{ color: var(--green); }.block-mwa-dashboard-app .sp-trend.down{ color: var(--red); }.block-mwa-dashboard-app /* Anotações */
+.sp-notes-area{
+  width: 100%;
+  min-height: 90px;
+  background: var(--panel2);
+  border: 1px solid var(--line2);
+  border-radius: 12px;
+  padding: 10px 13px;
+  font-family: inherit;
+  font-size: .82rem;
+  color: var(--text);
+  resize: vertical;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color .15s;
+}.block-mwa-dashboard-app .sp-notes-area:focus{ border-color: var(--blue); }.block-mwa-dashboard-app /* Histórico de contatos */
+.sp-contact-item{
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}.block-mwa-dashboard-app .sp-contact-item:last-child{ border-bottom: none; }.block-mwa-dashboard-app .sp-contact-dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}.block-mwa-dashboard-app .sp-contact-subject{
+  font-size: .82rem;
+  font-weight: 800;
+  color: var(--text);
+}.block-mwa-dashboard-app .sp-contact-meta{
+  font-size: .7rem;
+  color: var(--muted);
+  margin-top: 2px;
+}.block-mwa-dashboard-app .sp-contact-delete{
+  background: none;
+  border: none;
+  color: var(--subtle);
+  cursor: pointer;
+  font-size: .75rem;
+  padding: 0 2px;
+  margin-left: auto;
+  transition: color .15s;
+}.block-mwa-dashboard-app .sp-contact-delete:hover{ color: var(--red); }.block-mwa-dashboard-app /* Últimas interações — collapsible */
+.sp-collapse-trigger{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 18px;
+  cursor: pointer;
+  font-size: .85rem;
+  font-weight: 900;
+  color: var(--text);
+  user-select: none;
+}.block-mwa-dashboard-app .sp-collapse-trigger:hover{ background: var(--panel2); }.block-mwa-dashboard-app .sp-collapse-arrow{ color: var(--muted); transition: transform .2s; }.block-mwa-dashboard-app .sp-collapse-arrow.open{ transform: rotate(180deg); }.block-mwa-dashboard-app .sp-collapse-body{ display: none; }.block-mwa-dashboard-app .sp-collapse-body.open{ display: block; }.block-mwa-dashboard-app /* Calendário de atividade */
+.sp-calendar-wrap{ overflow-x: auto; padding: 4px 0; }.block-mwa-dashboard-app .sp-calendar-legend{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: .6rem;
+  color: var(--muted);
+  margin-top: 6px;
+}.block-mwa-dashboard-app .sp-cal-box{
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  display: inline-block;
+}.block-mwa-dashboard-app /* Empty state */
+.sp-empty{
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--muted);
+}.block-mwa-dashboard-app .sp-empty-icon{ font-size: 2.5rem; margin-bottom: 12px; }.block-mwa-dashboard-app .sp-empty p{ font-size: .95rem; font-weight: 700; margin: 0; }.block-mwa-dashboard-app /* Botões de ação dentro do histórico */
+.sp-action-btn{
+  background: var(--panel);
+  border: 1px solid var(--line2);
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-family: inherit;
+  font-size: .75rem;
+  font-weight: 800;
+  color: var(--muted);
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}.block-mwa-dashboard-app .sp-action-btn:hover{ border-color: var(--blue); color: var(--blue); }.block-mwa-dashboard-app .sp-action-btn.primary{
+  background: linear-gradient(135deg, var(--blue2), var(--blue));
+  color: #fff;
+  border-color: transparent;
+}

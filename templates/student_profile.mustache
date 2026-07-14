@@ -1,0 +1,81 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+    @template block_mwa_dashboard/student_profile
+    @copyright 2026 Bruno Porto
+    @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+}}
+<div class="sp-header-card">
+  <div class="sp-avatar" style="background:{{avatarcolor}};">{{initials}}</div>
+  <div class="sp-header-info">
+    <h2 class="sp-header-name">{{name}}</h2>
+    <div class="sp-header-email">{{email}}</div>
+    <div class="sp-header-tags">
+      <span class="sp-tag">📅 {{firstdate}} – {{lastdate}}</span>
+      <span class="sp-tag">💡 {{totalinteractions}} {{interactionslabel}}</span>
+    </div>
+  </div>
+  <div class="sp-header-actions">
+    <button class="sp-btn-email" data-sname="{{name}}" data-semail="{{rawemail}}" onclick="window.MWAInterventions&&window.MWAInterventions.openByEl(this)">✉️ {{#str}}sp_btn_message, block_mwa_dashboard{{/str}}</button>
+    <button class="sp-btn-crm" onclick="window.showPage&&window.showPage('interventions')">📊 {{#str}}sp_btn_history, block_mwa_dashboard{{/str}}</button>
+  </div>
+</div>
+<div class="sp-kpi-row">
+  <div class="sp-kpi">
+    <div class="sp-kpi-label">{{lastaccesslabel}}</div>
+    <div class="sp-kpi-val" style="color:{{agocolor}};">{{ago}}{{#str}}sp_days_suffix, block_mwa_dashboard{{/str}}</div>
+    <div class="sp-kpi-sub">{{lastdate}}</div>
+  </div>
+  <div class="sp-kpi">
+    <div class="sp-kpi-label">{{activedayslabel}}</div>
+    <div class="sp-kpi-val" style="color:var(--teal);">{{uniquedays}}</div>
+    <div class="sp-kpi-sub">{{total}} {{interactionslabel}}</div>
+  </div>
+  <div class="sp-kpi">
+    <div class="sp-kpi-label">{{gradelabel}}</div>
+    <div class="sp-kpi-val" style="color:{{gradecolor}};">{{gradevalue}}</div>
+    <div class="sp-kpi-sub">{{gradesub}}</div>
+  </div>
+  <div class="sp-kpi">
+    <div class="sp-kpi-label">{{engagementkpilabel}}</div>
+    <div class="sp-kpi-val" style="color:{{engcolor}};font-size:1.1rem;">{{englabel}}</div>
+    <div class="sp-kpi-sub">{{#str}}sp_score_format, block_mwa_dashboard, {{score}}{{/str}}</div>
+  </div>
+</div>
+<div class="sp-section">
+  <div class="sp-section-head">
+    📊 {{activity7d}}
+    <div class="sp-section-right">{{{trendhtml}}}</div>
+  </div>
+  <div class="sp-section-body">
+    <div class="sp-sparkline-wrap">
+      <svg width="70" height="36" viewBox="0 0 70 36" style="display:block;">{{{sparksvg}}}</svg>
+      <span style="font-size:.78rem;color:var(--muted);padding-bottom:2px;">{{weekinteractions}} {{weeklabel}}</span>
+    </div>
+  </div>
+</div>
+<div class="sp-section">
+  <div class="sp-section-head">📅 {{#str}}sp_timeline_label, block_mwa_dashboard{{/str}}</div>
+  <div class="sp-section-body"><div id="spTimeline_{{calendarid}}"></div></div>
+</div>
+<div class="sp-section">
+  <div class="sp-section-head">📈 {{dailyjourney}}</div>
+  <div class="sp-section-body"><div style="height:180px;"><canvas id="spDailyChart"></canvas></div></div>
+</div>
+<div class="sp-section" style="margin-top:18px;">
+  <div class="sp-section-head">📅 {{activitycalendar}}</div>
+  <div class="sp-section-body"><div id="{{calendarid}}"></div></div>
+</div>
