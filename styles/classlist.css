@@ -1,0 +1,197 @@
+.block-mwa-dashboard-app /* ── LISTA DA TURMA ── block_mwa_dashboard */
+
+/* Header da card com controles */
+.cl-card-head{
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+  background: #f5f7fc;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}.block-mwa-dashboard-app .cl-card-title{
+  font-size: .78rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #46516a;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: auto;
+}.block-mwa-dashboard-app /* Controles: select,.block-mwa-dashboard-app botão,.block-mwa-dashboard-app busca */
+.cl-sort-select{
+  background: var(--panel);
+  border: 1px solid var(--line2);
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+  outline: none;
+  transition: border-color .15s;
+}.block-mwa-dashboard-app .cl-sort-select:focus{ border-color: var(--blue); }.block-mwa-dashboard-app .cl-toggle-btn{
+  background: var(--panel);
+  border: 1px solid var(--line2);
+  border-radius: 12px;
+  padding: 8px 13px;
+  font-family: inherit;
+  font-size: .78rem;
+  font-weight: 800;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color .15s, color .15s;
+}.block-mwa-dashboard-app .cl-toggle-btn:hover,.block-mwa-dashboard-app .cl-toggle-btn.active{ border-color: var(--blue); color: var(--blue); }.block-mwa-dashboard-app .cl-search{
+  background: var(--panel);
+  border: 1px solid var(--line2);
+  border-radius: 12px;
+  padding: 8px 13px;
+  font-family: inherit;
+  font-size: .78rem;
+  color: var(--text);
+  width: 200px;
+  outline: none;
+  transition: border-color .15s;
+}.block-mwa-dashboard-app .cl-search:focus{ border-color: var(--blue); }.block-mwa-dashboard-app .cl-count{
+  font-size: .72rem;
+  color: var(--muted);
+  white-space: nowrap;
+  font-weight: 700;
+}.block-mwa-dashboard-app /* Tabela */
+.cl-tbl-wrap{ overflow-x: auto; }.block-mwa-dashboard-app .cl-tbl{
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: .88rem;
+}.block-mwa-dashboard-app .cl-tbl th{
+  background: #f0f2f7;
+  color: #46516a;
+  text-align: left;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--line);
+  font-size: .72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  white-space: nowrap;
+}.block-mwa-dashboard-app .cl-tbl th.center{ text-align: center; }.block-mwa-dashboard-app .cl-tbl td{
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}.block-mwa-dashboard-app .cl-tbl tr:last-child td{ border-bottom: none; }.block-mwa-dashboard-app .cl-tbl tr:hover td{ background: #f8fbff; }.block-mwa-dashboard-app /* Coluna aluno */
+.cl-student-cell{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}.block-mwa-dashboard-app .cl-avatar{
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .68rem;
+  font-weight: 900;
+  color: #fff;
+  flex-shrink: 0;
+}.block-mwa-dashboard-app .cl-student-name{
+  font-weight: 800;
+  font-size: .88rem;
+  color: var(--blue);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}.block-mwa-dashboard-app .cl-student-name:hover{ text-decoration: underline; }.block-mwa-dashboard-app .cl-student-email{
+  font-size: .68rem;
+  color: var(--muted);
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}.block-mwa-dashboard-app .cl-student-sub{
+  font-size: .65rem;
+  color: var(--subtle);
+  margin-top: 2px;
+}.block-mwa-dashboard-app /* Barra de participação */
+.cl-part-wrap{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}.block-mwa-dashboard-app .cl-part-bar-bg{
+  flex: 1;
+  height: 7px;
+  background: #e8ecf5;
+  border-radius: 4px;
+  overflow: hidden;
+}.block-mwa-dashboard-app .cl-part-bar-fill{
+  height: 100%;
+  border-radius: 4px;
+  transition: width .4s ease;
+}.block-mwa-dashboard-app .cl-part-pct{
+  font-family: 'DM Mono', ui-monospace, monospace;
+  font-size: .78rem;
+  font-weight: 700;
+  min-width: 36px;
+}.block-mwa-dashboard-app /* Dias sem acesso */
+.cl-days{
+  font-family: 'DM Mono', ui-monospace, monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+}.block-mwa-dashboard-app /* Tempo total */
+.cl-time{
+  font-family: 'DM Mono', ui-monospace, monospace;
+  font-size: .85rem;
+  font-weight: 700;
+}.block-mwa-dashboard-app /* Interações */
+.cl-inter{
+  font-family: 'DM Mono', ui-monospace, monospace;
+  font-size: .85rem;
+  font-weight: 600;
+}.block-mwa-dashboard-app /* Botão perfil */
+.cl-profile-btn{
+  background: var(--panel);
+  border: 1px solid var(--line2);
+  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .9rem;
+  color: var(--muted);
+  padding: 0;
+  transition: border-color .15s, color .15s;
+}.block-mwa-dashboard-app .cl-profile-btn:hover{ border-color: var(--blue); color: var(--blue); }.block-mwa-dashboard-app /* Activity dots (modo atividades) */
+.cl-act-dots{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}.block-mwa-dashboard-app .cl-act-dot{
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: .6rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #fff;
+  display: inline-block;
+}.block-mwa-dashboard-app .cl-act-dot.done{ background: var(--green); }.block-mwa-dashboard-app .cl-act-dot.missing{ background: var(--red); }.block-mwa-dashboard-app .cl-act-dot.pending{ background: var(--muted); }.block-mwa-dashboard-app .cl-no-grades-hint{
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: 3px;
+}.block-mwa-dashboard-app /* Estado vazio */
+.cl-empty{
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--muted);
+  font-size: .9rem;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {.block-mwa-dashboard-app .cl-search{ width: 130px; }.block-mwa-dashboard-app .cl-tbl{ font-size: .8rem; }
+}
+.block-mwa-dashboard-app .cl-btn-group{display:flex;align-items:center;justify-content:center;gap:4px;}

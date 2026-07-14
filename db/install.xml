@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/mwa_dashboard/db" VERSION="2026070700" COMMENT="MWA Dashboard tables">
+  <TABLES>
+    <TABLE NAME="block_mwa_dashboard_log" COMMENT="Focused log table for the MWA Analytics Dashboard. Populated by event observers to avoid querying the massive logstore_standard_log.">
+      <FIELDS>
+        <FIELD NAME="id"                  TYPE="int"  LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid"            TYPE="int"  LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Course ID"/>
+        <FIELD NAME="userid"              TYPE="int"  LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="User who triggered the event"/>
+        <FIELD NAME="component"           TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="Moodle component e.g. mod_forum"/>
+        <FIELD NAME="action"              TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="Event action e.g. viewed, submitted"/>
+        <FIELD NAME="contextinstanceid"   TYPE="int"  LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Course module ID"/>
+        <FIELD NAME="timecreated"         TYPE="int"  LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Unix timestamp"/>
+        <FIELD NAME="origin"              TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="web, cli, ws"/>
+        <FIELD NAME="ip"                  TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" COMMENT="IP address"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="ix_course_time"    UNIQUE="false" FIELDS="courseid, timecreated" COMMENT="Primary lookup: logs for a course within a time window"/>
+        <INDEX NAME="ix_course_user"    UNIQUE="false" FIELDS="courseid, userid" COMMENT="Per-student queries"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_mwa_dashboard_messages" COMMENT="Pedagogical intervention messages sent by teachers via MWA Dashboard.">
+      <FIELDS>
+        <FIELD NAME="id"                  TYPE="int"  LENGTH="10" NOTNULL="true"  SEQUENCE="true"/>
+        <FIELD NAME="courseid"            TYPE="int"  LENGTH="10" NOTNULL="true"  SEQUENCE="false"/>
+        <FIELD NAME="userid"              TYPE="int"  LENGTH="10" NOTNULL="true"  SEQUENCE="false" COMMENT="Recipient (student)"/>
+        <FIELD NAME="teacherid"           TYPE="int"  LENGTH="10" NOTNULL="true"  SEQUENCE="false" COMMENT="Sender (teacher)"/>
+        <FIELD NAME="subject"             TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="message"             TYPE="text"              NOTNULL="true"  SEQUENCE="false"/>
+        <FIELD NAME="timesent"            TYPE="int"  LENGTH="10" NOTNULL="true"  SEQUENCE="false"/>
+        <FIELD NAME="status"              TYPE="char" LENGTH="20"  NOTNULL="true" DEFAULT="sent"   SEQUENCE="false" COMMENT="sent|error"/>
+        <FIELD NAME="ai_generated"        TYPE="int"  LENGTH="1"  NOTNULL="true"  DEFAULT="0"     SEQUENCE="false"/>
+        <FIELD NAME="intervention_reason" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Low engagement, Risk, etc."/>
+        <FIELD NAME="moodle_msgid"        TYPE="int"  LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="ID from Moodle message_send()"/>
+        <FIELD NAME="send_type"           TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="moodle" SEQUENCE="false" COMMENT="moodle or email"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="ix_course_teacher"  UNIQUE="false" FIELDS="courseid, teacherid"/>
+        <INDEX NAME="ix_course_student"  UNIQUE="false" FIELDS="courseid, userid"/>
+        <INDEX NAME="ix_timesent"        UNIQUE="false" FIELDS="timesent"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
