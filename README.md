@@ -289,6 +289,19 @@ XLSX export and all file generation use native browser APIs (ZIP + OOXML) — no
 
 ## Version
 
+**3.1.7** — July 2026  
+Maturity: Beta
+
+### 3.1.7 highlights
+
+- Added full `backup/moodle2` implementation (`backup_block_mwa_dashboard_task`, `restore_block_mwa_dashboard_task` and matching stepslib files) so course-scoped data in `block_mwa_dashboard_log` and `block_mwa_dashboard_messages` is preserved when a course is backed up, restored, or duplicated.
+- User IDs (`userid`, `teacherid`) are annotated for automatic remapping on restore; `moodle_msgid` is cleared on restore as it is no longer valid in the target instance.
+- IP addresses are excluded from backups (personal data); messages are only included when the backup contains user data.
+- Fixed `open_btn` string not being resolved when the Moodle language was switched to English — the key was missing from the string map exported by `classes/output/dashboard_page.php`.
+- Added missing `messageprovider:intervention` string to `lang/en/block_mwa_dashboard.php` and `lang/pt_br/block_mwa_dashboard.php`.
+
+---
+
 **3.1.6** — July 2026  
 Maturity: Beta
 

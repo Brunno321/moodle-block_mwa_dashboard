@@ -25,8 +25,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component    = 'block_mwa_dashboard';
-$plugin->version = 2026071304;
+$plugin->version = 2026072700;
 $plugin->requires     = 2022112800; // Moodle 4.1+
 $plugin->maturity     = MATURITY_BETA;
-$plugin->release = '3.1.6';
+$plugin->release = '3.1.7';
 $plugin->dependencies = [];

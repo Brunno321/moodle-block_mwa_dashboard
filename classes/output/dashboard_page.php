@@ -529,7 +529,7 @@ class dashboard_page implements renderable, templatable {
             'int_col_teacher',
             'int_col_status',
             'int_col_effect',
-            'att_see_all', 'int_export', 'int_export_channel', 'int_export_subject', 'int_status_sent', 'int_status_error',
+            'att_see_all', 'open_btn', 'int_export', 'int_export_channel', 'int_export_subject', 'int_status_sent', 'int_status_error',
             'int_no_data',
             'int_no_timeline',
             'peak_at',
