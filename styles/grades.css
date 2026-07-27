@@ -1,0 +1,179 @@
+.block-mwa-dashboard-app /* ── ANÁLISE DE NOTAS ── block_mwa_dashboard */
+
+/* Barra de filtros */
+.gr-filter-bar{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}.block-mwa-dashboard-app .gr-search{
+  background: var(--panel);
+  border: 1px solid var(--line2);
+  border-radius: 12px;
+  padding: 8px 13px;
+  font-family: inherit;
+  font-size: .78rem;
+  color: var(--text);
+  min-width: 180px;
+  outline: none;
+  transition: border-color .15s;
+}.block-mwa-dashboard-app .gr-search:focus{ border-color: var(--blue); }.block-mwa-dashboard-app .gr-filter-select{
+  background: var(--panel);
+  border: 1px solid var(--line2);
+  border-radius: 12px;
+  padding: 8px 13px;
+  font-family: inherit;
+  font-size: .78rem;
+  color: var(--text);
+  cursor: pointer;
+  outline: none;
+  transition: border-color .15s;
+}.block-mwa-dashboard-app .gr-filter-select:focus{ border-color: var(--blue); }.block-mwa-dashboard-app .gr-export-btn{
+  margin-left: auto;
+  background: var(--panel);
+  border: 1px solid var(--line2);
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-family: inherit;
+  font-size: .76rem;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: border-color .15s, color .15s;
+}.block-mwa-dashboard-app .gr-export-btn:hover{ border-color: var(--green); color: var(--green); }.block-mwa-dashboard-app /* Cards de grupo */
+.gr-card{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow);
+}.block-mwa-dashboard-app .gr-card.approved{ border-left: 3px solid var(--green); }.block-mwa-dashboard-app .gr-card.inprogress{ border-left: 3px solid var(--amber); }.block-mwa-dashboard-app .gr-card.nograde{ border-left: 3px solid var(--subtle); }.block-mwa-dashboard-app .gr-card-head{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 18px;
+  background: var(--panel2);
+  border-bottom: 1px solid var(--line);
+}.block-mwa-dashboard-app .gr-card-title{ font-size: .88rem; font-weight: 900; }.block-mwa-dashboard-app .gr-card-sub{ font-size: .72rem; color: var(--muted); margin-left: 4px; }.block-mwa-dashboard-app /* Tabelas */
+.gr-tbl{ width: 100%; border-collapse: collapse; font-size: .85rem; }.block-mwa-dashboard-app .gr-tbl th{
+  background: #f0f2f7;
+  color: #46516a;
+  font-size: .72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  white-space: nowrap;
+}.block-mwa-dashboard-app .gr-tbl th.center{ text-align: center; }.block-mwa-dashboard-app .gr-tbl td{ padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: middle; }.block-mwa-dashboard-app .gr-tbl tr:last-child td{ border-bottom: none; }.block-mwa-dashboard-app .gr-tbl tr:hover td{ background: #f8fbff; }.block-mwa-dashboard-app .gr-rank{ color: var(--muted); font-family: 'DM Mono', monospace; font-size: .78rem; }.block-mwa-dashboard-app .gr-name{ font-weight: 700; color: var(--blue); cursor: pointer; }.block-mwa-dashboard-app .gr-name:hover{ text-decoration: underline; }.block-mwa-dashboard-app .gr-grade-val{ font-family: 'DM Mono', monospace; font-weight: 900; font-size: 1rem; }.block-mwa-dashboard-app /* Barra de progresso dentro da tabela */
+.gr-prog-wrap{ display: flex; align-items: center; gap: 8px; min-width: 160px; }.block-mwa-dashboard-app .gr-prog-bg{
+  flex: 1;
+  height: 8px;
+  background: #e8ecf5;
+  border-radius: 4px;
+  overflow: visible;
+  position: relative;
+}.block-mwa-dashboard-app .gr-prog-fill{ height: 100%; border-radius: 4px; }.block-mwa-dashboard-app .gr-prog-marker{
+  position: absolute;
+  top: -3px;
+  left: 60%;
+  width: 2px;
+  height: 14px;
+  background: var(--muted);
+  opacity: .5;
+  border-radius: 1px;
+}.block-mwa-dashboard-app .gr-prog-label{ font-family: 'DM Mono', monospace; font-size: .72rem; font-weight: 700; min-width: 40px; }.block-mwa-dashboard-app .gr-prog-sub{ font-size: .6rem; color: var(--muted); margin-top: 2px; }.block-mwa-dashboard-app /* Botão de detalhes de atividade */
+.gr-detail-btn{
+  background: transparent;
+  border: 1px solid var(--line2);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: .72rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color .15s, color .15s;
+  white-space: nowrap;
+}.block-mwa-dashboard-app /* Botão perfil */
+.gr-profile-btn{
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 2px 4px;
+  border-radius: 6px;
+  transition: background .12s;
+  color: var(--muted);
+}.block-mwa-dashboard-app .gr-profile-btn:hover{ background: var(--panel3); }.block-mwa-dashboard-app /* Footer de em progresso */
+.gr-footer{
+  padding: 10px 18px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: .78rem;
+  color: var(--muted);
+}.block-mwa-dashboard-app /* Modal de detalhes de notas */
+.gr-modal-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(3px);
+  animation: mwafadeIn .18s ease;
+}.block-mwa-dashboard-app .gr-modal{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  width: 480px;
+  max-width: 95vw;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}.block-mwa-dashboard-app .gr-modal-head{
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel2);
+  border-radius: 16px 16px 0 0;
+}.block-mwa-dashboard-app .gr-modal-name{ font-size: .9rem; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }.block-mwa-dashboard-app .gr-modal-sub{ font-size: .72rem; color: var(--muted); margin-top: 2px; }.block-mwa-dashboard-app .gr-modal-total{ text-align: right; flex-shrink: 0; }.block-mwa-dashboard-app .gr-modal-total-val{ font-size: 1.5rem; font-weight: 900; font-family: 'DM Mono', monospace; }.block-mwa-dashboard-app .gr-modal-total-label{ font-size: .65rem; color: var(--muted); }.block-mwa-dashboard-app .gr-modal-close{ background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1.2rem; padding: 4px 6px; line-height: 1; flex-shrink: 0; }.block-mwa-dashboard-app .gr-modal-body{ overflow-y: auto; padding: 12px 20px 16px; }.block-mwa-dashboard-app .gr-act-row{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: .5px solid var(--line);
+}.block-mwa-dashboard-app .gr-act-row:last-child{ border-bottom: none; }.block-mwa-dashboard-app .gr-act-num{
+  min-width: 24px;
+  text-align: center;
+  background: var(--panel3);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: .68rem;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  flex-shrink: 0;
+}.block-mwa-dashboard-app .gr-act-name{ flex: 1; font-size: .78rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.block-mwa-dashboard-app .gr-act-val{ min-width: 52px; text-align: right; font-size: .82rem; font-family: 'DM Mono', monospace; font-weight: 700; }.block-mwa-dashboard-app /* Aviso de semestre parcial */
+.gr-mid-warning{
+  background: rgba(201,138,42,.1);
+  border: 1px solid rgba(201,138,42,.3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: .82rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}.block-mwa-dashboard-app /* Empty */
+.gr-empty{ text-align: center; padding: 56px 24px; color: var(--muted); }.block-mwa-dashboard-app .gr-empty-icon{ font-size: 2.5rem; margin-bottom: 12px; }.block-mwa-dashboard-app .gr-empty p{ font-size: .95rem; font-weight: 700; margin: 0; }
+.block-mwa-dashboard-app .gr-tbl td.center{text-align:center;vertical-align:middle;}
