@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/mwa_dashboard/db" VERSION="2026081204" COMMENT="MWA Dashboard tables">
+  <TABLES>
+    <TABLE NAME="block_mwa_dashboard_log" COMMENT="Focused log table for the MWA Analytics Dashboard. Populated by event observers to avoid querying the massive logstore_standard_log.">
+      <FIELDS>
+        <FIELD NAME="id"                  TYPE="int"  LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid"            TYPE="int"  LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Course ID"/>
+        <FIELD NAME="userid"              TYPE="int"  LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="User who triggered the event"/>
+        <FIELD NAME="component"           TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="Moodle component e.g. mod_forum"/>
+        <FIELD NAME="action"              TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="Event action e.g. viewed, submitted"/>
+        <FIELD NAME="contextinstanceid"   TYPE="int"  LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Course module ID"/>
+        <FIELD NAME="timecreated"         TYPE="int"  LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Unix timestamp"/>
+        <FIELD NAME="origin"              TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="web, cli, ws"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="ix_course_time"    UNIQUE="false" FIELDS="courseid, timecreated" COMMENT="Primary lookup: logs for a course within a time window"/>
+        <INDEX NAME="ix_course_user"    UNIQUE="false" FIELDS="courseid, userid" COMMENT="Per-student queries"/>
+        <INDEX NAME="ix_course_user_time" UNIQUE="false" FIELDS="courseid, userid, timecreated" COMMENT="Per-student queries within a time window"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_mwa_dashboard_messages" COMMENT="Pedagogical intervention messages sent by teachers via MWA Dashboard.">
+      <FIELDS>
+        <FIELD NAME="id"                  TYPE="int"  LENGTH="10" NOTNULL="true"  SEQUENCE="true"/>
+        <FIELD NAME="courseid"            TYPE="int"  LENGTH="10" NOTNULL="true"  SEQUENCE="false"/>
+        <FIELD NAME="userid"              TYPE="int"  LENGTH="10" NOTNULL="true"  SEQUENCE="false" COMMENT="Recipient (student)"/>
+        <FIELD NAME="teacherid"           TYPE="int"  LENGTH="10" NOTNULL="true"  SEQUENCE="false" COMMENT="Sender (teacher)"/>
+        <FIELD NAME="subject"             TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="message"             TYPE="text"              NOTNULL="true"  SEQUENCE="false"/>
+        <FIELD NAME="timesent"            TYPE="int"  LENGTH="10" NOTNULL="true"  SEQUENCE="false"/>
+        <FIELD NAME="status"              TYPE="char" LENGTH="20"  NOTNULL="true" DEFAULT="sent"   SEQUENCE="false" COMMENT="sent|error"/>
+        <FIELD NAME="ai_generated"        TYPE="int"  LENGTH="1"  NOTNULL="true"  DEFAULT="0"     SEQUENCE="false"/>
+        <FIELD NAME="intervention_reason" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Low engagement, Risk, etc."/>
+        <FIELD NAME="moodle_msgid"        TYPE="int"  LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="ID from Moodle message_send()"/>
+        <FIELD NAME="send_type"           TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="moodle" SEQUENCE="false" COMMENT="moodle or email"/>
+        <FIELD NAME="target_type"         TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="Tracked intervention target type"/>
+        <FIELD NAME="target_items"        TYPE="text"              NOTNULL="false" SEQUENCE="false" COMMENT="JSON list of activities or resources tracked for this intervention"/>
+        <FIELD NAME="teacher_note"        TYPE="text"              NOTNULL="false" SEQUENCE="false" COMMENT="Private teacher note for this intervention"/>
+        <FIELD NAME="teacher_note_updated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Last teacher note update timestamp"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="ix_course_teacher"  UNIQUE="false" FIELDS="courseid, teacherid"/>
+        <INDEX NAME="ix_course_student"  UNIQUE="false" FIELDS="courseid, userid"/>
+        <INDEX NAME="ix_timesent"        UNIQUE="false" FIELDS="timesent"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_mwa_dashboard_snapshot" COMMENT="Immutable student situation captured when an intervention is recorded.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="interventionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="reason" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="situation" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="actiontaken" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="objective" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="snapshotdata" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_intervention" TYPE="foreign-unique" FIELDS="interventionid" REFTABLE="block_mwa_dashboard_messages" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="ix_course_user" UNIQUE="false" FIELDS="courseid, userid"/>
+        <INDEX NAME="ix_timecreated" UNIQUE="false" FIELDS="timecreated"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_mwa_dashboard_aiaudit" COMMENT="Metadata-only audit trail for external AI calls. Prompts, responses, student identifiers and credentials are never stored.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Moodle user initiating the AI operation"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="operation" TYPE="char" LENGTH="40" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="purpose" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="provider" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="endpoint" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Endpoint without query string or credentials"/>
+        <FIELD NAME="categories" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Allowlisted metadata categories only"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="success or error"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="ix_user_time" UNIQUE="false" FIELDS="userid, timecreated"/>
+        <INDEX NAME="ix_course_time" UNIQUE="false" FIELDS="courseid, timecreated"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
