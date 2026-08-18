@@ -226,6 +226,7 @@
 .cl-tbl-wrap{ overflow-x: auto; }.block-mwa-dashboard-app .cl-tbl,
 .block-mwa-dashboard-app #page-classlist .cl-tbl{
   width: 100%;
+  min-width: 1000px;
   background: #eef2f7;
   border-collapse: separate;
   border-spacing: 0 10px;
@@ -241,7 +242,8 @@
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: .08em;
-  white-space: nowrap;
+  white-space: pre-line;
+  line-height: 1.25;
 }.block-mwa-dashboard-app .cl-tbl th.center{ text-align: center; }.block-mwa-dashboard-app .cl-tbl td{
   padding: 13px 14px;
   border-top: 1px solid var(--line);
