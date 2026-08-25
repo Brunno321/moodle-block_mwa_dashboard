@@ -1,0 +1,412 @@
+/* Final KPI rhythm shared by every dashboard section. */
+.block-mwa-dashboard-app .mwa-icon-sprite{height:0;overflow:hidden;position:absolute;width:0;}
+.block-mwa-dashboard-app .mwa-ui-icon{display:block;fill:none;height:1em;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.8;width:1em;}
+.block-mwa-dashboard-app .nav-item>span:first-child .mwa-ui-icon{height:19px;margin:auto;width:19px;}
+.block-mwa-dashboard-app .mwa-page-title-icon .mwa-ui-icon{height:1.05em;width:1.05em;}
+.block-mwa-dashboard-app .gr-kpi-icon .mwa-ui-icon,.block-mwa-dashboard-app .sa-kpi-icon .mwa-ui-icon{height:21px;width:21px;}
+.block-mwa-dashboard-app .gr-card-title{align-items:center;display:inline-flex;gap:6px;}
+.block-mwa-dashboard-app .gr-card-title .mwa-ui-icon,.block-mwa-dashboard-app .card-head>.mwa-ui-icon{height:16px;flex:0 0 16px;width:16px;}
+.block-mwa-dashboard-app .gr-mid-warning>.mwa-ui-icon{color:var(--amber);flex:0 0 20px;height:20px;width:20px;}
+.block-mwa-dashboard-app #page-heatmap .hero h1::before{background:currentColor;content:"";height:.8em;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 22c4 0 7-3 7-7 0-3-1.5-5.5-4-8 .2 3-1 4-2 5-1-4-3-7-5-9 0 5-3 7-3 12 0 4 3 7 7 7z' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;width:.8em;}
+.block-mwa-dashboard-app .act-search-wrap>span,.block-mwa-dashboard-app .hm-search-wrap>span,.block-mwa-dashboard-app .hm-filter-title>span:first-child{background:currentColor;font-size:0;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='7' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='m20 20-4-4' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat;}
+.block-mwa-dashboard-app #page-ac #kpis.kpis,
+.block-mwa-dashboard-app #page-alerts .sa-kpi-row,
+.block-mwa-dashboard-app #page-classlist .cl-kpi-row,
+.block-mwa-dashboard-app #page-activities .kpis,
+.block-mwa-dashboard-app #page-grades .gr-analysis-kpis,
+.block-mwa-dashboard-app #page-heatmap > .hm-kpis,
+.block-mwa-dashboard-app #page-teacherfeedback .fr-kpis,
+.block-mwa-dashboard-app #page-interventions .int2-motivo-cards,
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi-row {
+  gap: 12px;
+}
+
+.block-mwa-dashboard-app #page-ac #kpis .ac-main-kpi,
+.block-mwa-dashboard-app #page-alerts .sa-kpi,
+.block-mwa-dashboard-app #page-classlist .cl-kpi-card,
+.block-mwa-dashboard-app #page-activities .act-analysis-kpi,
+.block-mwa-dashboard-app #page-grades .gr-analysis-kpi,
+.block-mwa-dashboard-app #page-heatmap .hm-kpi,
+.block-mwa-dashboard-app #page-teacherfeedback .fr-kpi,
+.block-mwa-dashboard-app #page-interventions .int2-motivo-card,
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi {
+  box-shadow: 0 2px 8px rgba(19, 36, 74, .055);
+  gap: 6px;
+  min-height: 118px;
+  padding: 10px 12px;
+  transition: background .15s, border-color .15s, box-shadow .15s, transform .15s;
+}
+
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi {
+  display: grid;
+  grid-template-rows: auto minmax(34px, 1fr) auto;
+  padding: 12px 14px;
+}
+
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi-label {
+  margin-bottom: 0;
+}
+
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi-head {
+  align-items: center;
+  display: flex;
+  gap: 9px;
+}
+
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi-icon {
+  align-items: center;
+  background: rgba(91, 155, 213, .08);
+  border: 1px solid rgba(91, 155, 213, .27);
+  border-radius: 9px;
+  color: var(--blue);
+  display: inline-flex;
+  flex: 0 0 32px;
+  height: 32px;
+  justify-content: center;
+  width: 32px;
+}
+
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi-icon .mwa-ui-icon {
+  height: 17px;
+  width: 17px;
+}
+
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi-icon-active {background:rgba(18,169,166,.08);border-color:rgba(18,169,166,.27);color:var(--teal);}
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi-icon-grade {background:rgba(58,171,122,.08);border-color:rgba(58,171,122,.27);color:var(--green);}
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi-icon-engagement {background:rgba(139,114,212,.08);border-color:rgba(139,114,212,.27);color:var(--purple);}
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi:last-child .sp-kpi-head::before {
+  background: linear-gradient(currentColor,currentColor) 7px 17px / 3px 8px no-repeat,
+              linear-gradient(currentColor,currentColor) 14px 12px / 3px 13px no-repeat,
+              linear-gradient(currentColor,currentColor) 21px 7px / 3px 18px no-repeat,
+              rgba(139,114,212,.08);
+  border: 1px solid rgba(139,114,212,.27);
+  border-radius: 9px;
+  box-sizing: border-box;
+  color: var(--purple);
+  content: "";
+  display: block;
+  flex: 0 0 32px;
+  height: 32px;
+  padding: 0;
+  width: 32px;
+}
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi-icon-engagement.medium {background:rgba(201,138,42,.09);border-color:rgba(201,138,42,.3);color:var(--amber);}
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi-icon-engagement.high {background:rgba(58,171,122,.08);border-color:rgba(58,171,122,.27);color:var(--green);}
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi-icon-engagement.low {background:var(--red-dim);border-color:rgba(217,95,95,.27);color:var(--red);}
+
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi-val {
+  align-self: center;
+  margin: 0;
+}
+
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi-sub {
+  align-self: end;
+  margin-top: 0;
+}
+
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi:nth-child(-n+2) .sp-kpi-val {
+  color: var(--text) !important;
+}
+
+.block-mwa-dashboard-app #page-ac #kpis .ac-main-kpi:hover,
+.block-mwa-dashboard-app #page-ac #kpis .ac-main-kpi:focus,
+.block-mwa-dashboard-app #page-alerts .sa-kpi:hover,
+.block-mwa-dashboard-app #page-alerts .sa-kpi:focus,
+.block-mwa-dashboard-app #page-classlist .cl-kpi-card:hover,
+.block-mwa-dashboard-app #page-classlist .cl-kpi-card:focus,
+.block-mwa-dashboard-app #page-activities .act-analysis-kpi:hover,
+.block-mwa-dashboard-app #page-activities .act-analysis-kpi:focus,
+.block-mwa-dashboard-app #page-grades .gr-analysis-kpi:hover,
+.block-mwa-dashboard-app #page-grades .gr-analysis-kpi:focus,
+.block-mwa-dashboard-app #page-heatmap .hm-kpi:hover,
+.block-mwa-dashboard-app #page-heatmap .hm-kpi:focus,
+.block-mwa-dashboard-app #page-teacherfeedback .fr-kpi:hover,
+.block-mwa-dashboard-app #page-interventions .int2-motivo-card:hover,
+.block-mwa-dashboard-app #page-studentprofile .sp-kpi:hover {
+  box-shadow: 0 4px 12px rgba(19, 36, 74, .085);
+  transform: translateY(-1px);
+}
+
+.block-mwa-dashboard-app #page-ac #kpis .ac-kpi-head,
+.block-mwa-dashboard-app #page-alerts .sa-kpi-head,
+.block-mwa-dashboard-app #page-classlist .cl-kpi-head,
+.block-mwa-dashboard-app #page-activities .act-kpi-head,
+.block-mwa-dashboard-app #page-grades .gr-kpi-head,
+.block-mwa-dashboard-app #page-heatmap .hm-kpi-head,
+.block-mwa-dashboard-app #page-teacherfeedback .fr-kpi-head,
+.block-mwa-dashboard-app #page-interventions .int2-motivo-head {
+  min-height: 40px;
+}
+
+.block-mwa-dashboard-app #page-ac #kpis.kpis {
+  margin-bottom: 22px;
+  margin-top: 16px;
+}
+
+.block-mwa-dashboard-app #page-alerts .sa-kpi-row,
+.block-mwa-dashboard-app #page-grades .gr-analysis-kpis,
+.block-mwa-dashboard-app #page-heatmap > .hm-kpis,
+.block-mwa-dashboard-app #page-teacherfeedback .fr-kpis {
+  margin-bottom: 14px;
+}
+
+.block-mwa-dashboard-app #page-teacherfeedback .fr-kpi > .fr-kpi-sub {
+  font-size: .68rem;
+  min-height: 0;
+}
+
+.block-mwa-dashboard-app #page-teacherfeedback .fr-kpi-label {
+  font-size: .74rem;
+}
+
+.block-mwa-dashboard-app #page-alerts .sa-kpi-label {
+  font-size: .74rem;
+}
+
+.block-mwa-dashboard-app #page-alerts .sa-kpi-val {
+  font-size: 2rem;
+}
+
+.block-mwa-dashboard-app #page-alerts .sa-kpi-delta {
+  font-size: .7rem;
+}
+
+.block-mwa-dashboard-app button > .mwa-ui-icon,
+.block-mwa-dashboard-app .det-chip .mwa-ui-icon,
+.block-mwa-dashboard-app .tag-chip .mwa-ui-icon,
+.block-mwa-dashboard-app .card-head > .mwa-ui-icon,
+.block-mwa-dashboard-app .int-collapse-title > .mwa-ui-icon {
+  display: inline-block;
+  flex: 0 0 15px;
+  height: 15px;
+  vertical-align: -2px;
+  width: 15px;
+}
+
+.block-mwa-dashboard-app .act-kpi-icon .mwa-ui-icon,
+.block-mwa-dashboard-app .ac-kpi-icon .mwa-ui-icon,
+.block-mwa-dashboard-app .hm-kpi-icon .mwa-ui-icon,
+.block-mwa-dashboard-app .sa-kpi-icon .mwa-ui-icon,
+.block-mwa-dashboard-app .gr-kpi-icon .mwa-ui-icon {
+  height: 21px;
+  width: 21px;
+}
+
+.block-mwa-dashboard-app .sa-icon .mwa-ui-icon,
+.block-mwa-dashboard-app .sa-empty-icon .mwa-ui-icon,
+.block-mwa-dashboard-app .gr-empty-icon .mwa-ui-icon,
+.block-mwa-dashboard-app .int-snapshot-open-icon .mwa-ui-icon {
+  height: 22px;
+  width: 22px;
+}
+
+.block-mwa-dashboard-app .sa-tip,
+.block-mwa-dashboard-app .ac-insight,
+.block-mwa-dashboard-app .card-head,
+.block-mwa-dashboard-app .mwa-msg-head-name {
+  align-items: center;
+}
+
+.block-mwa-dashboard-app #page-interventions .int2-motivo-desc {
+  min-height: 32px;
+}
+
+.block-mwa-dashboard-app #page-interventions .int2-motivo-card {
+  display: grid;
+  grid-template-rows: auto minmax(34px, 1fr) auto;
+}
+
+.block-mwa-dashboard-app #page-interventions .int2-motivo-count {
+  align-self: center;
+  margin: 0;
+}
+
+.block-mwa-dashboard-app #page-interventions .int2-motivo-desc {
+  align-self: end;
+  margin: 0;
+}
+
+@media (max-width: 780px) {
+  .block-mwa-dashboard-app #page-ac #kpis.kpis,
+  .block-mwa-dashboard-app #page-alerts .sa-kpi-row,
+  .block-mwa-dashboard-app #page-classlist .cl-kpi-row,
+  .block-mwa-dashboard-app #page-activities .kpis,
+  .block-mwa-dashboard-app #page-grades .gr-analysis-kpis,
+  .block-mwa-dashboard-app #page-heatmap > .hm-kpis,
+  .block-mwa-dashboard-app #page-teacherfeedback .fr-kpis,
+  .block-mwa-dashboard-app #page-interventions .int2-motivo-cards,
+  .block-mwa-dashboard-app #page-studentprofile .sp-kpi-row {
+    gap: 10px;
+  }
+}
+
+/* Consistent action feedback across dashboard modules. */
+.block-mwa-dashboard-app .mwa-feedback-region {
+  bottom: 22px;
+  display: grid;
+  gap: 8px;
+  max-width: min(390px, calc(100vw - 28px));
+  position: fixed;
+  right: 22px;
+  width: max-content;
+  z-index: 100000;
+}
+
+.block-mwa-dashboard-app .mwa-feedback {
+  align-items: center;
+  animation: mwaFeedbackIn .2s ease-out;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-left: 4px solid #248957;
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, .16);
+  color: #24324a;
+  display: grid;
+  font-size: .78rem;
+  font-weight: 750;
+  gap: 10px;
+  grid-template-columns: 18px minmax(0, 1fr) 26px;
+  line-height: 1.4;
+  min-width: 280px;
+  padding: 10px 10px 10px 12px;
+}
+
+.block-mwa-dashboard-app .mwa-feedback.error { border-left-color: #cf4d46; }
+.block-mwa-dashboard-app .mwa-feedback.warning { border-left-color: #c08318; }
+.block-mwa-dashboard-app .mwa-feedback.success > .mwa-ui-icon { color: #248957; }
+.block-mwa-dashboard-app .mwa-feedback.error > .mwa-ui-icon { color: #cf4d46; }
+.block-mwa-dashboard-app .mwa-feedback.warning > .mwa-ui-icon { color: #c08318; }
+.block-mwa-dashboard-app .mwa-feedback.leaving { opacity: 0; transform: translateY(5px); transition: .18s ease; }
+.block-mwa-dashboard-app .mwa-feedback button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  height: 26px;
+  justify-content: center;
+  padding: 0;
+  width: 26px;
+}
+
+@keyframes mwaFeedbackIn {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Shared modal proportions and controls. */
+.block-mwa-dashboard-app .mwa-msg-modal,
+.block-mwa-dashboard-app .act-modal,
+.block-mwa-dashboard-app .gr-modal,
+.block-mwa-dashboard-app .int-detail-modal,
+.block-mwa-dashboard-app .int-snapshot-modal {
+  border: 1px solid #dbe2ee;
+  border-radius: 10px;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, .24);
+}
+
+.block-mwa-dashboard-app .mwa-msg-head,
+.block-mwa-dashboard-app .act-modal-head,
+.block-mwa-dashboard-app .gr-modal-head,
+.block-mwa-dashboard-app .int-detail-modal-head,
+.block-mwa-dashboard-app .int-snapshot-modal-head {
+  align-items: center;
+  border-bottom: 1px solid #dfe5ef;
+  min-height: 54px;
+  padding: 10px 16px;
+}
+
+.block-mwa-dashboard-app .mwa-msg-close,
+.block-mwa-dashboard-app .act-modal-close,
+.block-mwa-dashboard-app .gr-modal-close,
+.block-mwa-dashboard-app .int-detail-modal-close,
+.block-mwa-dashboard-app .int-snapshot-modal-close {
+  align-items: center;
+  background: #fff;
+  border: 1px solid #d7deea;
+  border-radius: 7px;
+  color: #526077;
+  display: inline-flex;
+  height: 32px;
+  justify-content: center;
+  min-width: 32px;
+  padding: 0;
+  width: 32px;
+}
+
+.block-mwa-dashboard-app button:disabled {
+  cursor: wait;
+  opacity: .62;
+}
+
+.block-mwa-dashboard-app #page-interventions .int2-cards-area,
+.block-mwa-dashboard-app #page-teacherfeedback .fr-kpis {
+  margin-bottom: 14px;
+}
+
+.block-mwa-dashboard-app #page-interventions .int2-filters-bar,
+.block-mwa-dashboard-app #page-teacherfeedback .fr-toolbar {
+  margin-bottom: 16px;
+  margin-top: 0;
+}
+
+@media (max-width: 600px) {
+  .block-mwa-dashboard-app .mwa-feedback-region {
+    bottom: 12px;
+    left: 14px;
+    right: 14px;
+    width: auto;
+  }
+  .block-mwa-dashboard-app .mwa-feedback { min-width: 0; width: 100%; }
+}
+
+.block-mwa-dashboard-app .mwa-global-updated-footer {
+  border-top: 1px solid #dfe5ef;
+  color: #5570a8;
+  display: flex;
+  font-size: .62rem;
+  font-weight: 650;
+  justify-content: flex-end;
+  margin-top: 14px;
+  min-height: 30px;
+  padding: 9px 4px 6px;
+  width: 100%;
+}
+
+.block-mwa-dashboard-app #page-grades .gr-analysis-kpi {
+  gap: 4px;
+  min-height: 102px;
+  padding: 8px 12px;
+}
+
+.block-mwa-dashboard-app #page-grades .gr-kpi-head {
+  gap: 8px;
+  min-height: 34px;
+}
+
+.block-mwa-dashboard-app #page-grades .gr-kpi-icon {
+  flex-basis: 34px;
+  height: 34px;
+  width: 34px;
+}
+
+.block-mwa-dashboard-app #page-grades .gr-analysis-kpi .kpi-value {
+  font-size: 1.6rem;
+  margin: 3px 0 0;
+  color: var(--text) !important;
+}
+
+/* Keep intervention KPI counts neutral while preserving each KPI accent. */
+.block-mwa-dashboard-app #page-interventions .int2-motivo-card .int2-motivo-count {
+  color: var(--text) !important;
+}
+
+.block-mwa-dashboard-app #page-grades .gr-analysis-kpi .kpi-sub {
+  line-height: 1.2;
+  margin-top: 1px;
+}
+
+@media print {
+  .block-mwa-dashboard-app .mwa-global-updated-footer { display: none !important; }
+}
