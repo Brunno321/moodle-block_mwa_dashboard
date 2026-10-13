@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-13",
+  "branch": "feature/dashboard-es-mx",
+  "revision": "6c1b7b742e8b3648c8d1a1181f615c8729d09e7f",
+  "scope": "Pruebas aisladas; sin mensajes reales ni acceso a base de datos",
+  "commands": [
+    {
+      "command": "node tools/test_functional.js docs/testing/functional-results-2026-10-13.json",
+      "exit_code": 1,
+      "output": "Functional tests: 76 PASS, 7 FAIL\nFAIL [Mensajes] Dos invocaciones durante envío no duplican el mensaje: 2 == 1\nFAIL [Actividades] Dos CMID con el mismo nombre siguen siendo actividades distintas: 1 == 2\nFAIL [Alertas] Finalización H5P por código excluye una falsa entrega pendiente: The expression evaluated to a falsy value:\n\n  assert(e.hooks.alerts.isSubmitEvent(log(e,{_action_code:'completion_updated',nomedoevento:'Finalización H5P actualizada'})))\n\nFAIL [Alertas] Días de actividad simbólica se agrupan en Mérida aunque el navegador use UTC: 1 == 2\nFAIL [Reporte docente] CMID distinto no se confunde con un nombre coincidente: true == false\nFAIL [Reporte docente] Un evento que no es acceso no completa un objetivo de recurso: true == false\nFAIL [Reporte docente] Un código de finalización H5P cuenta aunque la etiqueta cambie: The expression evaluated to a falsy value:\n\n  assert(e.hooks.teacherfeedback.isSubmission(log(e,{_action_code:'completion_updated',nomedoevento:'Finalización H5P actualizada'})))\n\n"
+    },
+    {
+      "command": "node tools/test_build_contract.js",
+      "exit_code": 1,
+      "output": "BLOCKED BUILD: Missing amd/build/classify.min.js for the new AMD dependency\nBLOCKED BUILD: Compiled Store does not implement source APIs: tr, parseLogDate, dateParts, formatDate, formatTime, formatDateTime, formatNumber, reasonCode\nAMD package contract: 2 blockers\n"
+    },
+    {
+      "command": "node tools/test_classify.js",
+      "exit_code": 0,
+      "output": "Classify: pt/en/es historical labels and stable-code precedence OK\n"
+    },
+    {
+      "command": "node tools/test_locale.js",
+      "exit_code": 0,
+      "output": "Locale: midnight, calendar day, Unix timestamp, 24h and one warning per key OK\n"
+    },
+    {
+      "command": "node tools/check_lang.js",
+      "exit_code": 0,
+      "output": "en: 1733 keys\nes: 1733 keys\nes_mx: 1733 keys\npt_br: 1733 keys\nLanguage parity: 0 errors\n"
+    },
+    {
+      "command": "node tools/check_js_keys.js",
+      "exit_code": 0,
+      "output": "Literal client keys: 1181 uses, 0 errors (computed keys require review)\n"
+    },
+    {
+      "command": "wsl -d Debian -u root -- php \"/mnt/d/Elementos importantes/optimizacion/mwa-analytics-dashboard-optimized/tools/test_php_contract.php\"",
+      "exit_code": 0,
+      "output": "PASS Default timezone\nPASS Invalid timezone fallback\nPASS Configured timezone\nPASS Locale es\nPASS Locale es_mx\nPASS Locale en\nPASS Locale pt_br\nPASS Reason nunca acessou\nPASS Reason never accessed\nPASS Reason nunca accedio\nPASS Reason nunca ha accedido\nPASS Reason baixa participacao\nPASS Reason low participation\nPASS Reason baja participacion\nPASS Reason baixo engajamento\nPASS Reason low engagement\nPASS Reason bajo compromiso\nPASS Reason risco de evasao\nPASS Reason dropout risk\nPASS Reason riesgo de abandono\nPASS Reason 7+ dias sem acesso\nPASS Reason 7+ days without access\nPASS Reason 7+ dias sin acceso\nPASS Reason reengajamento\nPASS Reason reengagement\nPASS Reason reactivacion\nPASS Reason pendencia academica\nPASS Reason academic pending\nPASS Reason academic pending issue\nPASS Reason pendiente academico\nPASS Reason pendencia academica pendiente\nPASS Reason pendiente academica\nPASS Reason tarefa pendente\nPASS Reason pending task\nPASS Reason tarea pendiente\nPASS Reason actividad pendiente\nPASS Reason dificuldade academica\nPASS Reason academic difficulty\nPASS Reason dificultad academica\nPASS Reason outro\nPASS Reason other\nPASS Reason otro\nPASS Reason parabenizar\nPASS Reason praise\nPASS Reason felicitar\nPASS Reason academic pending work\nPASS Reason pendientes academicos\nPASS Reason pendientes academicas\nPASS Localized reason Pendência acadêmica\nPASS Localized reason Academic pending work\nPASS Localized reason Tarea pendiente [email]\nPASS Unknown reason\nPASS Assignment label\nPASS Viewed action label\nPASS Unknown component label\nPASS Unknown action label\nPHP isolated contracts: 56 passed, 0 failed\n"
+    }
+  ]
+}

@@ -53,3 +53,8 @@ AMD compilado y PHPUnit con una base de datos independiente:
 8. Revisar consola del navegador y registros PHP durante esos recorridos.
 
 No implementar ni probar servicios de IA: quedan fuera del alcance.
+
+## Estado registrado para la siguiente persona
+
+Consulta [el estado de pruebas y los fallos pendientes](../docs/testing/ESTADO_PRUEBAS.md),
+con resultados por caso, salidas reproducibles y diferencias entre fuente, build y despliegue.

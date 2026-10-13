@@ -180,3 +180,9 @@ Version 4.3 delivers the current unified dashboard experience for course monitor
 **Bruno Porto**  
 Professor and Researcher — IFES/CEFOR  
 Espírito Santo, Brazil — 2026
+
+## Estado actual de pruebas (UADY)
+
+La rama 4.4 mantiene regresiones pendientes y AMD sin sincronizar con el fuente.
+Consulta [el estado de pruebas y continuidad](docs/testing/ESTADO_PRUEBAS.md)
+y [los comandos de ejecución](tools/TESTING.md) antes de probar o desplegar.

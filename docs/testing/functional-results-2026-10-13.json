@@ -1,0 +1,428 @@
+{
+  "passed": 76,
+  "failed": 7,
+  "results": [
+    {
+      "area": "Carga AMD",
+      "name": "Los nueve módulos funcionales cargan sin errores",
+      "status": "PASS"
+    },
+    {
+      "area": "Participación",
+      "name": "Estudiante sin actividad obtiene cero",
+      "status": "PASS"
+    },
+    {
+      "area": "Participación",
+      "name": "Navegación sola no equivale a completar actividades",
+      "status": "PASS"
+    },
+    {
+      "area": "Participación",
+      "name": "Se separan estudiantes y se deduplican nombres",
+      "status": "PASS"
+    },
+    {
+      "area": "Centro de acciones",
+      "name": "Calificación 0 frente al umbral 60%",
+      "status": "PASS"
+    },
+    {
+      "area": "Centro de acciones",
+      "name": "Calificación 59.9 frente al umbral 60%",
+      "status": "PASS"
+    },
+    {
+      "area": "Centro de acciones",
+      "name": "Calificación 60 frente al umbral 60%",
+      "status": "PASS"
+    },
+    {
+      "area": "Centro de acciones",
+      "name": "Calificación 100 frente al umbral 60%",
+      "status": "PASS"
+    },
+    {
+      "area": "Centro de acciones",
+      "name": "Calificación null frente al umbral 60%",
+      "status": "PASS"
+    },
+    {
+      "area": "Centro de acciones",
+      "name": "Calificación \"\" frente al umbral 60%",
+      "status": "PASS"
+    },
+    {
+      "area": "Centro de acciones",
+      "name": "Calificación \"59,9\" frente al umbral 60%",
+      "status": "PASS"
+    },
+    {
+      "area": "Centro de acciones",
+      "name": "El umbral se adapta al máximo del curso",
+      "status": "PASS"
+    },
+    {
+      "area": "Centro de acciones",
+      "name": "Objetivos excluyen entregas completadas y actividades cerradas",
+      "status": "PASS"
+    },
+    {
+      "area": "Centro de acciones",
+      "name": "Nunca accedió se distingue del bajo desempeño",
+      "status": "PASS"
+    },
+    {
+      "area": "Centro de acciones",
+      "name": "Siete días sin acceso requiere contenido disponible",
+      "status": "PASS"
+    },
+    {
+      "area": "Centro de acciones",
+      "name": "Mensaje masivo de seguimiento selecciona solo bajo desempeño y deduplica",
+      "status": "PASS"
+    },
+    {
+      "area": "Centro de acciones",
+      "name": "Filtro warning respeta los límites",
+      "status": "PASS"
+    },
+    {
+      "area": "Centro de acciones",
+      "name": "Filtro good respeta los límites",
+      "status": "PASS"
+    },
+    {
+      "area": "Mensajes",
+      "name": "Canal moodle, destinatario y HTML seguro",
+      "status": "PASS"
+    },
+    {
+      "area": "Mensajes",
+      "name": "Canal email, destinatario y HTML seguro",
+      "status": "PASS"
+    },
+    {
+      "area": "Mensajes",
+      "name": "Canal both, destinatario y HTML seguro",
+      "status": "PASS"
+    },
+    {
+      "area": "Mensajes",
+      "name": "Campo obligatorio mwaMsgSubject vacío bloquea envío",
+      "status": "PASS"
+    },
+    {
+      "area": "Mensajes",
+      "name": "Campo obligatorio mwaMsgBody vacío bloquea envío",
+      "status": "PASS"
+    },
+    {
+      "area": "Mensajes",
+      "name": "Sin canal no envía",
+      "status": "PASS"
+    },
+    {
+      "area": "Mensajes",
+      "name": "Motivo Otro exige situación y objetivo",
+      "status": "PASS"
+    },
+    {
+      "area": "Mensajes",
+      "name": "Fallo del servicio habilita reintento",
+      "status": "PASS"
+    },
+    {
+      "area": "Mensajes",
+      "name": "Fallo de conexión habilita reintento",
+      "status": "PASS"
+    },
+    {
+      "area": "Mensajes",
+      "name": "Dos invocaciones durante envío no duplican el mensaje",
+      "status": "FAIL",
+      "error": "2 == 1"
+    },
+    {
+      "area": "Lista de clase",
+      "name": "Sesiones deduplican eventos y limitan los huecos",
+      "status": "PASS"
+    },
+    {
+      "area": "Lista de clase",
+      "name": "CSV protege fórmulas y comillas",
+      "status": "PASS"
+    },
+    {
+      "area": "Lista de clase",
+      "name": "Presencia distingue acceso reciente y ausencia",
+      "status": "PASS"
+    },
+    {
+      "area": "Calificaciones",
+      "name": "Distingue cero de ausencia: 0",
+      "status": "PASS"
+    },
+    {
+      "area": "Calificaciones",
+      "name": "Distingue cero de ausencia: null",
+      "status": "PASS"
+    },
+    {
+      "area": "Calificaciones",
+      "name": "Distingue cero de ausencia: \"\"",
+      "status": "PASS"
+    },
+    {
+      "area": "Calificaciones",
+      "name": "Distingue cero de ausencia: \"59,5\"",
+      "status": "PASS"
+    },
+    {
+      "area": "Actividades",
+      "name": "Clasifica assign sin depender del texto visible",
+      "status": "PASS"
+    },
+    {
+      "area": "Actividades",
+      "name": "Clasifica forum sin depender del texto visible",
+      "status": "PASS"
+    },
+    {
+      "area": "Actividades",
+      "name": "Clasifica quiz sin depender del texto visible",
+      "status": "PASS"
+    },
+    {
+      "area": "Actividades",
+      "name": "Clasifica h5pactivity sin depender del texto visible",
+      "status": "PASS"
+    },
+    {
+      "area": "Actividades",
+      "name": "Clasifica resource sin depender del texto visible",
+      "status": "PASS"
+    },
+    {
+      "area": "Actividades",
+      "name": "Clasifica label sin depender del texto visible",
+      "status": "PASS"
+    },
+    {
+      "area": "Actividades",
+      "name": "Entrega y visualización son distintas",
+      "status": "PASS"
+    },
+    {
+      "area": "Actividades",
+      "name": "Dos CMID con el mismo nombre siguen siendo actividades distintas",
+      "status": "FAIL",
+      "error": "1 == 2"
+    },
+    {
+      "area": "Actividades",
+      "name": "Ocultar conserva curso y CMID al enviar la solicitud",
+      "status": "PASS"
+    },
+    {
+      "area": "Actividades",
+      "name": "Cancelar desactivar seguimiento no llama al servicio",
+      "status": "PASS"
+    },
+    {
+      "area": "Actividades",
+      "name": "Error al cambiar seguimiento se informa",
+      "status": "PASS"
+    },
+    {
+      "area": "Perfil",
+      "name": "Se reconoce recurso por módulo estable",
+      "status": "PASS"
+    },
+    {
+      "area": "Perfil",
+      "name": "Búsqueda identifica nombres sin distinguir acentos",
+      "status": "PASS"
+    },
+    {
+      "area": "Perfil",
+      "name": "Guardar y borrar nota funciona durante la sesión",
+      "status": "PASS"
+    },
+    {
+      "area": "Intervenciones",
+      "name": "Nota de intervención se guarda y está aislada por curso",
+      "status": "PASS"
+    },
+    {
+      "area": "Intervenciones",
+      "name": "Cancelar eliminación no llama al servicio",
+      "status": "PASS"
+    },
+    {
+      "area": "Intervenciones",
+      "name": "Eliminación usa el identificador solicitado",
+      "status": "PASS"
+    },
+    {
+      "area": "Intervenciones",
+      "name": "Plantilla personaliza nombre del destinatario",
+      "status": "PASS"
+    },
+    {
+      "area": "Intervenciones",
+      "name": "Historial recibido por AJAX queda disponible",
+      "status": "PASS"
+    },
+    {
+      "area": "Intervenciones",
+      "name": "JSON inválido del historial se controla",
+      "status": "PASS"
+    },
+    {
+      "area": "Alertas",
+      "name": "Lista explícita de quienes nunca accedieron",
+      "status": "PASS"
+    },
+    {
+      "area": "Alertas",
+      "name": "Finalización H5P por código excluye una falsa entrega pendiente",
+      "status": "FAIL",
+      "error": "The expression evaluated to a falsy value:\n\n  assert(e.hooks.alerts.isSubmitEvent(log(e,{_action_code:'completion_updated',nomedoevento:'Finalización H5P actualizada'})))\n"
+    },
+    {
+      "area": "Alertas",
+      "name": "Caída de participación",
+      "status": "PASS"
+    },
+    {
+      "area": "Alertas",
+      "name": "Inactividad temprana",
+      "status": "PASS"
+    },
+    {
+      "area": "Alertas",
+      "name": "Acceso simbólico",
+      "status": "PASS"
+    },
+    {
+      "area": "Alertas",
+      "name": "Reactivación",
+      "status": "PASS"
+    },
+    {
+      "area": "Alertas",
+      "name": "Actividad de madrugada se calcula en Mérida",
+      "status": "PASS"
+    },
+    {
+      "area": "Alertas",
+      "name": "Días de actividad simbólica se agrupan en Mérida aunque el navegador use UTC",
+      "status": "FAIL",
+      "error": "1 == 2"
+    },
+    {
+      "area": "Mapa de calor/fechas",
+      "name": "Medianoche Mérida cambia el día y hora de agrupamiento",
+      "status": "PASS"
+    },
+    {
+      "area": "Participación",
+      "name": "Calificación y puntuación nunca salen de límites válidos",
+      "status": "PASS"
+    },
+    {
+      "area": "Lista de clase",
+      "name": "Progreso académico no ejecuta HTML de nombres de actividades",
+      "status": "PASS"
+    },
+    {
+      "area": "Reporte docente",
+      "name": "CMID distinto no se confunde con un nombre coincidente",
+      "status": "FAIL",
+      "error": "true == false"
+    },
+    {
+      "area": "Reporte docente",
+      "name": "Un evento que no es acceso no completa un objetivo de recurso",
+      "status": "FAIL",
+      "error": "true == false"
+    },
+    {
+      "area": "Intervenciones",
+      "name": "Motivos históricos pt/en/es corresponden al mismo código",
+      "status": "PASS"
+    },
+    {
+      "area": "Reporte docente",
+      "name": "No cuenta eventos anteriores ni de otro estudiante",
+      "status": "PASS"
+    },
+    {
+      "area": "Reporte docente",
+      "name": "Un código de finalización H5P cuenta aunque la etiqueta cambie",
+      "status": "FAIL",
+      "error": "The expression evaluated to a falsy value:\n\n  assert(e.hooks.teacherfeedback.isSubmission(log(e,{_action_code:'completion_updated',nomedoevento:'Finalización H5P actualizada'})))\n"
+    },
+    {
+      "area": "Reporte docente",
+      "name": "JSON histórico inválido no rompe el reporte",
+      "status": "PASS"
+    },
+    {
+      "area": "Reporte docente",
+      "name": "Estado de seguimiento integral",
+      "status": "PASS"
+    },
+    {
+      "area": "Reporte docente",
+      "name": "Estado de seguimiento partial",
+      "status": "PASS"
+    },
+    {
+      "area": "Reporte docente",
+      "name": "Estado de seguimiento awaiting",
+      "status": "PASS"
+    },
+    {
+      "area": "Reporte docente",
+      "name": "Estudiante con varias intervenciones no duplica la población",
+      "status": "PASS"
+    },
+    {
+      "area": "Seguridad HTML",
+      "name": "Escapado en classlist",
+      "status": "PASS"
+    },
+    {
+      "area": "Seguridad HTML",
+      "name": "Escapado en grades",
+      "status": "PASS"
+    },
+    {
+      "area": "Seguridad HTML",
+      "name": "Escapado en activities",
+      "status": "PASS"
+    },
+    {
+      "area": "Seguridad HTML",
+      "name": "Escapado en alerts",
+      "status": "PASS"
+    },
+    {
+      "area": "Seguridad HTML",
+      "name": "Escapado en studentprofile",
+      "status": "PASS"
+    },
+    {
+      "area": "Seguridad HTML",
+      "name": "Escapado en interventions",
+      "status": "PASS"
+    },
+    {
+      "area": "Seguridad HTML",
+      "name": "Escapado en teacherfeedback",
+      "status": "PASS"
+    }
+  ]
+}
