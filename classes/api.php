@@ -602,6 +602,8 @@ class api {
                 '_ts'              => (int)$r->timecreated,
                 '_cmid'            => $cmid,
                 '_modtype'         => $modtype,
+                '_action_code'     => (string)$r->action,
+                '_component_code'  => (string)$r->component,
                 '_available'       => is_array($cminfo) ? (int)($cminfo['available'] ?? 1) : 1,
                 '_availablefrom'   => is_array($cminfo) ? (int)($cminfo['availablefrom'] ?? 0) : 0,
                 '_availableuntil'  => is_array($cminfo) ? (int)($cminfo['availableuntil'] ?? 0) : 0,
@@ -719,7 +721,7 @@ class api {
                 'usurioafetado'    => trim($r->fullname),
                 'contextodoevento' => $actname ?: $modtype,
                 'componente'       => 'H5P',
-                'nomedoevento'     => 'H5P completion updated',
+                'nomedoevento'     => get_string('action_h5p_completion_updated', 'block_mwa_dashboard'),
                 'descrio'          => '',
                 'origem'           => 'completion',
                 'endereoip'        => '',
@@ -731,6 +733,8 @@ class api {
                 '_availableuntil'  => is_array($cminfo) ? (int)($cminfo['availableuntil'] ?? 0) : 0,
                 '_duedate'         => is_array($cminfo) ? (int)($cminfo['duedate'] ?? 0) : 0,
                 '_userid'          => (int)$r->userid,
+                '_action_code' => 'completion_updated',
+                '_component_code' => 'mod_h5pactivity',
                 '_synthetic'       => 'h5p_completion',
             ];
         }
@@ -1016,6 +1020,10 @@ class api {
         $items = array_values(array_filter($items, function($item) {
             if (($item->itemmodule ?? '') !== 'forum') {
                 return true;
+            }
+            // Moodle 5.1 mod/forum/lib.php uses itemnumber 1 for whole-forum grading.
+            if (isset($item->itemnumber) && (int)$item->itemnumber === 1) {
+                return false;
             }
             $name = \core_text::strtolower((string)$item->get_name(false));
             $isglobalforumgrade = strpos($name, 'global') !== false
@@ -1324,36 +1332,36 @@ class api {
      */
     private static function translate_component(string $comp): string {
         $map = [
-            'mod_forum'       => 'Forum',
-            'mod_assign'      => 'Assignment',
-            'mod_quiz'        => 'Quiz',
-            'mod_h5pactivity' => 'H5P',
-            'mod_hvp'         => 'H5P',
-            'mod_scorm'       => 'SCORM package',
-            'mod_page'        => 'Page',
-            'mod_book'        => 'Book',
-            'mod_url'         => 'URL',
-            'mod_resource'    => 'File',
-            'mod_folder'      => 'Folder',
-            'mod_glossary'    => 'Glossary',
-            'mod_lesson'      => 'Lesson',
-            'mod_wiki'        => 'Wiki',
-            'mod_choice'      => 'Choice',
-            'mod_choicegroup' => 'Group choice',
-            'mod_groupselect' => 'Group choice',
-            'mod_data'        => 'Database',
-            'mod_chat'        => 'Chat',
-            'mod_feedback'    => 'Feedback',
-            'mod_survey'      => 'Survey',
-            'mod_questionnaire' => 'Questionnaire',
-            'mod_game'        => 'Game',
-            'mod_workshop'    => 'Workshop',
-            'mod_attendance'  => 'Attendance',
-            'mod_board'       => 'Board',
-            'mod_journal'     => 'Journal',
-            'mod_vpl'         => 'Virtual programming lab',
-            'mod_bigbluebuttonbn' => 'Virtual classroom',
-            'core'            => 'System',
+            'mod_forum'       => get_string('component_forum', 'block_mwa_dashboard'),
+            'mod_assign'      => get_string('component_assign', 'block_mwa_dashboard'),
+            'mod_quiz'        => get_string('component_quiz', 'block_mwa_dashboard'),
+            'mod_h5pactivity' => get_string('component_h5pactivity', 'block_mwa_dashboard'),
+            'mod_hvp'         => get_string('component_hvp', 'block_mwa_dashboard'),
+            'mod_scorm'       => get_string('component_scorm', 'block_mwa_dashboard'),
+            'mod_page'        => get_string('component_page', 'block_mwa_dashboard'),
+            'mod_book'        => get_string('component_book', 'block_mwa_dashboard'),
+            'mod_url'         => get_string('component_url', 'block_mwa_dashboard'),
+            'mod_resource'    => get_string('component_resource', 'block_mwa_dashboard'),
+            'mod_folder'      => get_string('component_folder', 'block_mwa_dashboard'),
+            'mod_glossary'    => get_string('component_glossary', 'block_mwa_dashboard'),
+            'mod_lesson'      => get_string('component_lesson', 'block_mwa_dashboard'),
+            'mod_wiki'        => get_string('component_wiki', 'block_mwa_dashboard'),
+            'mod_choice'      => get_string('component_choice', 'block_mwa_dashboard'),
+            'mod_choicegroup' => get_string('component_choicegroup', 'block_mwa_dashboard'),
+            'mod_groupselect' => get_string('component_groupselect', 'block_mwa_dashboard'),
+            'mod_data'        => get_string('component_data', 'block_mwa_dashboard'),
+            'mod_chat'        => get_string('component_chat', 'block_mwa_dashboard'),
+            'mod_feedback'    => get_string('component_feedback', 'block_mwa_dashboard'),
+            'mod_survey'      => get_string('component_survey', 'block_mwa_dashboard'),
+            'mod_questionnaire' => get_string('component_questionnaire', 'block_mwa_dashboard'),
+            'mod_game'        => get_string('component_game', 'block_mwa_dashboard'),
+            'mod_workshop'    => get_string('component_workshop', 'block_mwa_dashboard'),
+            'mod_attendance'  => get_string('component_attendance', 'block_mwa_dashboard'),
+            'mod_board'       => get_string('component_board', 'block_mwa_dashboard'),
+            'mod_journal'     => get_string('component_journal', 'block_mwa_dashboard'),
+            'mod_vpl'         => get_string('component_vpl', 'block_mwa_dashboard'),
+            'mod_bigbluebuttonbn' => get_string('component_bigbluebuttonbn', 'block_mwa_dashboard'),
+            'core'            => get_string('component_core', 'block_mwa_dashboard'),
         ];
         return $map[$comp] ?? ucfirst(str_replace(['mod_', 'core_'], '', $comp));
     }
@@ -1367,22 +1375,22 @@ class api {
     private static function translate_action(string $action, string $comp): string {
         if (($comp === 'mod_quiz' || $comp === 'mod_h5pactivity' || $comp === 'mod_hvp') &&
             ($action === 'submitted' || $action === 'attempt_submitted' || $action === 'attempt submitted')) {
-            return $comp === 'mod_quiz' ? 'Quiz attempt submitted' : 'H5P attempt submitted';
+            return $comp === 'mod_quiz' ? get_string('action_quiz_attempt_submitted', 'block_mwa_dashboard') : get_string('action_h5p_attempt_submitted', 'block_mwa_dashboard');
         }
         $map = [
-            'viewed'             => 'Course module viewed',
-            'submitted'          => 'Submission submitted',
-            'uploaded'           => 'File uploaded',
-            'graded'             => 'Submission graded',
-            'created'            => 'Content created',
-            'loggedin'           => 'User logged in',
-            'loggedout'          => 'User logged out',
-            'attempt_submitted'  => 'Quiz attempt submitted',
-            'attempt_started'    => 'Quiz attempt started',
-            'course_viewed'      => 'Course viewed',
-            'post_created'       => 'Forum post created',
-            'discussion_created' => 'Discussion created',
-            'discussion_viewed'  => 'Discussion viewed',
+            'viewed'             => get_string('action_viewed', 'block_mwa_dashboard'),
+            'submitted'          => get_string('action_submitted', 'block_mwa_dashboard'),
+            'uploaded'           => get_string('action_uploaded', 'block_mwa_dashboard'),
+            'graded'             => get_string('action_graded', 'block_mwa_dashboard'),
+            'created'            => get_string('action_created', 'block_mwa_dashboard'),
+            'loggedin'           => get_string('action_loggedin', 'block_mwa_dashboard'),
+            'loggedout'          => get_string('action_loggedout', 'block_mwa_dashboard'),
+            'attempt_submitted'  => get_string('action_attempt_submitted', 'block_mwa_dashboard'),
+            'attempt_started'    => get_string('action_attempt_started', 'block_mwa_dashboard'),
+            'course_viewed'      => get_string('action_course_viewed', 'block_mwa_dashboard'),
+            'post_created'       => get_string('action_post_created', 'block_mwa_dashboard'),
+            'discussion_created' => get_string('action_discussion_created', 'block_mwa_dashboard'),
+            'discussion_viewed'  => get_string('action_discussion_viewed', 'block_mwa_dashboard'),
         ];
         return $map[$action] ?? $action;
     }

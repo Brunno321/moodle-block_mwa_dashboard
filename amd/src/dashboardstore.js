@@ -18,7 +18,7 @@
  * @copyright  2026 Bruno Porto
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define([], function() {
+define(['block_mwa_dashboard/classify'], function(Classify) {
 
     'use strict';
 
@@ -388,6 +388,8 @@ define([], function() {
         formatDateTime: formatDateTime,
         formatNumber: formatNumber,
         parseLogDate: parseLogDate,
+        classify: Classify,
+        reasonCode: function(value) { return Classify.reasonCode(value, config.reasonaliases); },
         tr: tr,
         configure: configure,
         register: register,

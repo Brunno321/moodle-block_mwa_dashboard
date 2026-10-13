@@ -111,15 +111,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         return Number(log && (log._ts || log.timecreated || 0)) || 0;
     }
 
-    function reasonBucket(value) {
-        var text = lower(value).normalize ? lower(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '') : lower(value);
-        if (text.indexOf('nunca') >= 0 || text.indexOf('never') >= 0) { return 'never'; }
-        if (text.indexOf('particip') >= 0 || text.indexOf('engaj') >= 0 || text.indexOf('acesso') >= 0 ||
-                text.indexOf('evas') >= 0 || text.indexOf('reeng') >= 0) { return 'low'; }
-        if (text.indexOf('pend') >= 0 || text.indexOf('entrega') >= 0 || text.indexOf('tarefa') >= 0) { return 'pending'; }
-        if (text.indexOf('dific') >= 0 || text.indexOf('nota') >= 0 || text.indexOf('desempenho') >= 0) { return 'difficult'; }
-        return 'other';
-    }
+    function reasonBucket(value) { return Store.reasonCode(value); }
 
     function parseSnapshot(row) {
         try {
@@ -245,7 +237,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         }).sort(function(a, b) { return timestamp(a) - timestamp(b); });
         var academic = after.filter(isAcademicAction);
         var submissions = after.filter(isSubmission);
-        var reason = reasonBucket(row.snapshot_reason || row.intervention_reason);
+        var reason = reasonBucket(row._reason_code || row.snapshot_reason || row.intervention_reason);
         var trackedItems = norm(row.target_type) === 'activity_completion' ? parseTargets(row).map(function(target) {
             return {
                 key: studentKey(row) + ':' + (target.cmid || target.seq || lower(target.name)),

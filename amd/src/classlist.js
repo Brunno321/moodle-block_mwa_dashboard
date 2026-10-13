@@ -366,15 +366,7 @@ define(['block_mwa_dashboard/dashboardstore', 'block_mwa_dashboard/engagementcal
       }
     
       /* ── activity coverage calculation ── */
-      function isCourseGeneral(name) {
-        var n = norm(name);
-        if (!n) return true;
-        if (/^curso\s*:/i.test(n)) return true;
-        if (/^sistema$/i.test(n)) return true;
-        if (/^área de texto/i.test(n)) return true;
-        if (/^mídia/i.test(n)) return true;
-        return false;
-      }
+      function isCourseGeneral(name) { return Store.classify.genericName(name); }
     
       /* ── dots de atividade por aluno (modo "Ver atividades") ── */
       function buildActDots(name, grades) {
@@ -480,22 +472,7 @@ define(['block_mwa_dashboard/dashboardstore', 'block_mwa_dashboard/engagementcal
         }).join('') + '</div>';
       }
 
-      function moduleOf(log) {
-        var mod = norm(log._modtype || log.modtype || log.module || log.modname || '').toLowerCase();
-        var comp = norm(log.component || log.componente || '').toLowerCase();
-        if (!mod && /^mod_/.test(comp)) mod = comp.replace(/^mod_/, '');
-        if (mod === 'hvp') mod = 'h5pactivity';
-        if (mod === 'assignsubmission') mod = 'assign';
-        if (!mod || mod === 'core' || mod === 'system') {
-          if (comp === 'página' || comp === 'page') mod = 'page';
-          else if (comp === 'livro' || comp === 'book') mod = 'book';
-          else if (comp === 'url') mod = 'url';
-          else if (comp === 'arquivo' || comp === 'file' || comp === 'recurso' || comp === 'resource') mod = 'resource';
-          else if (comp === 'pasta' || comp === 'folder') mod = 'folder';
-          else if (comp === 'pacote de conteúdo ims' || comp === 'ims content package' || comp === 'imscp') mod = 'imscp';
-        }
-        return mod;
-      }
+      function moduleOf(log) { return Store.classify.moduleType(log); }
 
       function realContextName(log) {
         var ctx = norm(log.contextodoevento || log.eventcontext || log.context || '');

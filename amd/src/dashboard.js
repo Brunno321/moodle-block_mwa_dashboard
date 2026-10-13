@@ -147,6 +147,7 @@ define([
                 config.language = result.language || 'es_mx';
                 config.locale = result.locale || 'es-MX';
                 config.timezone = result.timezone || 'America/Merida';
+                config.reasonaliases = JSON.parse(result.reasonaliases || '{}');
                 Store.configure(config, strings, callAction);
                 DashboardApp.init(config);
             })

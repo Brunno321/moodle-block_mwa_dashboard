@@ -568,31 +568,16 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates'], function(Store,
           'Outro':              'msg_reason_other',
         };
         var key = map[reason];
-        return (key ? tr(key) : reason) + channel;
+        var code = Store.reasonCode(reason);
+        var labels = {never:'msg_reason_never',low:'msg_reason_low_participation',pending:'msg_reason_academic_pending',difficult:'msg_reason_difficulty',other:'msg_reason_other'};
+        return (key ? tr(key) : code !== 'other' ? tr(labels[code]) : reason) + channel;
       }
 
       /* Classify reason into one of the 5 motivo buckets */
-      function reasonBucket(reason) {
-        var r = norm(reason).replace(/\s*\[(moodle|email)\]\s*$/i, '');
-        if (!r) return 'other';
-        var rLow = r.toLowerCase();
-        if (rLow.normalize) rLow = rLow.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        if (rLow.indexOf('nunca') >= 0 || rLow === 'never accessed') return 'never';
-        if (rLow.indexOf('engajamento') >= 0 || rLow.indexOf('particip') >= 0 ||
-            rLow.indexOf('engagement') >= 0 || rLow.indexOf('inativ') >= 0 ||
-            rLow.indexOf('evas') >= 0 || rLow.indexOf('reeng') >= 0 ||
-            rLow.indexOf('sem acesso') >= 0 || rLow.indexOf('no access') >= 0) return 'low';
-        if (rLow.indexOf('tarefa') >= 0 || rLow.indexOf('pendenc') >= 0 ||
-            rLow.indexOf('entrega') >= 0 || rLow.indexOf('task') >= 0 ||
-            rLow.indexOf('pending') >= 0) return 'pending';
-        if (rLow.indexOf('nota') >= 0 || rLow.indexOf('dificul') >= 0 ||
-            rLow.indexOf('desempenho') >= 0 || rLow.indexOf('grade') >= 0 ||
-            rLow.indexOf('academ') >= 0) return 'difficult';
-        return 'other';
-      }
+      function reasonBucket(reason) { return Store.reasonCode(reason); }
 
       function effectiveReason(d) {
-        return norm((d && (d.snapshot_reason || d.snapshot_situation || d.intervention_reason)) || '');
+        return norm((d && (d._reason_code || d.snapshot_reason || d.snapshot_situation || d.intervention_reason)) || '');
       }
 
       function trackedTargets(d) {
@@ -664,13 +649,8 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates'], function(Store,
           return lowerText([log.nomedoevento, log.eventname, log.action, log.componente, log.component,
             log._modtype, log.modtype, log.module, log.contextodoevento, log.eventcontext, log.context].join(' '));
         }
-        function isCompletion(log) {
-          var text = eventText(log);
-          return /submit|submitted|submission|upload|attempt|tentativa|submet|envio|enviad|entrega|post created|discussion created|postagem|completed|completion|conclu|graded|grade|avaliad|nota/.test(text);
-        }
-        function isAccess(log) {
-          return /view|viewed|visualiz|open|abert|access|acess|read|leitur/.test(eventText(log));
-        }
+        function isCompletion(log) { return Store.classify.isSubmission(log); }
+        function isAccess(log) { return Store.classify.isAccess(log); }
         function isResource(target) {
           if (targetType === 'resource_access') return true;
           var type = lowerText(target && target.type);
@@ -1825,18 +1805,8 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates'], function(Store,
         var cutoff = period === 'all' ? 0 : Date.now() - Number(period || 30) * 86400000;
 
         function eventTs(r) { var date = Store.parseLogDate(r); return date ? date.getTime() : 0; }
-        function eventKind(r) {
-          var ev = norm(r.nomedoevento || r.eventname || r.action).toLowerCase();
-          var comp = norm(r.componente || r.component || r._modtype).toLowerCase();
-          if (ev.indexOf('submit') !== -1 || ev.indexOf('submitted') !== -1 || ev.indexOf('post created') !== -1 || ev.indexOf('discussion created') !== -1 || ev.indexOf('attempt submitted') !== -1 || ev.indexOf('completed') !== -1 || ev.indexOf('completion') !== -1 || ev.indexOf('graded') !== -1) return 'submit';
-          if (comp === 'message' || ev.indexOf('message') !== -1) return 'msg';
-          return 'access';
-        }
-        function isGenericCourseView(r) {
-          var ctx = norm(r.contextodoevento || r.eventcontext || r.context).toLowerCase();
-          var ev = norm(r.nomedoevento || r.eventname || r.action).toLowerCase();
-          return ctx === 'course module viewed' || ev === 'course module viewed';
-        }
+        function eventKind(r) { return Store.classify.eventKind(r); }
+        function isGenericCourseView(r) { if (r._action_code) return !r._cmid && Store.classify.isAccess(r); return Store.classify.genericName(r.contextodoevento || r.nomedoevento); }
         function eventTitle(kind) {
           if (kind === 'msg') return tr('sp_tl_message');
           if (kind === 'submit') return tr('sp_tl_completion');

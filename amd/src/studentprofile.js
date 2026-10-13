@@ -300,18 +300,9 @@ function(Store, EngagementCalc, ActionCenter, Templates, Chart) {
         }).join('') + '</div>';
       }
 
-      function moduleOf(log) {
-        var mod = norm(log._modtype || log.modtype || log.module || log.modname || '').toLowerCase();
-        var comp = norm(log.component || log.componente || '').toLowerCase();
-        if (!mod && /^mod_/.test(comp)) mod = comp.replace(/^mod_/, '');
-        if (mod === 'hvp') mod = 'h5pactivity';
-        return mod;
-      }
+      function moduleOf(log) { return Store.classify.moduleType(log); }
 
-      function isCourseGeneral(v) {
-        v = norm(v).toLowerCase();
-        return !v || v === 'course module viewed' || v === 'módulo do curso visualizado' || v === 'course viewed' || v === 'curso visualizado';
-      }
+      function isCourseGeneral(v) { return Store.classify.genericName(v); }
 
       function isResourceModule(log) {
         var mod = moduleOf(log);
@@ -567,7 +558,7 @@ function(Store, EngagementCalc, ActionCenter, Templates, Chart) {
             var gn = (norm(g['First name']) + ' ' + norm(g['Last name'])).trim();
             if (studentKey(gn) === selectedKey) {
               gradeRow = g;
-              var k = Object.keys(g).find(function (x) { var lx = x.toLowerCase(); return lx.includes('course total') || lx.includes('total do curso'); });
+              var k = Object.prototype.hasOwnProperty.call(g, 'Course total (Grade)') ? 'Course total (Grade)' : Object.keys(g).find(function (x) { var lx = x.toLowerCase(); return lx.includes('course total') || lx.includes('total do curso'); });
               if (k) { var n = parseFloat(String(g[k]).replace(',','.')); if (!isNaN(n)) grade = n; }
               return true;
             }

@@ -478,7 +478,11 @@ final class snapshot_manager {
                 $log['nomedoevento'] ?? '', $log['eventname'] ?? '', $log['action'] ?? '',
                 $log['componente'] ?? '', $log['component'] ?? '', $log['_modtype'] ?? '',
             ]));
-            if (!$isgeneral && preg_match('/submit|submission|upload|post created|discussion created|attempt submitted|graded|submetid|envio/u', $eventtext)) {
+            $submissioncodes = ['submitted', 'attempt_submitted', 'uploaded', 'graded', 'post_created',
+                'discussion_created', 'completed', 'completion_updated'];
+            $submitted = isset($log['_action_code']) ? in_array($log['_action_code'], $submissioncodes, true) :
+                preg_match('/submit|submission|upload|post created|discussion created|attempt submitted|graded|submetid|envio/u', $eventtext);
+            if (!$isgeneral && $submitted) {
                 $submittedactivities[$lowercontext] = true;
             }
         }

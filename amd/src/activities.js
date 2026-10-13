@@ -60,6 +60,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
       function studentEmail(r) { return norm(r.email || r.useremail || ''); }
       function logTime(r) { return norm(r.hora || r.time || r.date || ''); }
       function resourceName(r) {
+        if (r._cmid && r.contextodoevento) return norm(r.contextodoevento);
         var ctx = norm(r.contextodoevento || r.eventcontext || r.context || '');
         var ev = eventName(r);
         var name = ctx || ev || 'Outro';
@@ -75,6 +76,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         ].join(' ').toLowerCase();
       }
       function isH5PActivity(r) {
+        if (r._modtype) return Store.classify.moduleType(r) === 'h5pactivity';
         var text = lowerText(r);
         return text.indexOf('h5p') >= 0 ||
                text.indexOf('hvp') >= 0 ||
@@ -84,18 +86,14 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
                text.indexOf('interactive content') >= 0;
       }
       function isManagementEvent(r) {
+        if (r._action_code) return ['updated', 'created'].indexOf(r._action_code) >= 0;
         var ev = eventName(r).toLowerCase();
         return ev.indexOf('mÃƒÂ³dulo de curso atualizado') >= 0 ||
                ev.indexOf('mÃƒÂ³dulo de curso criado') >= 0 ||
                ev.indexOf('course module updated') >= 0 ||
                ev.indexOf('course module created') >= 0;
       }
-      function isCompletionEvent(r) {
-        var ev = eventName(r).toLowerCase();
-        return ev.indexOf('conclus') >= 0 ||
-               ev.indexOf('completion') >= 0 ||
-               ev.indexOf('completed') >= 0;
-      }
+      function isCompletionEvent(r) { return Store.classify.isSubmission(r); }
     
       var CURRENT_FILTER = 'all';
       var CURRENT_AVAILABILITY = 'all';
@@ -191,8 +189,8 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         'imscp', 'wiki', 'label']);
 
       function getEventType(r) {
-        var comp = componentName(r).toLowerCase();
-        var modtype = (r._modtype||'').toLowerCase();
+        var comp = r._modtype ? Store.classify.moduleType(r) : componentName(r).toLowerCase();
+        var modtype = Store.classify.moduleType(r);
         var ev   = eventName(r).toLowerCase();
         if (modtype === 'label' || comp === 'label' ||
             comp.indexOf('Ã¡rea de mÃ­dia e texto') >= 0 ||
@@ -202,7 +200,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         }
     
         /* Non-module noise is discarded before anything else. */
-        if (comp === 'system' || ev === 'user logged in' || ev === 'user logged out' || ev === 'course viewed') {
+        if (r._component_code === 'core' || comp === 'system' || ev === 'user logged in' || ev === 'user logged out' || ev === 'course viewed') {
           return 'login';
         }
 
@@ -247,80 +245,9 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         return 'outro';
       }
     
-      function isCourseGeneral(name) {
-        var n = norm(name);
-        var plain = n.toLowerCase().normalize ? n.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') : n.toLowerCase();
-        if (plain.indexOf('area de midia e texto') === 0 ||
-            plain.indexOf('area de texto e midia') === 0 ||
-            plain.indexOf('text and media area') === 0) return true;
-        if (!n) return true;
-        if (/^curso\s*:/i.test(n)) return true;
-        if (/^sistema$/i.test(n)) return true;
-        if (/^system$/i.test(n)) return true;
-        if (/^ÃƒÂ¡rea de texto/i.test(n)) return true;
-        if (/^mÃƒÂ­dia/i.test(n)) return true;
-        return false;
-      }
+      function isCourseGeneral(name) { return Store.classify.genericName(name); }
     
-      function isSubmission(r) {
-        var ev   = eventName(r).toLowerCase();
-        var comp = componentName(r).toLowerCase();
-    
-        if (comp === 'assignment' || comp === 'tarefa') {
-          return ev === 'submission submitted' ||
-                 ev === 'file uploaded' ||
-                 ev.includes('submit') ||
-                 ev.includes('upload');
-        }
-    
-        if (isH5PActivity(r)) {
-          return isCompletionEvent(r) ||
-                 ev.indexOf('attempt') >= 0 ||
-                 ev.indexOf('tentativa') >= 0 ||
-                 ev.indexOf('submitted') >= 0 ||
-                 ev.indexOf('submit') >= 0 ||
-                 ev === 'updated' ||
-                 ev.indexOf('hvp') >= 0 ||
-                 ev.indexOf('h5p') >= 0 ||
-                 ev.indexOf('xapi') >= 0;
-        }
-
-        if (comp === 'quiz' || comp === 'game' || comp === 'jogo' || comp === 'questionÃƒÂ¡rio' || comp === 'questionario' || comp === 'h5p' || comp === 'hvp' ||
-            comp.indexOf('h5p') >= 0 || comp.indexOf('hvp') >= 0 ||
-            comp === 'scorm package' || comp === 'lesson') {
-          return ev === 'quiz attempt submitted' ||
-                 ev === 'submission submitted' ||
-                 ev === 'mod_hvp: attempt submitted' ||
-                 ev === 'h5p attempt submitted' ||
-                 ev.includes('attempt_submitted') ||
-                 ev.includes('attempt submitted') ||
-                 ev.includes('mod_hvp') ||
-                 ev.includes('hvp') ||
-                 ev.includes('h5p') ||
-                 ev.includes('xapi') ||
-                 ev.includes('submitted') ||
-                 ev.includes('submit') ||
-                 ev.includes('tentativa enviada') ||
-                 ev.includes('tentativa submetida') ||
-                 ev.includes('enviou a tentativa');
-        }
-    
-        if (comp === 'forum' || comp === 'fÃƒÂ³rum') {
-          return ev === 'forum post created' ||
-                 ev === 'discussion created' ||
-                 ev === 'content created' ||
-                 ev.includes('post_created') ||
-                 ev.includes('post created') ||
-                 ev.includes('discussion_created') ||
-                 ev.includes('discussion created') ||
-                 ev.includes('subscription_created') ||
-                 ev.includes('subscription created') ||
-                 ev.includes('user_subscribed') ||
-                 ev.includes('user subscribed');
-        }
-    
-        return false;
-      }
+      function isSubmission(r) { return Store.classify.isSubmission(r); }
     
       var parseDate = Store.parseLogDate;
     

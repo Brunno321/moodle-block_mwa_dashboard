@@ -181,7 +181,6 @@ class external extends \external_api {
         $text = preg_replace('/[ \t]+\n/u', "\n", $text);
         $text = preg_replace('/\n[ \t]+/u', "\n", $text);
         $text = preg_replace('/[ \t]{2,}/u', ' ', $text);
-        $text = preg_replace('/\s*ITENS\s+ACOMPANHADOS[\s\S]*$/iu', '', $text);
         $text = preg_replace('/\n{3,}/u', "\n\n", trim($text));
 
         $lines = preg_split('/\n{2,}/u', $text);
@@ -284,6 +283,7 @@ class external extends \external_api {
             'language' => current_language(),
             'timezone' => api::display_timezone(),
             'locale' => api::display_locale(),
+            'reasonaliases' => json_encode(compatibility::reason_aliases(), JSON_UNESCAPED_UNICODE),
         ];
     }
 
@@ -293,6 +293,7 @@ class external extends \external_api {
             'language' => new \external_value(PARAM_TEXT, 'Current language'),
             'timezone' => new \external_value(PARAM_TEXT, 'Display timezone'),
             'locale' => new \external_value(PARAM_TEXT, 'Display locale'),
+            'reasonaliases' => new \external_value(PARAM_RAW, 'Historical reason identifiers'),
         ]);
     }
 
@@ -404,18 +405,22 @@ class external extends \external_api {
         $sender = $DB->get_record('user', ['id' => $USER->id], '*', MUST_EXIST);
 
         $cleanreason = trim($params['intervention_reason']);
+        $reasoncode = compatibility::reason_code($cleanreason);
         $objectives = [
-            'Nunca acessou'        => get_string('snapshot_objective_never', 'block_mwa_dashboard'),
-            'Baixa participação'   => get_string('snapshot_objective_low', 'block_mwa_dashboard'),
-            'Pendência acadêmica'  => get_string('snapshot_objective_pending', 'block_mwa_dashboard'),
-            'Dificuldade acadêmica'=> get_string('snapshot_objective_difficult', 'block_mwa_dashboard'),
+            'never' => get_string('snapshot_objective_never', 'block_mwa_dashboard'),
+            'low' => get_string('snapshot_objective_low', 'block_mwa_dashboard'),
+            'pending' => get_string('snapshot_objective_pending', 'block_mwa_dashboard'),
+            'difficult' => get_string('snapshot_objective_difficult', 'block_mwa_dashboard'),
         ];
-        $situation = $cleanreason === 'Outro' ? trim($params['snapshot_situation']) : $cleanreason;
+        $reasonlabels = ['never' => 'msg_reason_never', 'low' => 'msg_reason_low_participation',
+            'pending' => 'msg_reason_academic_pending', 'difficult' => 'msg_reason_difficulty'];
+        $situation = $reasoncode === 'other' ? trim($params['snapshot_situation']) :
+            get_string($reasonlabels[$reasoncode], 'block_mwa_dashboard');
         $objective = trim($params['snapshot_objective']);
-        if ($objective === '' && isset($objectives[$cleanreason])) {
-            $objective = $objectives[$cleanreason];
+        if ($objective === '' && isset($objectives[$reasoncode])) {
+            $objective = $objectives[$reasoncode];
         }
-        if ($cleanreason === 'Outro' && ($situation === '' || $objective === '')) {
+        if ($reasoncode === 'other' && ($situation === '' || $objective === '')) {
             return ['success' => false, 'status' => 'error_snapshot_fields_required', 'recordid' => 0];
         }
 
@@ -601,6 +606,7 @@ class external extends \external_api {
                 'timesent'            => (int)$r->timesent,
                 'status'              => $r->status,
                 'intervention_reason' => $r->intervention_reason ?? '',
+                '_reason_code' => compatibility::reason_code($r->intervention_reason ?? ''),
                 'send_type'           => preg_match('/\[(email)\]\s*$/i', $r->intervention_reason ?? '')
                     ? 'email' : ($r->send_type ?? 'moodle'),
                 'target_type'         => $r->target_type ?? '',

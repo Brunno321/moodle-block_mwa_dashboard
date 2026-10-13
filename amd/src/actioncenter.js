@@ -100,6 +100,7 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates',
       return isNaN(cmid)?0:cmid;
     }
     function realContextName(log){
+      if(log._cmid && log.contextodoevento)return norm(log.contextodoevento);
       var ctxName=norm(log&& (log.contextodoevento||log.eventcontext||log.context||''));
       var ev=norm(log&& (log.nomedoevento||log.eventname||log.action||''));
       var low=lower(ctxName);
@@ -258,8 +259,8 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates',
       }).filter(function(item){return item.name&&item.available&&!item.done;});
     }
     function targetsForReason(reason, target){
-      if(reason==='Pendência acadêmica')return buildActivityTargetsForStudent(target);
-      if(reason==='Baixa participação')return buildResourceTargetsForStudent(target);
+      if(Store.reasonCode(reason)==='pending')return buildActivityTargetsForStudent(target);
+      if(Store.reasonCode(reason)==='low')return buildResourceTargetsForStudent(target);
       return [];
     }
     function helpTip(text){
@@ -954,7 +955,7 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates',
         'Outro':''
       };
       function updateSnapshotFields(){
-        snapshotSituationDiv.style.display=reasonSel.value==='Outro'?'block':'none';
+        snapshotSituationDiv.style.display=Store.reasonCode(reasonSel.value)==='other'?'block':'none';
         snapshotObjectiveInput.value=suggestedObjectives[reasonSel.value]||'';
       }
       var targetSelectDiv=document.createElement('div');
@@ -1035,13 +1036,13 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates',
         });
       }
       function targetTypeForReason(reason){
-        if(reason==='Pendência acadêmica')return 'activity_completion';
-        if(reason==='Baixa participação')return 'resource_access';
-        if(reason==='Nunca acessou')return 'access_after_message';
+        if(Store.reasonCode(reason)==='pending')return 'activity_completion';
+        if(Store.reasonCode(reason)==='low')return 'resource_access';
+        if(Store.reasonCode(reason)==='never')return 'access_after_message';
         return '';
       }
       function reasonUsesTargetItems(reason){
-        return reason==='Pendência acadêmica'||reason==='Baixa participação';
+        return Store.reasonCode(reason)==='pending'||Store.reasonCode(reason)==='low';
       }
       function updateTargetMessage(){
         var tpl=reasonTemplates[reasonSel.value];
@@ -1083,7 +1084,7 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates',
       function renderTargetOptions(){
         var reason=reasonSel.value;
         selectedTargetOptions=[];
-        if(reason!=='Pendência acadêmica'&&reason!=='Baixa participação'){
+        if(Store.reasonCode(reason)!=='pending'&&Store.reasonCode(reason)!=='low'){
           targetSelectDiv.style.display='none';
           targetSelectList.replaceChildren();
           return;
@@ -1220,7 +1221,7 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates',
         var message=msgArea.value||'';
         var reason=reasonSel.value||'';
         if(!subject.trim()||!message.trim()){Store.notify(tr('msg_required_subject_body'),'warning');return;}
-        if(reason==='Outro'&&(!snapshotSituationInput.value.trim()||!snapshotObjectiveInput.value.trim())){
+        if(Store.reasonCode(reason)==='other'&&(!snapshotSituationInput.value.trim()||!snapshotObjectiveInput.value.trim())){
           Store.notify(tr('snapshot_other_required', 'Enter the situation identified and the intervention objective.'),'warning');return;
         }
         if(!selectedTargets.length){Store.notify(tr('msg_recipients_required', 'Select at least one recipient.'),'warning');return;}

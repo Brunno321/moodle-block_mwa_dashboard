@@ -257,21 +257,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         return (!from || from <= now) && (!until || until >= now);
     }
 
-    function isSubmission(log) {
-        var text = lower([
-            log.nomedoevento,
-            log.eventname,
-            log.action,
-            log.componente,
-            log.component,
-            log._modtype
-        ].join(' '));
-        return text.indexOf('submit') >= 0 || text.indexOf('submitted') >= 0 ||
-            text.indexOf('submission') >= 0 || text.indexOf('upload') >= 0 ||
-            text.indexOf('post created') >= 0 || text.indexOf('discussion created') >= 0 ||
-            text.indexOf('attempt submitted') >= 0 || text.indexOf('graded') >= 0 ||
-            text.indexOf('submetid') >= 0 || text.indexOf('envio') >= 0;
-    }
+    function isSubmission(log) { return Store.classify.isSubmission(log); }
 
     function calculateForStudent(name, email, logs, grades) {
         var allActivities = new Set();

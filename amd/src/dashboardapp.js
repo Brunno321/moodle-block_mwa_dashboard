@@ -350,7 +350,7 @@ define([
         function gradePicture(row){var k=Object.keys(row).find(function(x){var lx=lower(x);return lx==='picture url'||lx==='pictureurl'||lx.includes('profile image')||lx.includes('foto')});return k?norm(row[k]):''}
         function gradeUserId(row){var k=Object.keys(row).find(function(x){var lx=lower(x);return lx==='user id'||lx==='userid'||lx==='id do usuario'||lx==='id do usuÃƒÆ’Ã‚Â¡rio'});var n=k?parseInt(row[k],10):0;return isNaN(n)?0:n}
         function logPicture(log){return norm(log.pictureurl||log.profileimageurl||log.userpictureurl)}
-        function isSubmission(log){var text=lower([log.nomedoevento,log.action,log.componente,log.component].join(' '));return text.includes('submit')||text.includes('submission')||text.includes('submitted')||text.includes('upload')||text.includes('graded')}
+        function isSubmission(log) { return Store.classify.isSubmission(log); }
         function activityName(log){return norm(log.contextodoevento)||norm(log.context)||norm(log._modtype)||null}
         function componentName(log){return norm(log.componente)||norm(log.component)||norm(log._modtype)||tr('other','Other')}
         function logCmid(log){var n=parseInt(log._cmid||log.contextinstanceid||0,10);return isNaN(n)?0:n}
@@ -731,6 +731,7 @@ define([
           return raw || tr('unknown_activity');
         }
         function hmIsGenericResourceName(name, l) {
+          if (l && l._action_code) return !l._cmid;
           var text = String(name || '').toLowerCase();
           var ev = String((l && l.nomedoevento) || '').toLowerCase();
           return !text ||
@@ -760,18 +761,7 @@ define([
           })[0];
           return modMatch ? hmResourceName(modMatch) : '';
         }
-        function hmModuleType(l) {
-          var source = String((l && (l._modtype || l.componente || l.component || l.contextodoevento || l.nomedoevento)) || '').toLowerCase();
-          if (source.indexOf('h5p') >= 0 || source.indexOf('hvp') >= 0 || source.indexOf('interativo') >= 0) return 'h5pactivity';
-          if (source.indexOf('quiz') >= 0 || source.indexOf('question') >= 0 || source.indexOf('question') >= 0) return 'quiz';
-          if (source.indexOf('forum') >= 0 || source.indexOf('fÃƒÆ’Ã‚Â³rum') >= 0 || source.indexOf('fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³rum') >= 0) return 'forum';
-          if (source.indexOf('assign') >= 0 || source.indexOf('tarefa') >= 0) return 'assign';
-          if (source.indexOf('page') >= 0 || source.indexOf('pÃƒÆ’Ã‚Â¡gina') >= 0 || source.indexOf('pÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡gina') >= 0) return 'page';
-          if (source.indexOf('resource') >= 0 || source.indexOf('arquivo') >= 0) return 'resource';
-          if (source.indexOf('url') >= 0) return 'url';
-          if (source.indexOf('scorm') >= 0) return 'scorm';
-          return '';
-        }
+        function hmModuleType(l) { return Store.classify.moduleType(l); }
         function hmCourseModuleId(l) {
           var explicit = Number(l && (l.cmid || l._cmid || l.coursemoduleid || l.course_module_id || 0));
           if (explicit > 0) return explicit;
