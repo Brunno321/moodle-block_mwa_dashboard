@@ -351,18 +351,18 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
 
     function formatDate(ts) {
         if (!ts) { return '—'; }
-        return new Date(ts * 1000).toLocaleDateString();
+        return Store.formatDate(new Date(ts * 1000), {});
     }
 
     function formatDateTime(ts) {
         if (!ts) { return '—'; }
-        return new Date(ts * 1000).toLocaleString([], {dateStyle: 'short', timeStyle: 'short'});
+        return Store.formatDateTime(new Date(ts * 1000), {dateStyle: 'short', timeStyle: 'short'});
     }
 
     function localDateKey(ts) {
         var date = ts instanceof Date ? ts : new Date(Number(ts) * 1000);
-        return date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' +
-            String(date.getDate()).padStart(2, '0');
+        return Store.dateParts(date).year + '-' + String((Store.dateParts(date).month - 1) + 1).padStart(2, '0') + '-' +
+            String(Store.dateParts(date).day).padStart(2, '0');
     }
 
     function duration(seconds) {
@@ -732,9 +732,9 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
                     weakest.responded + ' de ' + weakest.total + ' (' + pctText(weakest.responded, weakest.total) + ').' : ''));
         }
         var improved = engagement.improved.concat(grade.improved);
-        var issuedAt = new Date().toLocaleString([], {dateStyle: 'long', timeStyle: 'short'});
-        var period = filters.from || filters.to ? (filters.from ? new Date(filters.from + 'T00:00:00').toLocaleDateString() : 'inicio') +
-            ' a ' + (filters.to ? new Date(filters.to + 'T00:00:00').toLocaleDateString() : 'hoy') : 'Todo el periodo disponible';
+        var issuedAt = Store.formatDateTime(new Date(), {dateStyle: 'long', timeStyle: 'short'});
+        var period = filters.from || filters.to ? (filters.from ? Store.formatDate(new Date(filters.from + 'T00:00:00'), {}) : 'inicio') +
+            ' a ' + (filters.to ? Store.formatDate(new Date(filters.to + 'T00:00:00'), {}) : 'hoy') : 'Todo el periodo disponible';
         var interventionRows = rows.slice().sort(function(a, b) { return b.captured - a.captured; }).map(function(row) {
             var status = !row.response ? 'Sin respuesta' : row.reached === true ? 'Objetivo alcanzado' : 'En seguimiento';
             return '<tr><td>' + esc(formatDateTime(row.captured)) + '</td><td>' + esc(row.raw.student_name || row.raw.student_email || 'Sin identificar') +
@@ -838,14 +838,14 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
             var points = Object.keys(byDay).sort().map(function(day) {
                 var dayValues = byDay[day];
                 return {
-                    label: new Date(day + 'T12:00:00').toLocaleDateString([], {day: '2-digit', month: '2-digit'}),
+                    label: Store.formatDate(new Date(day + 'T12:00:00'), {day: '2-digit', month: '2-digit'}),
                     value: item.approval ? dayValues.filter(function(value) { return value.before >= 100; }).length :
                         avg(dayValues.map(function(value) { return value.before; })),
                     students: item.approval ? dayValues.filter(function(value) { return value.before >= 100 && norm(value.name); })
                         .map(function(value) { return norm(value.name); }) : namesThatImproved(dayValues)
                 };
             });
-            points.push({label: new Date().toLocaleDateString([], {day: '2-digit', month: '2-digit'}),
+            points.push({label: Store.formatDate(new Date(), {day: '2-digit', month: '2-digit'}),
                 value: item.approval ? item.values.filter(function(value) { return value.after >= 100; }).length :
                     avg(item.values.map(function(value) { return value.after; })),
                 students: item.approval ? item.values.filter(function(value) { return value.after >= 100 && norm(value.name); })
@@ -868,8 +868,8 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         var firstSeries = series[0].values;
         var days = {};
         firstSeries.forEach(function(value) { days[localDateKey(value.captured)] = true; });
-        Object.keys(days).sort().forEach(function(day) { labels.push(new Date(day + 'T12:00:00').toLocaleDateString([], {day: '2-digit', month: '2-digit'})); });
-        labels.push(new Date().toLocaleDateString([], {day: '2-digit', month: '2-digit'}));
+        Object.keys(days).sort().forEach(function(day) { labels.push(Store.formatDate(new Date(day + 'T12:00:00'), {day: '2-digit', month: '2-digit'})); });
+        labels.push(Store.formatDate(new Date(), {day: '2-digit', month: '2-digit'}));
         var labelStep = labels.length > 1 ? (right - left) / (labels.length - 1) : 0;
         var xlabels = labels.map(function(label, index) {
             return '<text class="axis" text-anchor="middle" x="' + (left + labelStep * index) + '" y="160">' + label + '</text>';
@@ -878,7 +878,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         var interventionDays = Object.keys(days).sort();
         var interventionMarkers = interventionDays.map(function(day, index) {
             var markerX = left + labelStep * index;
-            var markerDate = new Date(day + 'T12:00:00').toLocaleDateString([], {day: '2-digit', month: '2-digit'});
+            var markerDate = Store.formatDate(new Date(day + 'T12:00:00'), {day: '2-digit', month: '2-digit'});
             return '<line class="fr-intervention-line" x1="' + markerX + '" y1="' + top + '" x2="' + markerX + '" y2="' + bottom + '"/>' +
                 '<text class="fr-intervention-label" text-anchor="start" x="' + (markerX + 7) + '" y="28">' + tr('tf_linechart_marker') + '</text>' +
                 '<text class="fr-intervention-label" text-anchor="start" x="' + (markerX + 7) + '" y="38">(' + esc(markerDate) + ')</text>';

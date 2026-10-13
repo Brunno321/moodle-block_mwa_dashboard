@@ -32,10 +32,7 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates',
 
     (function(){
     'use strict';
-      function dashboardLocale() {
-        var language = String(((Store.getConfig() || {}).language) || '').toLowerCase().replace('_', '-');
-        return language.indexOf('es') === 0 ? 'es-MX' : 'en-US';
-      }
+      var dashboardLocale = Store.locale;
 
 
     function ctx(){ return window.MWADashboard || {}; }
@@ -438,7 +435,7 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates',
       }
       return '<div class="ac-card '+kind+'"><div class="ac-badge-row"><span class="ac-badge '+kind+'">'+esc(label)+'</span>'+helpTip(tip)+'<span class="ac-time">'+tr('updated_now')+'</span></div><div class="ac-number '+kind+'">'+esc(count)+'</div><div class="ac-desc">'+esc(desc)+'</div>'+content+'<div class="ac-btn-row">'+primaryBtn+secondaryBtn+'</div>'+(insight?'<div class="ac-insight"><svg class="mwa-ui-icon" aria-hidden="true"><use href="#mwa-icon-lightbulb"></use></svg> '+esc(insight)+'</div>':'')+'</div>';
     }
-    function peakHourInfo(){var hours=Array(24).fill(0);state().logs.forEach(function(l){var d=parseDate(l);if(d)hours[d.getHours()]++});var max=Math.max.apply(null,hours), peak=max>0?hours.indexOf(max):-1;return {hours:hours,peak:peak,max:max}}
+    function peakHourInfo(){var hours=Array(24).fill(0);state().logs.forEach(function(l){var d=parseDate(l);if(d)hours[Store.dateParts(d).hour]++});var max=Math.max.apply(null,hours), peak=max>0?hours.indexOf(max):-1;return {hours:hours,peak:peak,max:max}}
     function miniHourChart(info){if(!info||info.peak<0)return '';var max=Math.max(1,info.max);return info.hours.map(function(v,i){var h=Math.max(4,Math.round((v/max)*48));return '<div class="ac-bar-mini '+(i===info.peak?'hi':'')+'" style="height:'+h+'px" title="'+i+'h: '+v+'"></div>'}).join('')}
     function mwaSubmissionsByActivity(){
       var map={};

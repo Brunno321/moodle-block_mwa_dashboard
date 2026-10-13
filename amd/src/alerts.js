@@ -217,13 +217,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
       }
     
       /* ── parseDate a partir de um log ── */
-      function parseDate(log) {
-        if (log._ts) return new Date(Number(log._ts) * 1000);
-        var s = norm(log.hora);
-        var m = s.match(/(\d{2})\/(\d{2})\/(\d{2}),\s*(\d{2}):(\d{2})/);
-        if (m) return new Date(2000 + Number(m[3]), Number(m[2]) - 1, Number(m[1]), Number(m[4]), Number(m[5]));
-        return null;
-      }
+      var parseDate = Store.parseLogDate;
     
       /* ── agrupa logs por aluno ── */
       function groupByStudent() {
@@ -332,9 +326,9 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
           var evs    = s.logs.filter(function (r) { return r.date; }).sort(function (a, b) { return a.date - b.date; });
           if (!evs.length) return;
           var daySet = new Set(evs.map(function (r) { return r.date.toDateString(); }));
-          var firstDay = Date.UTC(evs[0].date.getFullYear(), evs[0].date.getMonth(), evs[0].date.getDate());
+          var firstDay = Date.UTC(Store.dateParts(evs[0].date).year, (Store.dateParts(evs[0].date).month - 1), Store.dateParts(evs[0].date).day);
           var now = new Date();
-          var today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+          var today = Date.UTC(Store.dateParts(now).year, (Store.dateParts(now).month - 1), Store.dateParts(now).day);
           var observedCalendarDays = Math.floor((today - firstDay) / 86400000) + 1;
           if (observedCalendarDays >= 3 && daySet.size <= 2)
             symbolic.push({ name: s.name, email: s.email, days: daySet.size });
@@ -345,7 +339,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         keys.forEach(function (k) {
           var s    = byStudent[k];
           var evs  = s.logs.filter(function (r) { return r.date; });
-          var dawn = evs.filter(function (r) { return r.date.getHours() < 5; }).length;
+          var dawn = evs.filter(function (r) { return Store.dateParts(r.date).hour < 5; }).length;
           if (evs.length >= 10 && dawn / evs.length >= 0.45)
             nightOwls.push({ name: s.name, email: s.email, pct: Math.round(dawn / evs.length * 100) });
         });

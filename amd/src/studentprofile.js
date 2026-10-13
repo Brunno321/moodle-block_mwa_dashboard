@@ -28,10 +28,7 @@ function(Store, EngagementCalc, ActionCenter, Templates, Chart) {
 
     (function () {
       'use strict';
-      function dashboardLocale() {
-        var language = String(((Store.getConfig() || {}).language) || '').toLowerCase().replace('_', '-');
-        return language.indexOf('es') === 0 ? 'es-MX' : 'en-US';
-      }
+      var dashboardLocale = Store.locale;
 
 
     
@@ -65,21 +62,12 @@ function(Store, EngagementCalc, ActionCenter, Templates, Chart) {
     
       var AV_COLORS = ['#49647f','#64758a','#557764','#8a7147','#9b5e5e','#527579','#6a5960'];
     
-      function parseDate(log) {
-        if (log._ts) return new Date(Number(log._ts) * 1000);
-        var s = norm(log.hora);
-        var m = s.match(/(\d{2})\/(\d{2})\/(\d{2}),\s*(\d{2}):(\d{2})/);
-        if (m) return new Date(2000 + Number(m[3]), Number(m[2]) - 1, Number(m[1]), Number(m[4]), Number(m[5]));
-        return null;
-      }
+      var parseDate = Store.parseLogDate;
       function getDaysAgo(date) {
         if (!date) return 999;
         return Math.max(0, Math.floor((Date.now() - date.getTime()) / 86400000));
       }
-      function fmtDate(d) {
-        if (!d) return '—';
-        return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
-      }
+      function fmtDate(d) { return d ? Store.formatDate(d) : '-'; }
       function agoColor(ago) {
         if (ago === 0) return 'var(--green)';
         if (ago <= 2)  return 'var(--teal)';
@@ -427,19 +415,19 @@ function(Store, EngagementCalc, ActionCenter, Templates, Chart) {
         sData.forEach(function (r) {
           if (!r._parsed_date) return;
           var d = r._parsed_date;
-          var dk = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+          var dk = Store.dateParts(d).year + '-' + String((Store.dateParts(d).month - 1)+1).padStart(2,'0') + '-' + String(Store.dateParts(d).day).padStart(2,'0');
           dayMap[dk] = (dayMap[dk] || 0) + 1;
         });
         var today = new Date();
         var weeks = [];
         var cur = new Date(today);
-        cur.setDate(cur.getDate() - cur.getDay());
+        cur.setDate(Store.dateParts(cur).day - Store.dateParts(cur).weekday);
         for (var w = 51; w >= 0; w--) {
           var week = [];
           for (var d = 0; d < 7; d++) {
             var date = new Date(cur);
-            date.setDate(cur.getDate() - (51 - w) * 7 + d);
-            var dk = date.getFullYear() + '-' + String(date.getMonth()+1).padStart(2,'0') + '-' + String(date.getDate()).padStart(2,'0');
+            date.setDate(Store.dateParts(cur).day - (51 - w) * 7 + d);
+            var dk = Store.dateParts(date).year + '-' + String((Store.dateParts(date).month - 1)+1).padStart(2,'0') + '-' + String(Store.dateParts(date).day).padStart(2,'0');
             week.push({ date: new Date(date), dk: dk, count: dayMap[dk] || 0 });
           }
           weeks.push(week);
@@ -456,8 +444,8 @@ function(Store, EngagementCalc, ActionCenter, Templates, Chart) {
         var monthMarkers = [];
         weeks.forEach(function (wk, wi) {
           var label = '';
-          if (wi === 0 || wk[0].date.getDate() <= 7) {
-            var m = wk[0].date.toLocaleDateString(dashboardLocale(), { month: 'short' });
+          if (wi === 0 || Store.dateParts(wk[0].date).day <= 7) {
+            var m = Store.formatDate(wk[0].date, { month: 'short' });
             if (!monthMarkers.length || monthMarkers[monthMarkers.length-1] !== m) {
               label = m;
               monthMarkers.push(m);
@@ -493,7 +481,7 @@ function(Store, EngagementCalc, ActionCenter, Templates, Chart) {
         sData.forEach(function (r) {
           if (!r._parsed_date) return;
           var d = r._parsed_date;
-          var dk = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+          var dk = Store.dateParts(d).year + '-' + String((Store.dateParts(d).month - 1)+1).padStart(2,'0') + '-' + String(Store.dateParts(d).day).padStart(2,'0');
           daily[dk] = (daily[dk] || 0) + 1;
         });
         var arr = Object.entries(daily).sort(function (a, b) { return a[0] < b[0] ? -1 : 1; });
@@ -563,7 +551,7 @@ function(Store, EngagementCalc, ActionCenter, Templates, Chart) {
         var ago       = getDaysAgo(last);
         var ac        = agoColor(ago);
         var email     = getEmailForStudent(name, logs, grades, students);
-        var uniqDays  = new Set(sLogs.map(function (r) { var d = r._parsed_date; return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate(); })).size;
+        var uniqDays  = new Set(sLogs.map(function (r) { var d = r._parsed_date; return Store.dateParts(d).year + '-' + ((Store.dateParts(d).month - 1)+1) + '-' + Store.dateParts(d).day; })).size;
         var total     = sLogs.length;
         var rosterStudent = (students || []).find(function(student) {
           var sameEmail = email && studentKey(student.email) === studentKey(email);
@@ -614,10 +602,10 @@ function(Store, EngagementCalc, ActionCenter, Templates, Chart) {
         var spark = [];
         for (var i = 6; i >= 0; i--) {
           var d = new Date(Date.now() - i * 86400000);
-          var dk = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+          var dk = Store.dateParts(d).year + '-' + ((Store.dateParts(d).month - 1)+1) + '-' + Store.dateParts(d).day;
           spark.push(sLogs.filter(function (r) {
             var rd = r._parsed_date;
-            return rd.getFullYear() + '-' + (rd.getMonth()+1) + '-' + rd.getDate() === dk;
+            return Store.dateParts(rd).year + '-' + ((Store.dateParts(rd).month - 1)+1) + '-' + Store.dateParts(rd).day === dk;
           }).length);
         }
         var maxS = Math.max.apply(null, spark.concat([1]));
@@ -660,7 +648,7 @@ function(Store, EngagementCalc, ActionCenter, Templates, Chart) {
           rawemail: email,
           firstdate: fmtDate(first),
           lastdate: fmtDate(last),
-          totalinteractions: total.toLocaleString(dashboardLocale()),
+          totalinteractions: Store.formatNumber(total, {}),
           interactionslabel: tr('interactions'),
           lastaccesslabel: tr('sp_kpi_last_access'),
           agocolor: ac,

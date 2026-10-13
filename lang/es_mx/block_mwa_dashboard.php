@@ -1646,3 +1646,6 @@ $string['pl_tag_daytime'] = 'Durante el día';
 
 $string['capture_status_active'] = 'Activo';
 $string['capture_status_inactive'] = 'Inactivo';
+
+$string['displaytimezone'] = 'Zona horaria del dashboard';
+$string['displaytimezone_desc'] = 'Zona para mostrar fechas y agrupar los datos. Predeterminada: America/Merida.';

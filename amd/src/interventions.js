@@ -179,16 +179,7 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates'], function(Store,
       }
 
       /* format a Unix timestamp (seconds) or Date as DD/MM/YYYY HH:MM */
-      function fmtDate(d) {
-        if (!d) return '-';
-        var dt = (typeof d === 'number') ? new Date(d * 1000) : d;
-        if (isNaN(dt.getTime())) return '-';
-        var dd = String(dt.getDate()).padStart(2, '0');
-        var mm = String(dt.getMonth() + 1).padStart(2, '0');
-        var hh = String(dt.getHours()).padStart(2, '0');
-        var mi = String(dt.getMinutes()).padStart(2, '0');
-        return dd + '/' + mm + '/' + dt.getFullYear() + ' ' + hh + ':' + mi;
-      }
+      function fmtDate(d) { if (!d) return '-'; var date = typeof d === 'number' ? new Date(d * 1000) : d; return isNaN(date.getTime()) ? '-' : Store.formatDateTime(date); }
 
       /* notification toast */
       function toast(msg, type) {
@@ -1601,7 +1592,7 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates'], function(Store,
           function accessValue() {
             if (!data.lastAccess) return null;
             return data.daysWithoutAccess === null || data.daysWithoutAccess === undefined
-              ? new Date(Number(data.lastAccess) * 1000).toLocaleDateString()
+              ? Store.formatDate(new Date(Number(data.lastAccess) * 1000), {})
               : tr('snapshot_days_ago').replace('{days}', String(data.daysWithoutAccess));
           }
           var snapshotCourseGrade = data.gradeMetric === 'course_total_points' ? data.courseTotalGrade : null;
@@ -1645,8 +1636,8 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates'], function(Store,
             return '<div class="int-snapshot-metric"><span>' + esc(tr(item[0])) + '</span><strong>' + esc(String(item[1])) + '</strong></div>';
           }).join('');
           var captured = new Date(Number(d.snapshot_timecreated) * 1000);
-          var capturedLabel = captured.toLocaleDateString() + ' ' + tr('snapshot_at') + ' ' +
-            captured.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+          var capturedLabel = Store.formatDate(captured, {}) + ' ' + tr('snapshot_at') + ' ' +
+            Store.formatTime(captured, {hour:'2-digit', minute:'2-digit'});
           var snapshotEngagement = Number(data.engagement);
           snapshotEngagement = isNaN(snapshotEngagement) ? null : Math.max(0, Math.min(100, Math.round(snapshotEngagement)));
           var snapshotEngagementColor = snapshotEngagement === 0 ? '#64758a' :
@@ -1833,14 +1824,7 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates'], function(Store,
         el2.dataset.timelineDays = period;
         var cutoff = period === 'all' ? 0 : Date.now() - Number(period || 30) * 86400000;
 
-        function eventTs(r) {
-          if (r._ts) return Number(r._ts) * 1000;
-          if (r.timecreated) return Number(r.timecreated) * 1000;
-          var s = norm(r.hora || r.time || r.date);
-          var m2 = s.match(/(\d{2})\/(\d{2})\/(\d{2}),\s*(\d{2}):(\d{2})(?::(\d{2}))?/);
-          if (m2) return new Date(2000 + Number(m2[3]), Number(m2[2]) - 1, Number(m2[1]), Number(m2[4]), Number(m2[5]), Number(m2[6] || 0)).getTime();
-          return 0;
-        }
+        function eventTs(r) { var date = Store.parseLogDate(r); return date ? date.getTime() : 0; }
         function eventKind(r) {
           var ev = norm(r.nomedoevento || r.eventname || r.action).toLowerCase();
           var comp = norm(r.componente || r.component || r._modtype).toLowerCase();

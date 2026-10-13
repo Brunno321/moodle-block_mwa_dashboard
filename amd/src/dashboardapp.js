@@ -79,7 +79,7 @@ define([
           if (!el) { return; }
           var cfg = Store.getConfig ? Store.getConfig() : (config || {});
           var name = firstName(cfg.userfirstname || cfg.username || '');
-          var hour = new Date().getHours();
+          var hour = Store.dateParts(new Date()).hour;
           var key = hour < 12 ? 'action_greeting_morning' : hour < 18 ? 'action_greeting_afternoon' : 'action_greeting_evening';
           var greeting = tr(key).replace('{name}', name || tr('teacher_label'));
           var courseName = String(cfg.coursename || '').trim();
@@ -343,7 +343,7 @@ define([
         function $(id){return document.getElementById(id)}
         function norm(v){return (v===undefined||v===null)?'':String(v).trim()}
         function lower(v){return norm(v).toLowerCase()}
-        function parseDate(log){if(log._ts){return new Date(Number(log._ts)*1000)}var s=norm(log.hora);var m=s.match(/(\d{2})\/(\d{2})\/(\d{2}),\s*(\d{2}):(\d{2})/);if(m){return new Date(2000+Number(m[3]),Number(m[2])-1,Number(m[1]),Number(m[4]),Number(m[5]))}return null}
+        var parseDate = Store.parseLogDate;
         function studentKey(name,email){return lower(email)||lower(name)}
         function gradeEmail(row){var k=Object.keys(row).find(function(x){return lower(x)==='email'||lower(x).includes('email')});return k?norm(row[k]):''}
         function gradeName(row){var f=Object.keys(row).find(function(x){return lower(x).includes('first')||lower(x).includes('nome')});var l=Object.keys(row).find(function(x){return lower(x).includes('last')||lower(x).includes('sobrenome')});return [f?row[f]:'',l?row[l]:''].join(' ').trim()}
@@ -588,7 +588,7 @@ define([
           // For interaction KPIs, reconstruct the BEFORE value from the Moodle log itself,
           // so a new event can never overwrite or reset the comparison anchor.
           var now = new Date();
-          var dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+          var dayStart = new Date(Store.dateParts(now).year, (Store.dateParts(now).month - 1), Store.dateParts(now).day, 0, 0, 0, 0);
           var studentNames = {};
           state.students.forEach(function(student) {
             var n = lower(student.name || student.fullname || '');
@@ -619,7 +619,7 @@ define([
             try { return parseInt(new URL(window.location.href).searchParams.get('id') || '0', 10) || 0; } catch (e) { return 0; }
           })();
           var trendKey = 'mwa_action_kpi_nonlog_' + String(trendCourseId);
-          var today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+          var today = Store.dateParts(now).year + '-' + String((Store.dateParts(now).month - 1) + 1).padStart(2, '0') + '-' + String(Store.dateParts(now).day).padStart(2, '0');
           var savedTrend = null;
           try { savedTrend = window.localStorage ? JSON.parse(window.localStorage.getItem(trendKey) || 'null') : null; } catch (e) { savedTrend = null; }
           var nonLogBaseline = savedTrend && savedTrend.day === today && savedTrend.counts ? savedTrend.counts : null;
@@ -936,11 +936,11 @@ define([
           var now = new Date();
           var start = null, end = new Date(now.getTime() + 86400000);
           if (range === 'today') {
-            start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            start = new Date(Store.dateParts(now).year, (Store.dateParts(now).month - 1), Store.dateParts(now).day);
           } else if (range === '30') {
             start = new Date(now.getTime() - 30 * 86400000);
           } else if (range === 'month') {
-            start = new Date(now.getFullYear(), now.getMonth(), 1);
+            start = new Date(Store.dateParts(now).year, (Store.dateParts(now).month - 1), 1);
           } else if (range === 'custom') {
             var s = document.getElementById('heatmapStartDate');
             var e = document.getElementById('heatmapEndDate');
@@ -1142,7 +1142,7 @@ define([
           logs.forEach(function(l) {
             var d = parseDate(l);
             if (!d) return;
-            var key = d.getDay() + ':' + d.getHours();
+            var key = Store.dateParts(d).weekday + ':' + Store.dateParts(d).hour;
             if (!cellBuckets[key]) cellBuckets[key] = [];
             cellBuckets[key].push(l);
 
@@ -1457,7 +1457,7 @@ define([
             var uHours = Array(24).fill(0);
             var uLogs = logs.filter(function(l){ return norm(l.nomecompleto) === norm(s.name); });
             uLogs
-              .forEach(function(l){ var d=parseDate(l); if(d) uHours[d.getHours()]++; });
+              .forEach(function(l){ var d=parseDate(l); if(d) uHours[Store.dateParts(d).hour]++; });
             var uBest = uHours.indexOf(Math.max.apply(null,uHours));
             var bucket = uBest<12?tr('hm_morning', 'Morning (6am–12pm)'):uBest<18?tr('hm_afternoon', 'Afternoon (12pm–6pm)'):tr('hm_evening', 'Evening (6pm–12am)');
             if (!hourGrades[bucket]) hourGrades[bucket] = [];
@@ -1499,7 +1499,7 @@ define([
               + tr('hm_besttime_tip', 'Send messages before this window for higher read rates.')+'</p></button>');
             btBox.onclick = function(ev) {
               if (!ev.target.closest('[data-hm-besttime]')) return;
-              var bestLogs = visibleLogs.filter(function(l){ var d=parseDate(l); return d && d.getHours() >= best2hStart && d.getHours() < best2hStart + 2; });
+              var bestLogs = visibleLogs.filter(function(l){ var d=parseDate(l); return d && Store.dateParts(d).hour >= best2hStart && Store.dateParts(d).hour < best2hStart + 2; });
               hmStoreDetail('besttime', {});
               renderHmDetail(tr('hm_besttime_title', 'Best time to intervene') + ': ' + best2hStart + 'h-' + (best2hStart+2) + 'h', bestLogs, {
                 suggestion: tr('hm_besttime_action_suggestion')
@@ -1563,7 +1563,7 @@ define([
             node.classList.add('mwa-chart-motion');
           });
         }
-        function updateDashboardTimestamp(){var el=document.getElementById('mwaGlobalUpdatedAt');if(!el)return;var locale=String(config.language || '').toLowerCase().indexOf('es') === 0 ? 'es-MX' : 'en-US';var formatted=new Date().toLocaleString(locale,{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});el.textContent=tr('dashboard_updated_at','Updated at')+' '+formatted;}
+        function updateDashboardTimestamp(){var el=document.getElementById('mwaGlobalUpdatedAt');if(!el)return;var locale=String(config.language || '').toLowerCase().indexOf('es') === 0 ? 'es-MX' : 'en-US';var formatted=Store.formatDateTime(new Date(), {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});el.textContent=tr('dashboard_updated_at','Updated at')+' '+formatted;}
         function renderAll(){buildModel();dashboard.state=state;Store.setDashboard(dashboard);renderKPIs();if(Modules.ActionCenter){Modules.ActionCenter.renderEngagement();Modules.ActionCenter.render();}renderChart();renderTables();renderAlerts();renderHeatmap();renderReport();if(Modules.ClassList)Modules.ClassList.render();if(Modules.Profile)Modules.Profile.render();if(Modules.Activities)Modules.Activities.render();if(Modules.Grades)Modules.Grades.render();if(Modules.Interventions)Modules.Interventions.render();if(!document.querySelector('.page.active')){showPage(config.initialpage||'ac');}updateDashboardTimestamp();loading.style.display='none';setTimeout(function(){animateDashboard();var active=document.getElementById('page-ac');if(active&&active.classList.contains('active')&&Modules.ActionCenter)Modules.ActionCenter.renderEngagement();},120)}
         function esc(v){return String(v===undefined||v===null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
         function showPage(p){updateDashboardTimestamp();try{var currentUrl=new window.URL(window.location.href);currentUrl.searchParams.set('mwa_page',p);window.history.replaceState({},'',currentUrl.toString());}catch(ignore){}document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active')});var page=$('page-'+p);if(page)page.classList.add('active');document.querySelectorAll('.nav-item').forEach(function(x){x.classList.toggle('active',x.getAttribute('data-page')===p)});if(p==='ac'&&Modules.ActionCenter){setTimeout(function(){Modules.ActionCenter.renderEngagement();},120);}if(p==='alerts'&&Modules.Alerts&&state.logs.length){Modules.Alerts.reset();Modules.Alerts.render();}if(p==='classlist'&&Modules.ClassList&&(state.logs.length||state.grades.length)){Modules.ClassList.render();}if(p==='studentprofile'&&Modules.Profile){if(typeof window.MWAReloadData==='function'&&!window.MWAProfileReloading){window.MWAProfileReloading=true;window.MWAReloadData().then(function(){Modules.Profile.render();}).catch(function(){Modules.Profile.render();}).then(function(){window.MWAProfileReloading=false;});}else{Modules.Profile.render();}}if(p==='activities'&&Modules.Activities&&state.logs.length){Modules.Activities.render();}if(p==='grades'&&Modules.Grades){Modules.Grades.render();}if(p==='interventions'&&Modules.Interventions){if(typeof window.MWAReloadData==='function'&&!window.MWAInterventionsReloading){window.MWAInterventionsReloading=true;window.MWAReloadData().then(function(){Modules.Interventions.render();}).catch(function(){Modules.Interventions.render();}).then(function(){window.MWAInterventionsReloading=false;});}else{Modules.Interventions.render();}}if(p==='teacherfeedback'&&Modules.TeacherFeedback){Modules.TeacherFeedback.render();}if(p==='heatmap'&&state.logs.length){renderHeatmap();['heatmapStudentSel','heatmapModSel','heatmapModeSel'].forEach(function(id){var el=document.getElementById(id);if(el&&!el.dataset.hmInit){el.dataset.hmInit='1';el.addEventListener('change',renderHeatmap);}});}}
@@ -1572,7 +1572,7 @@ define([
         var dashboardBrand=document.getElementById('mwaDashboardBrand');
         if(dashboardBrand&&!dashboardBrand.dataset.mwaHomeInit){dashboardBrand.dataset.mwaHomeInit='1';dashboardBrand.addEventListener('click',refreshDashboardHome);dashboardBrand.addEventListener('keydown',function(event){if(event.key==='Enter'||event.key===' '){event.preventDefault();refreshDashboardHome();}});}
         function markSeen(){state.seen=true;alert(tr('actions_marked_seen','Actions marked as seen.'));}
-        $('todayLabel').textContent=new Date().toLocaleDateString(String(config.language || '').toLowerCase().indexOf('es') === 0 ? 'es-MX' : 'en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});$('search').addEventListener('input',renderTables);
+        $('todayLabel').textContent=Store.formatDate(new Date(), {weekday:'long',year:'numeric',month:'long',day:'numeric'});$('search').addEventListener('input',renderTables);
         function receiveData(data){try{
           // Reloads can arrive in stages (for example, fresh logs before the grade/roster
           // payload). Never erase a dataset that is already valid just because that stage

@@ -1764,3 +1764,6 @@ $string['capture_status_active'] = 'Active';
 $string['capture_status_inactive'] = 'Inactive';
 
 $string['savechanges'] = 'Save changes';
+
+$string['displaytimezone'] = 'Dashboard timezone';
+$string['displaytimezone_desc'] = 'Timezone for dates and data aggregation. Default: America/Merida.';

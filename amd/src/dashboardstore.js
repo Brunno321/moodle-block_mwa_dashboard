@@ -42,6 +42,32 @@ define([], function() {
         return key;
     };
 
+    var locale = function() { return config.locale || 'es-MX'; };
+    var dateParts = function(date) {
+        var result = {};
+        new Intl.DateTimeFormat('en-US', {timeZone: config.timezone || 'America/Merida',
+            year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit',
+            second: '2-digit', hourCycle: 'h23'}).formatToParts(date).forEach(function(part) {
+                if (part.type !== 'literal') { result[part.type] = Number(part.value); }
+            });
+        result.weekday = new Date(Date.UTC(result.year, result.month - 1, result.day)).getUTCDay();
+        return result;
+    };
+    var format = function(date, options, defaults) {
+        return new Intl.DateTimeFormat(locale(), Object.assign({}, defaults, options || {},
+            {timeZone: config.timezone || 'America/Merida', hour12: false})).format(date);
+    };
+    var formatDate = function(date, options) { return format(date, options,
+        options && (options.dateStyle || options.month || options.weekday) ? {} : {year: 'numeric', month: '2-digit', day: '2-digit'}); };
+    var formatTime = function(date, options) { return format(date, options, {hour: '2-digit', minute: '2-digit'}); };
+    var formatDateTime = function(date, options) { return format(date, options,
+        options && (options.dateStyle || options.timeStyle) ? {} : {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'}); };
+    var formatNumber = function(value, options) { return new Intl.NumberFormat(locale(), options || {}).format(value); };
+    var parseLogDate = function(log) {
+        var timestamp = Number(log._ts || log.timecreated || log.timestamp || 0);
+        return timestamp > 0 ? new Date(timestamp * 1000) : null;
+    };
+
     var configure = function(newConfig, newStrings, caller) {
         config = newConfig || {};
         strings = newStrings || {};
@@ -355,6 +381,13 @@ define([], function() {
     };
 
     return {
+        locale: locale,
+        dateParts: dateParts,
+        formatDate: formatDate,
+        formatTime: formatTime,
+        formatDateTime: formatDateTime,
+        formatNumber: formatNumber,
+        parseLogDate: parseLogDate,
         tr: tr,
         configure: configure,
         register: register,

@@ -144,7 +144,9 @@ define([
                 }
                 config.courseid = courseid;
                 config.groupid = groupid;
-                config.language = result.language || 'en';
+                config.language = result.language || 'es_mx';
+                config.locale = result.locale || 'es-MX';
+                config.timezone = result.timezone || 'America/Merida';
                 Store.configure(config, strings, callAction);
                 DashboardApp.init(config);
             })

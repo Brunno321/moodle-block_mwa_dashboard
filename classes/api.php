@@ -27,6 +27,19 @@ defined('MOODLE_INTERNAL') || die();
  */
 class api {
 
+    /** Display and aggregation timezone shared with the client. */
+    public static function display_timezone(): string {
+        $zone = (string)get_config('block_mwa_dashboard', 'displaytimezone');
+        return in_array($zone, \DateTimeZone::listIdentifiers(), true) ? $zone : 'America/Merida';
+    }
+
+    /** BCP 47 locale for dashboard formatting. */
+    public static function display_locale(): string {
+        $language = str_replace('_', '-', current_language());
+        return strpos($language, 'es') === 0 ? 'es-MX' : $language;
+    }
+
+
     /** @var array<int, int[]> Excluded course-module ids cached for this request. */
     private static $excludedcmidcache = [];
 
@@ -552,7 +565,7 @@ class api {
         $logs = [];
         foreach ($records as $r) {
             $dt = new \DateTime('@' . $r->timecreated);
-            $dt->setTimezone(new \DateTimeZone('America/Merida'));
+            $dt->setTimezone(new \DateTimeZone(self::display_timezone()));
             $cmid    = (int)($r->contextinstanceid ?? 0);
             $component = (string)($r->component ?? '');
             if ($cmid > 0 && isset($excluded[$cmid]) && strpos($component, 'mod_') === 0) {
@@ -568,7 +581,7 @@ class api {
                 : str_replace(['mod_', 'core'], '', $r->component);
             $context = $actname ?: $modtype;
             $logs[] = [
-                'hora'             => $dt->format('d/m/y, H:i:s'),
+                'hora'             => $dt->format('d/m/Y H:i:s'),
                 'nomecompleto'     => trim($r->fullname),
                 'email'            => $r->email,
                 'pictureurl'       => self::user_picture_url((object)[
@@ -690,9 +703,9 @@ class api {
                 ? $cminfo['modname']
                 : $r->modname;
             $dt = new \DateTime('@' . (int)$r->timemodified);
-            $dt->setTimezone(new \DateTimeZone('America/Sao_Paulo'));
+            $dt->setTimezone(new \DateTimeZone(self::display_timezone()));
             $logs[] = [
-                'hora'             => $dt->format('d/m/y, H:i:s'),
+                'hora'             => $dt->format('d/m/Y H:i:s'),
                 'nomecompleto'     => trim($r->fullname),
                 'email'            => $r->email,
                 'pictureurl'       => self::user_picture_url((object)[

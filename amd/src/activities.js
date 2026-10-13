@@ -34,10 +34,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
 
     (function () {
       'use strict';
-      function dashboardLocale() {
-        var language = String(((Store.getConfig() || {}).language) || '').toLowerCase().replace('_', '-');
-        return language.indexOf('es') === 0 ? 'es-MX' : 'en-US';
-      }
+      var dashboardLocale = Store.locale;
 
 
 
@@ -152,7 +149,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
           return [
             name, item.type || '', clampPct(item.concluded.size / activeBase * 100) + '%', item.students.size,
             item.count, clampPct(item.students.size / reachBase * 100) + '%', availabilityLabel(availability),
-            dueDate ? new Date(dueDate).toLocaleDateString() : '', tr('act_export_tracked', 'Tracked'),
+            dueDate ? Store.formatDate(new Date(dueDate), {}) : '', tr('act_export_tracked', 'Tracked'),
             HIDDEN_CMIDS[Number(item.cmid || 0)] ? tr('act_export_hidden', 'Hidden') : tr('act_export_visible', 'Shown')
           ];
         });
@@ -325,13 +322,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         return false;
       }
     
-      function parseDate(log) {
-        if (log._ts) return new Date(Number(log._ts) * 1000);
-        var s = logTime(log);
-        var m = s.match(/(\d{2})\/(\d{2})\/(\d{2}),\s*(\d{2}):(\d{2})/);
-        if (m) return new Date(2000 + Number(m[3]), Number(m[2]) - 1, Number(m[1]), Number(m[4]), Number(m[5]));
-        return null;
-      }
+      var parseDate = Store.parseLogDate;
     
       function fmtTime(ms) {
         if (!ms || ms <= 0) return '-';
@@ -551,7 +542,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         if (dueDate) {
           var due = new Date(dueDate);
           var today = new Date();
-          if (due.getFullYear() === today.getFullYear() && due.getMonth() === today.getMonth() && due.getDate() === today.getDate()) {
+          if (Store.dateParts(due).year === Store.dateParts(today).year && (Store.dateParts(due).month - 1) === (Store.dateParts(today).month - 1) && Store.dateParts(due).day === Store.dateParts(today).day) {
             return 'today';
           }
         }
@@ -688,7 +679,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
           var scheduleLabel = cardState === 'closed' || cardState === 'today'
             ? availabilityLabel(cardState)
             : dueDate
-              ? tr('act_due_label').replace('{date}', new Date(dueDate).toLocaleDateString())
+              ? tr('act_due_label').replace('{date}', Store.formatDate(new Date(dueDate), {}))
               : v.availability === 'future'
                 ? availabilityLabel('future')
                 : tr('act_kpi_no_deadline');
@@ -764,7 +755,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
             + '</div>'
             + '<div class="act-card-stats">'
               + '<div class="act-card-stat"><div class="act-card-stat-label">' + tr('act_col_students') + '</div><div class="act-card-stat-val" style="color:var(--text);">' + v.students.size + '</div></div>'
-              + '<div class="act-card-stat"><div class="act-card-stat-label">' + tr('act_col_accesses') + '</div><div class="act-card-stat-val" style="color:var(--blue);">' + v.count.toLocaleString() + '</div></div>'
+              + '<div class="act-card-stat"><div class="act-card-stat-label">' + tr('act_col_accesses') + '</div><div class="act-card-stat-val" style="color:var(--blue);">' + Store.formatNumber(v.count, {}) + '</div></div>'
               + '<div class="act-card-stat"><div class="act-card-stat-label">' + tr('act_col_access_coverage') + '</div><div class="act-card-stat-val" style="color:var(--green);">' + pct + '%</div></div>'
             + '</div>'
             + '<div class="act-card-deadline"><span class="act-status-chip act-schedule-chip ' + esc(cardState) + '"><span>' + esc(scheduleLabel) + '</span></span></div>'
@@ -996,7 +987,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
             var dd = new Date(d.duedate);
             var now = new Date();
             var diffDays = Math.ceil((dd - now) / (1000 * 60 * 60 * 24));
-            var dateStr = dd.toLocaleDateString();
+            var dateStr = Store.formatDate(dd, {});
             if (d.availability === 'closed') {
               dueDateKpi = '<div class="act-detail-box act-deadline-box">'
                   + '<div class="act-detail-label">' + deadlineTitle + '</div>'
@@ -1144,7 +1135,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
               + '<div style="flex:1;min-width:0;">'
                 + '<div class="act-modal-title">' + esc(d.title) + '</div>'
                 + '<div style="font-size:.7rem;color:var(--muted);margin-top:2px;">'
-                  + esc(d.type) + ' &middot; ' + (d.concludedSt.length + d.pendingSt.length) + ' ' + tr('act_col_students') + ' &middot; ' + d.totalAcc.toLocaleString() + ' ' + tr('act_col_accesses')
+                  + esc(d.type) + ' &middot; ' + (d.concludedSt.length + d.pendingSt.length) + ' ' + tr('act_col_students') + ' &middot; ' + Store.formatNumber(d.totalAcc, {}) + ' ' + tr('act_col_accesses')
                 + '</div>'
               + '</div>'
               + '<button class="act-modal-close" onclick="window.MWAActivities.closeModal()">&times;</button>'

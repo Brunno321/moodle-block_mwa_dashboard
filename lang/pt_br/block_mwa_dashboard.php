@@ -1764,3 +1764,6 @@ $string['capture_status_active'] = 'Ativo';
 $string['capture_status_inactive'] = 'Inativo';
 
 $string['savechanges'] = 'Save changes';
+
+$string['displaytimezone'] = 'Fuso horário do dashboard';
+$string['displaytimezone_desc'] = 'Fuso para datas e agrupamento de dados. Padrão: America/Merida.';

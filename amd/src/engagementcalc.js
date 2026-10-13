@@ -34,17 +34,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         return Math.max(0, Math.min(100, Math.round(value || 0)));
     }
 
-    function parseDate(log) {
-        if (log && log._ts) {
-            return new Date(Number(log._ts) * 1000);
-        }
-        var source = norm(log && log.hora);
-        var match = source.match(/(\d{2})\/(\d{2})\/(\d{2}),?\s*(\d{2}):(\d{2})/);
-        if (match) {
-            return new Date(2000 + Number(match[3]), Number(match[2]) - 1, Number(match[1]), Number(match[4]), Number(match[5]));
-        }
-        return null;
-    }
+    var parseDate = Store.parseLogDate;
 
     function studentNameFromGrade(row) {
         var first = norm(row['First name'] || row.Nome || row.firstname || row.student_firstname);
@@ -343,7 +333,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
                 studentActivities.add(contentKey);
             }
             if (date) {
-                var dayKey = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+                var dayKey = Store.dateParts(date).year + '-' + ((Store.dateParts(date).month - 1) + 1) + '-' + Store.dateParts(date).day;
                 activeDays.add(dayKey);
                 if (!lastDate || date > lastDate) {
                     lastDate = date;

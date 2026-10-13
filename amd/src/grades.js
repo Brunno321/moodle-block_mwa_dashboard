@@ -37,10 +37,7 @@ define(['block_mwa_dashboard/dashboardstore', 'core/chartjs'], function(Store, C
         return '<svg class="mwa-ui-icon" aria-hidden="true"><use href="#mwa-icon-' + name + '"></use></svg>';
       }
       'use strict';
-      function dashboardLocale() {
-        var language = String(((Store.getConfig() || {}).language) || '').toLowerCase().replace('_', '-');
-        return language.indexOf('es') === 0 ? 'es-MX' : 'en-US';
-      }
+      var dashboardLocale = Store.locale;
 
 
     

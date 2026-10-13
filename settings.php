@@ -26,6 +26,14 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
 
+    $settings->add(new admin_setting_configselect(
+        'block_mwa_dashboard/displaytimezone',
+        get_string('displaytimezone', 'block_mwa_dashboard'),
+        get_string('displaytimezone_desc', 'block_mwa_dashboard'),
+        'America/Merida',
+        array_combine(DateTimeZone::listIdentifiers(), DateTimeZone::listIdentifiers())
+    ));
+
     // Dashboard capture settings.
     $settings->add(new admin_setting_heading(
         'block_mwa_dashboard/general_heading',

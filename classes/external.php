@@ -282,6 +282,8 @@ class external extends \external_api {
         return [
             'strings' => json_encode($dashboard->get_strings(), JSON_UNESCAPED_UNICODE),
             'language' => current_language(),
+            'timezone' => api::display_timezone(),
+            'locale' => api::display_locale(),
         ];
     }
 
@@ -289,6 +291,8 @@ class external extends \external_api {
         return new \external_single_structure([
             'strings' => new \external_value(PARAM_RAW, 'Dashboard language strings'),
             'language' => new \external_value(PARAM_TEXT, 'Current language'),
+            'timezone' => new \external_value(PARAM_TEXT, 'Display timezone'),
+            'locale' => new \external_value(PARAM_TEXT, 'Display locale'),
         ]);
     }
 

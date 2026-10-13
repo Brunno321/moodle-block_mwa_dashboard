@@ -248,7 +248,7 @@ final class snapshot_manager {
                 $visited[$cmid] = true;
             }
             if ((int)$event->timecreated >= $capturedat - (7 * DAYSECS)) {
-                $active7[userdate((int)$event->timecreated, '%Y-%m-%d')] = true;
+                $active7[(new \DateTimeImmutable('@' . (int)$event->timecreated))->setTimezone(new \DateTimeZone(api::display_timezone()))->format('Y-m-d')] = true;
             }
         }
 
@@ -472,7 +472,7 @@ final class snapshot_manager {
                 $studentactivities[$contentkey] = true;
             }
             if ($timestamp > 0) {
-                $activedays[userdate($timestamp, '%Y-%m-%d')] = true;
+                $activedays[(new \DateTimeImmutable('@' . $timestamp))->setTimezone(new \DateTimeZone(api::display_timezone()))->format('Y-m-d')] = true;
             }
             $eventtext = \core_text::strtolower(implode(' ', [
                 $log['nomedoevento'] ?? '', $log['eventname'] ?? '', $log['action'] ?? '',

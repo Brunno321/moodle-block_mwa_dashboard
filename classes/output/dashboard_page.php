@@ -109,6 +109,8 @@ class dashboard_page implements renderable, templatable {
                 'initialpage' => in_array($requestedpage, $allowedpages, true) ? $requestedpage : 'ac',
                 'wwwroot' => (string)$CFG->wwwroot,
                 'language' => current_language(),
+            'timezone' => \block_mwa_dashboard\api::display_timezone(),
+            'locale' => \block_mwa_dashboard\api::display_locale(),
             ],
             'strings' => [],
         ];
@@ -141,6 +143,8 @@ class dashboard_page implements renderable, templatable {
             'wwwroot'     => (string)$CFG->wwwroot,
             'coursename'  => $coursename,
             'language'    => current_language(),
+            'timezone' => \block_mwa_dashboard\api::display_timezone(),
+            'locale' => \block_mwa_dashboard\api::display_locale(),
             'userfirstname' => isset($USER->firstname) ? (string)$USER->firstname : '',
             'activitylinks' => $this->get_activity_links(),
             'excludedcmids' => \block_mwa_dashboard\api::get_excluded_cmids($this->courseid),

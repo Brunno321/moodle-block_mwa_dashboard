@@ -38,10 +38,7 @@ define(['block_mwa_dashboard/dashboardstore', 'block_mwa_dashboard/engagementcal
         return '<svg class="mwa-ui-icon" aria-hidden="true"><use href="#mwa-icon-' + name + '"></use></svg>';
       }
       'use strict';
-      function dashboardLocale() {
-        var language = String(((Store.getConfig() || {}).language) || '').toLowerCase().replace('_', '-');
-        return language.indexOf('es') === 0 ? 'es-MX' : 'en-US';
-      }
+      var dashboardLocale = Store.locale;
 
 
     
@@ -94,21 +91,9 @@ define(['block_mwa_dashboard/dashboardstore', 'block_mwa_dashboard/engagementcal
       var AV_COLORS = ['#49647f','#64758a','#557764','#8a7147','#9b5e5e','#527579','#6a5960'];
     
       /* ── helpers de data ── */
-      function parseDate(log) {
-        if (log._ts) return new Date(Number(log._ts) * 1000);
-        if (log.timecreated) return new Date(Number(log.timecreated) * 1000);
-        var s = norm(log.hora || log.time || log.date);
-        var m = s.match(/(\d{2})\/(\d{2})\/(\d{2}),\s*(\d{2}):(\d{2})(?::(\d{2}))?/);
-        if (m) return new Date(2000 + Number(m[3]), Number(m[2]) - 1, Number(m[1]), Number(m[4]), Number(m[5]), Number(m[6] || 0));
-        return null;
-      }
+      var parseDate = Store.parseLogDate;
     
-      function fmtDate(d) {
-        if (!d) return '—';
-        var dd = String(d.getDate()).padStart(2, '0');
-        var mm = String(d.getMonth() + 1).padStart(2, '0');
-        return dd + '/' + mm + '/' + d.getFullYear();
-      }
+      function fmtDate(d) { return d ? Store.formatDate(d) : '-'; }
 
       function presenceInfo(last) {
         if (!last || !(last instanceof Date) || isNaN(last.getTime())) {
@@ -836,7 +821,7 @@ define(['block_mwa_dashboard/dashboardstore', 'block_mwa_dashboard/engagementcal
           if (n !== name) return;
           d = parseDate(r);
           if (!d) return;
-          h = d.getHours();
+          h = Store.dateParts(d).hour;
           if (h >= 0 && h < 6) buckets.dawn++;
           else if (h < 12) buckets.morning++;
           else if (h < 18) buckets.afternoon++;
@@ -970,7 +955,7 @@ define(['block_mwa_dashboard/dashboardstore', 'block_mwa_dashboard/engagementcal
         var calc = item.calc || {};
         var currentGrade = calc.grade === null || calc.grade === undefined ? null : Number(calc.grade);
         if (currentGrade !== null && isNaN(currentGrade)) currentGrade = null;
-        var gradeText = currentGrade === null ? '\u2014' : currentGrade.toLocaleString(dashboardLocale(), {minimumFractionDigits: 1, maximumFractionDigits: 1});
+        var gradeText = currentGrade === null ? '\u2014' : Store.formatNumber(currentGrade, {minimumFractionDigits: 1, maximumFractionDigits: 1});
         var gradeColor = currentGrade === null ? 'var(--muted)' : currentGrade >= 60 ? 'var(--green)' : 'var(--red)';
         var lastText = calc.last ? fmtDate(calc.last) : '—';
         var daysText = item.status.key === 'never' ? tr('ev_never_access', 'No recorded access') : (calc.daysWithoutAccess || 0) + 'd';
@@ -1151,7 +1136,7 @@ define(['block_mwa_dashboard/dashboardstore', 'block_mwa_dashboard/engagementcal
           var currentGrade = e.calc && e.calc.grade !== null && e.calc.grade !== undefined
             ? Number(e.calc.grade) : null;
           if (currentGrade !== null && isNaN(currentGrade)) currentGrade = null;
-          var gradeText = currentGrade === null ? '\u2014' : currentGrade.toLocaleString(dashboardLocale(), {
+          var gradeText = currentGrade === null ? '\u2014' : Store.formatNumber(currentGrade, {
             minimumFractionDigits: 1,
             maximumFractionDigits: 1
           });
