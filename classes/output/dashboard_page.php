@@ -86,7 +86,7 @@ class dashboard_page implements renderable, templatable {
             'selectstudentlabel' => get_string('msg_select_student', 'block_mwa_dashboard'),
             'showgroupfilter'    => count($groupconfig['groups']) > 1,
             'groups'             => $groupconfig['groups'],
-            'pluginrelease'      => $plugininfo ? (string)$plugininfo->release : '4.2',
+            'pluginrelease'      => $plugininfo ? (string)$plugininfo->release : '4.4',
         ];
     }
 
