@@ -1363,7 +1363,7 @@ class api {
             'mod_bigbluebuttonbn' => get_string('component_bigbluebuttonbn', 'block_mwa_dashboard'),
             'core'            => get_string('component_core', 'block_mwa_dashboard'),
         ];
-        return $map[$comp] ?? ucfirst(str_replace(['mod_', 'core_'], '', $comp));
+        return $map[$comp] ?? get_string('other', 'block_mwa_dashboard');
     }
     /**
      * Translate a Moodle log action to a human-readable label.
@@ -1392,6 +1392,6 @@ class api {
             'discussion_created' => get_string('action_discussion_created', 'block_mwa_dashboard'),
             'discussion_viewed'  => get_string('action_discussion_viewed', 'block_mwa_dashboard'),
         ];
-        return $map[$action] ?? $action;
+        return $map[$action] ?? get_string('other', 'block_mwa_dashboard');
     }
 }
