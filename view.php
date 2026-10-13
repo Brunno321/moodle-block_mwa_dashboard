@@ -27,6 +27,16 @@ use block_mwa_dashboard\api;
 
 require_once('../../config.php');
 
+// Override the theme favicon only for this dashboard request.
+$faviconurl = new moodle_url('/blocks/mwa_dashboard/pix/favicon.ico', [
+    'v' => filemtime(__DIR__ . '/pix/favicon.ico'),
+]);
+$CFG->additionalhtmlhead = ($CFG->additionalhtmlhead ?? '') . html_writer::empty_tag('link', [
+    'rel' => 'icon',
+    'type' => 'image/x-icon',
+    'href' => $faviconurl->out(false),
+]);
+
 $courseid = optional_param('course', 0, PARAM_INT);
 if ($courseid <= SITEID) {
     $requestedcourseid = optional_param('mwa_courseid', 0, PARAM_INT);
