@@ -99,20 +99,8 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates',
       var cmid=parseInt((log&& (log.cmid||log._cmid||log.contextinstanceid||log.contextinstance||log.coursemoduleid||log.moduleid))||0,10);
       return isNaN(cmid)?0:cmid;
     }
-    function realContextName(log){
-      if(log._cmid && log.contextodoevento)return norm(log.contextodoevento);
-      var ctxName=norm(log&& (log.contextodoevento||log.eventcontext||log.context||''));
-      var ev=norm(log&& (log.nomedoevento||log.eventname||log.action||''));
-      var low=lower(ctxName);
-      if(ctxName&&low!=='course module viewed'&&low!=='mÃƒÆ’Ã‚Â³dulo do curso visualizado')return ctxName.replace(/^(page|pÃƒÆ’Ã‚Â¡gina|book|livro|url|resource|recurso|file|arquivo|folder|pasta)\s*:\s*/i,'');
-      return ev&&lower(ev)!=='course module viewed'?ev:'';
-    }
-    function isResourceLog(log){
-      var mod=moduleOfLog(log);
-      var comp=lower(log&& (log.component||log.componente||''));
-      if(mod==='label'||comp.indexOf('ÃƒÆ’Ã‚Â¡rea de mÃƒÆ’Ã‚Â­dia e texto')>=0||comp.indexOf('text and media area')>=0)return false;
-      return ['page','book','url','resource','folder','imscp'].indexOf(mod)>=0||['pÃƒÆ’Ã‚Â¡gina','page','livro','book','url','arquivo','file','pasta','folder'].indexOf(comp)>=0;
-    }
+    function realContextName(log) { var value = norm(log.contextodoevento || log.eventcontext || log.context || ''); return Store.classify.genericName(value) ? '' : value; }
+    function isResourceLog(log) { return ['page','book','url','resource','folder','imscp'].indexOf(Store.classify.moduleType(log)) >= 0; }
     function studentAccessedCatalogItem(student,item){
       var studentName=lower(student&&student.name);
       var studentEmail=lower(student&&student.email);

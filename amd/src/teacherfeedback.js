@@ -362,7 +362,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         var hours = seconds / 3600;
         if (hours < 1) { return Math.round(seconds / 60) + ' min'; }
         if (hours < 48) { return round(hours, 1) + ' h'; }
-        return round(hours / 24, 1) + ' dias';
+        return round(hours / 24, 1) + tr('tf_static_phrase_1');
     }
 
     function filterRows(rows) {
@@ -396,17 +396,17 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         var reasonOptions = option('all', tr('tf_filter_all_reasons'), filters.reason);
         REASONS.forEach(function(key) { reasonOptions += option(key, REASON_META[key].label(), filters.reason); });
         return '<div class="fr-toolbar open">' +
-            '<div class="fr-filter"><label>Periodo de inicio</label><input id="frFrom" type="date" value="' + esc(filters.from) + '"></div>' +
-            '<div class="fr-filter"><label>Periodo final</label><input id="frTo" type="date" value="' + esc(filters.to) + '"></div>' +
-            '<div class="fr-filter"><label>Motivo</label><select id="frReason">' + reasonOptions + '</select></div>' +
-            '<div class="fr-filter"><label>Docente</label><select id="frTeacher">' + teacherOptions + '</select></div>' +
-            '<div class="fr-filter fr-student-filter"><label>Estudiante</label><select id="frStudent">' + studentOptions + '</select></div>' +
+            '<div class="fr-filter"><label>' + esc(tr('tf_static_label_1')) + '</label><input id="frFrom" type="date" value="' + esc(filters.from) + '"></div>' +
+            '<div class="fr-filter"><label>' + esc(tr('tf_static_label_2')) + '</label><input id="frTo" type="date" value="' + esc(filters.to) + '"></div>' +
+            '<div class="fr-filter"><label>' + esc(tr('tf_static_label_3')) + '</label><select id="frReason">' + reasonOptions + '</select></div>' +
+            '<div class="fr-filter"><label>' + esc(tr('tf_static_label_4')) + '</label><select id="frTeacher">' + teacherOptions + '</select></div>' +
+            '<div class="fr-filter fr-student-filter"><label>' + esc(tr('tf_static_label_5')) + '</label><select id="frStudent">' + studentOptions + '</select></div>' +
             '<button type="button" class="fr-btn fr-clear" id="frClear">⌫ Limpiar filtros</button></div>';
     }
 
     function headerActionsHtml() {
         return '<div class="fr-header-actions">' +
-            '<button type="button" class="fr-btn fr-export" id="frExport">' + svg('download', 16) + ' ' + tr('tf_export_report_pdf', 'Export Report (PDF)') + '</button></div>';
+            '<button type="button" class="fr-btn fr-export" id="frExport">' + svg('download', 16) + ' ' + tr('tf_export_report_pdf', tr('tf_static_phrase_2')) + '</button></div>';
     }
 
     function kpi(icon, label, value, sub, color, help) {
@@ -577,7 +577,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
             svgStyle + '<g class="grid">' + grid + '</g>' + zeroLine + bars +
             '</svg>' +
             '<div class="fr-legend">' + legend + '</div></div>' +
-            '<div class="fr-chart-detail" id="frReasonDetail"><strong>Selecciona una barra</strong><span>Consulta los estudiantes incluidos en este indicador.</span></div>' +
+            '<div class="fr-chart-detail" id="frReasonDetail"><strong>' + esc(tr('tf_static_label_6')) + '</strong><span>' + esc(tr('tf_static_label_7')) + '</span></div>' +
             '<div class="fr-reason-info-gap" aria-hidden="true"></div>' +
             info(tr('tf_reason_engage_note'));
     }
@@ -686,14 +686,14 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
                 if (name) { unique[name] = true; }
             });
             var list = Object.keys(unique);
-            return list.length ? list.slice(0, 12).join(', ') + (list.length > 12 ? ' y ' + (list.length - 12) + ' más' : '') : 'No se identificaron estudiantes';
+            return list.length ? list.slice(0, 12).join(', ') + (list.length > 12 ? ' y ' + (list.length - 12) + ' más' : '') : tr('tf_static_phrase_3');
         }
         function metricSentence(label, summary) {
-            if (!summary.count) { return 'No hay suficientes pares comparables para evaluar ' + label + ' en este periodo.'; }
-            var direction = summary.average > 0.05 ? 'aumentó' : summary.average < -0.05 ? 'disminuyó' : 'se mantuvo estable';
-            return 'En la comparación antes y después, ' + label + ' ' + direction + ' en promedio ' +
-                formatNumber(Math.abs(summary.average), ' puntos') + '. ' + summary.improved.length + ' de ' + summary.count +
-                ' estudiantes mejoraron y ' + summary.declined.length + ' mostraron una disminución.';
+            if (!summary.count) { return tr('tf_static_phrase_4') + label + tr('tf_static_phrase_5'); }
+            var direction = summary.average > 0.05 ? tr('tf_static_word_59') : summary.average < -0.05 ? tr('tf_static_word_60') : tr('tf_static_phrase_6');
+            return tr('tf_static_phrase_7') + label + ' ' + direction + tr('tf_static_phrase_8') +
+                formatNumber(Math.abs(summary.average), tr('tf_static_phrase_9')) + '. ' + summary.improved.length + ' de ' + summary.count +
+                tr('tf_static_phrase_10') + summary.declined.length + tr('tf_static_phrase_11');
         }
         var total = groups.length;
         var responded = groups.filter(function(group) { return group.responded; });
@@ -707,44 +707,44 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         reasonResults.sort(function(a, b) { return (b.responded / b.total) - (a.responded / a.total); });
         var sustained = sustainedAfterSeven(groups);
         var findings = [
-            'Se dio seguimiento a ' + total + ' estudiantes. ' + responded.length + ' (' + pctText(responded.length, total) +
+            tr('tf_static_phrase_12') + total + tr('tf_static_phrase_13') + responded.length + ' (' + pctText(responded.length, total) +
                 ') volvieron a Moodle después de la intervención; ' + evolved.length + ' (' + pctText(evolved.length, total) +
                 ') alcanzaron por completo el objetivo observado.',
-            metricSentence('el engagement', engagement),
-            metricSentence('la calificación', grade)
+            metricSentence(tr('tf_static_phrase_14'), engagement),
+            metricSentence(tr('tf_static_phrase_15'), grade)
         ];
         if (sustained.eligible) {
-            findings.push(sustained.count + ' de ' + sustained.eligible + ' estudiantes elegibles (' +
+            findings.push(sustained.count + ' de ' + sustained.eligible + tr('tf_static_phrase_16') +
                 pctText(sustained.count, sustained.eligible) + ') mantuvieron actividad después de siete días.');
         }
         if (reasonResults.length) {
             var best = reasonResults[0], weakest = reasonResults.length > 1 ? reasonResults[reasonResults.length - 1] : null;
-            findings.push('El mayor retorno se observó para el motivo ' + best.label + ': ' + best.responded + ' de ' + best.total +
-                ' (' + pctText(best.responded, best.total) + ').' + (weakest ? ' El menor se observó para el motivo ' + weakest.label + ': ' +
+            findings.push(tr('tf_static_phrase_17') + best.label + ': ' + best.responded + ' de ' + best.total +
+                ' (' + pctText(best.responded, best.total) + ').' + (weakest ? tr('tf_static_phrase_18') + weakest.label + ': ' +
                     weakest.responded + ' de ' + weakest.total + ' (' + pctText(weakest.responded, weakest.total) + ').' : ''));
         }
         var improved = engagement.improved.concat(grade.improved);
         var issuedAt = Store.formatDateTime(new Date(), {dateStyle: 'long', timeStyle: 'short'});
-        var period = filters.from || filters.to ? (filters.from ? Store.formatDate(new Date(filters.from + 'T00:00:00'), {}) : 'inicio') +
-            ' a ' + (filters.to ? Store.formatDate(new Date(filters.to + 'T00:00:00'), {}) : 'hoy') : 'Todo el periodo disponible';
+        var period = filters.from || filters.to ? (filters.from ? Store.formatDate(new Date(filters.from + 'T00:00:00'), {}) : tr('tf_static_word_61')) +
+            ' a ' + (filters.to ? Store.formatDate(new Date(filters.to + 'T00:00:00'), {}) : tr('tf_static_word_62')) : tr('tf_static_phrase_19');
         var interventionRows = rows.slice().sort(function(a, b) { return b.captured - a.captured; }).map(function(row) {
-            var status = !row.response ? 'Sin respuesta' : row.reached === true ? 'Objetivo alcanzado' : 'En seguimiento';
-            return '<tr><td>' + esc(formatDateTime(row.captured)) + '</td><td>' + esc(row.raw.student_name || row.raw.student_email || 'Sin identificar') +
+            var status = !row.response ? tr('tf_static_phrase_20') : row.reached === true ? tr('tf_static_phrase_21') : tr('tf_static_phrase_22');
+            return '<tr><td>' + esc(formatDateTime(row.captured)) + '</td><td>' + esc(row.raw.student_name || row.raw.student_email || tr('tf_static_phrase_23')) +
                 '</td><td>' + esc(REASON_META[row.reason].label()) + '</td><td>' + esc(row.raw.teacher_name || row.raw.teachername || row.raw.sender_name || '—') +
-                '</td><td>' + esc(status) + '</td><td>' + esc(row.firstResponse ? duration(row.firstResponse - row.captured) : 'Sin respuesta') + '</td></tr>';
+                '</td><td>' + esc(status) + '</td><td>' + esc(row.firstResponse ? duration(row.firstResponse - row.captured) : tr('tf_static_phrase_20')) + '</td></tr>';
         }).join('');
         return '<section class="fr-card fr-analytical-summary fr-export-only" data-fr-scope="overview"><header class="fr-export-report-head">' +
-            '<div><small>MWA DASHBOARD · REPORTE ANALÍTICO</small><h1>Reporte de seguimiento y evolución del aprendizaje</h1></div>' +
-            '<dl><div><dt>Fecha de emisión</dt><dd>' + esc(issuedAt) + '</dd></div><div><dt>Periodo analizado</dt><dd>' + esc(period) +
-            '</dd></div><div><dt>Intervenciones analizadas</dt><dd>' + rows.length + '</dd></div><div><dt>Estudiantes en seguimiento</dt><dd>' + total + '</dd></div></dl></header>' +
-            '<div class="fr-analytical-title">' + svg('chart', 20) + '<div><h2>Análisis pedagógico del periodo</h2><p>Resumen de los datos antes y después de las intervenciones.</p></div></div>' +
-            '<div class="fr-analytical-grid"><div><h3>Resultados observados</h3><ul>' + findings.map(function(item) { return '<li>' + esc(item) + '</li>'; }).join('') +
-            '</ul></div><div><h3>Aspectos con mejora</h3><p>' + (improved.length ? 'Se observó una mejora medible en: ' + esc(names(improved)) + '.' :
-                'Aún no hay una mejora medible en los pares comparables de este periodo.') + '</p></div></div>' +
-            '<section class="fr-export-interventions"><h2>Intervenciones incluidas en el reporte</h2><p>Relación cronológica de las acciones del periodo y de las respuestas observadas posteriormente en Moodle.</p>' +
-            '<table><thead><tr><th>Fecha de intervención</th><th>Estudiante</th><th>Motivo</th><th>Responsable</th><th>Situación observada</th><th>Tiempo hasta la respuesta</th></tr></thead><tbody>' +
+            '<div><small>MWA DASHBOARD · REPORTE ANALÍTICO</small><h1>' + esc(tr('tf_static_label_8')) + '</h1></div>' +
+            '<dl><div><dt>' + esc(tr('tf_static_label_9')) + '</dt><dd>' + esc(issuedAt) + '</dd></div><div><dt>' + esc(tr('tf_static_label_10')) + '</dt><dd>' + esc(period) +
+            '</dd></div><div><dt>' + esc(tr('tf_static_label_11')) + '</dt><dd>' + rows.length + '</dd></div><div><dt>' + esc(tr('tf_static_label_12')) + '</dt><dd>' + total + '</dd></div></dl></header>' +
+            '<div class="fr-analytical-title">' + svg('chart', 20) + '<div><h2>' + esc(tr('tf_static_label_13')) + '</h2><p>' + esc(tr('tf_static_label_14')) + '</p></div></div>' +
+            '<div class="fr-analytical-grid"><div><h3>' + esc(tr('tf_static_label_15')) + '</h3><ul>' + findings.map(function(item) { return '<li>' + esc(item) + '</li>'; }).join('') +
+            '</ul></div><div><h3>' + esc(tr('tf_static_label_16')) + '</h3><p>' + (improved.length ? tr('tf_static_phrase_24') + esc(names(improved)) + '.' :
+                tr('tf_static_phrase_25')) + '</p></div></div>' +
+            '<section class="fr-export-interventions"><h2>' + esc(tr('tf_static_label_17')) + '</h2><p>' + esc(tr('tf_static_label_18')) + '</p>' +
+            '<table><thead><tr><th>' + esc(tr('tf_static_label_19')) + '</th><th>' + esc(tr('tf_static_label_5')) + '</th><th>' + esc(tr('tf_static_label_3')) + '</th><th>' + esc(tr('tf_static_label_20')) + '</th><th>' + esc(tr('tf_static_label_21')) + '</th><th>' + esc(tr('tf_static_label_22')) + '</th></tr></thead><tbody>' +
             interventionRows + '</tbody></table></section>' +
-            '<p class="fr-analytical-note">Las variaciones muestran una asociación temporal posterior a las intervenciones y no prueban causalidad. El análisis depende de que haya datos comparables disponibles.</p></section>';
+            '<p class="fr-analytical-note">' + esc(tr('tf_static_label_23')) + '</p></section>';
     }
 
     function deltaCard(label, pairs, suffix, invert, mode, detail) {
@@ -808,7 +808,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
             {label: tr('tf_chart_grade'), color: '#557764', values: pairs.grade},
             {label: tr('tf_chart_approval'), color: '#64758a', values: pairs.approval, approval: true}
         ].filter(function(item) { return item.values.length; });
-        if (!series.length) { return '<div class="fr-no-data">Sem pares snapshot × atual elegíveis para o gráfico.</div>'; }
+        if (!series.length) { return '<div class="fr-no-data">' + esc(tr('tf_static_label_24')) + '</div>'; }
         var timelineDays = {};
         series.forEach(function(item) {
             item.values.forEach(function(value) { timelineDays[localDateKey(value.captured)] = true; });
@@ -1025,7 +1025,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         });
         var hasEvents = access.some(function(item) { return item.count > 0; });
         if (!hasEvents) {
-            return '<div class="fr-no-data">A?n no hay accesos posteriores a las intervenciones seleccionadas.</div>' +
+            return '<div class="fr-no-data">' + esc(tr('tf_static_label_25')) + '</div>' +
                 info('El gráfico comienza en el momento de la intervención y usa únicamente registros reales posteriores de Moodle, hasta el día 15.');
         }
 
@@ -1096,8 +1096,8 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
                     }) ? '✓' : '×';
                 }
                 var progress = progressState(row);
-                var progressHtml = progress === 'integral' ? '<b class="green">Integral</b>' :
-                    progress === 'partial' ? '<b class="amber">Parcial</b>' : '<b class="red">' + tr('int_status_awaiting') + '</b>';
+                var progressHtml = progress === 'integral' ? '<b class="green">' + esc(tr('tf_static_label_26')) + '</b>' :
+                    progress === 'partial' ? '<b class="amber">' + esc(tr('tf_static_label_27')) + '</b>' : '<b class="red">' + tr('int_status_awaiting') + '</b>';
                 return '<tr><td><strong>' + esc(row.raw.student_name) + '</strong></td><td>' + formatDateTime(row.captured) + '</td>' +
                     '<td><span class="fr-reason" style="--fr-color:' + REASON_META[row.reason].color + '">' + svg(REASON_META[row.reason].icon, 15) + ' ' + REASON_META[row.reason].label() + '</span><small>' + esc(row.raw.snapshot_action || '') + '</small></td>' +
                     '<td>' + tr('tf_traj_events_academic').replace('{events}', row.after.length).replace('{academic}', row.academic.length) + '</td>' +
@@ -1132,7 +1132,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
 
         if (!rows.length) {
             html += '<div class="fr-empty"><span>▥</span><h2>' + tr('tf_empty_eligible') + '</h2><p>' + tr('tf_empty_eligible_desc') + '</p></div>';
-            if (ignored) { html += info(ignored + ' intervención(es) anterior(es) al registro histórico se conservaron, pero no se incluyen en las comparaciones antes y después.'); }
+            if (ignored) { html += info(ignored + tr('tf_static_phrase_26')); }
             Store.renderHtml(box, html);
             bind(allRows);
             return;
@@ -1150,12 +1150,12 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
             card(tr('tf_card_synthesis'), donutHtml(groups), 'overview', 'fr-span-7 fr-summary-card') +
             card(tr('tf_card_continuity'), continuityHtml(groups), 'overview continuity', 'fr-span-7 fr-continuity-card') + '</div>';
         html += '<div class="fr-grid fr-grid-bottom">' +
-            card('Actividad del estudiante después de la intervención', interactionHtml(rows, groups), 'overview interaction', 'fr-span-7 fr-interaction-card') +
+            card(tr('tf_static_phrase_27'), interactionHtml(rows, groups), 'overview interaction', 'fr-span-7 fr-interaction-card') +
             card(tr('tf_card_mediation_time'), mediationHtml(rows), 'overview mediation', 'fr-span-7 fr-mediation-card') +
             card(tr('tf_progress_by_strategy'), strategyTable(rows), 'mediation', 'fr-span-8') +
             card(tr('tf_card_journey'), accessJourneyHtml(rows, groups), 'trajectory', 'fr-span-14 fr-journey-card') +
             card(tr('tf_card_trajectory'), trajectoryTable(rows), 'trajectory', 'fr-span-14') + '</div>';
-        if (ignored) { html += info(ignored + ' intervención(es) sin registro histórico se excluyeron de las métricas comparativas.'); }
+        if (ignored) { html += info(ignored + tr('tf_static_phrase_28')); }
         Store.renderHtml(box, html);
         applyTab();
         bind(allRows);
@@ -1213,7 +1213,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
             panel.replaceChildren();
             var title = document.createElement('strong');
             title.textContent = (detail.series || 'Indicador') + ' · ' + (detail.label || '') + ' · ' +
-                (detail.approval ? detail.value + (Number(detail.value) === 1 ? ' estudiante' : ' estudiantes') : 'valor ' + detail.value);
+                (detail.approval ? detail.value + (Number(detail.value) === 1 ? tr('tf_static_phrase_29') : tr('tf_static_phrase_30')) : tr('tf_static_phrase_31') + detail.value);
             var text = document.createElement('span');
             text.textContent = names.length ? (detail.approval ? tr('tf_students_approved') : tr('tf_students_improved')) + ' ' + names.join(', ') :
                 (detail.approval ? tr('tf_no_student_approved') :
@@ -1307,7 +1307,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
             var names = Array.isArray(detail.names) ? detail.names.filter(Boolean) : [];
             panel.replaceChildren();
             var title = document.createElement('strong');
-            title.textContent = detail.label || 'Etapa do funil';
+            title.textContent = detail.label || tr('tf_static_phrase_32');
             var text = document.createElement('span');
             text.textContent = names.length ? names.join(', ') : tr('tf_no_student_here');
             panel.appendChild(title);

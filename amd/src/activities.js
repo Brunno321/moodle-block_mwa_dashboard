@@ -21,7 +21,7 @@
 
 /**
  * Note: This module generates HTML markup directly in JavaScript strings for
- * performance reasons Ã¢â‚¬â€ the dashboard renders large dynamic datasets (student lists,
+ * For performance, the dashboard renders large dynamic datasets (student lists,
  * heatmaps, charts) that require frequent partial updates. All user-supplied data is
  * escaped via the esc() helper before insertion into the DOM.
  * See: https://docs.moodle.org/dev/JavaScript_Modules#HTML_generation
@@ -59,13 +59,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
       function studentName(r) { return norm(r.nomecompleto || r.userfullname || r.fullname || r.name || r.affecteduser || ''); }
       function studentEmail(r) { return norm(r.email || r.useremail || ''); }
       function logTime(r) { return norm(r.hora || r.time || r.date || ''); }
-      function resourceName(r) {
-        if (r._cmid && r.contextodoevento) return norm(r.contextodoevento);
-        var ctx = norm(r.contextodoevento || r.eventcontext || r.context || '');
-        var ev = eventName(r);
-        var name = ctx || ev || 'Outro';
-        return name.replace(/^(quiz|question[aÃƒÂ¡]rio|assignment|tarefa|forum|f[oÃƒÂ³]rum|page|p[aÃƒÂ¡]gina|resource|recurso|file|arquivo|h5p|hvp|conte[uÃƒÂº]do interativo|conte.{0,4}do interativo|interactive content)\s*:\s*/i, '');
-      }
+      function resourceName(r) { var value = norm(r.contextodoevento || r.eventcontext || r.context || r._resource || ''); return Store.classify.genericName(value) ? '' : value; }
       function lowerText(r) {
         return [
           componentName(r),
@@ -75,24 +69,8 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
           norm(r._modtype || '')
         ].join(' ').toLowerCase();
       }
-      function isH5PActivity(r) {
-        if (r._modtype) return Store.classify.moduleType(r) === 'h5pactivity';
-        var text = lowerText(r);
-        return text.indexOf('h5p') >= 0 ||
-               text.indexOf('hvp') >= 0 ||
-               text.indexOf('conteÃƒÂºdo interativo') >= 0 ||
-               text.indexOf('conteÃƒÂ£Ã‚Âºdo interativo') >= 0 ||
-               text.indexOf('conte') >= 0 && text.indexOf('interativo') >= 0 ||
-               text.indexOf('interactive content') >= 0;
-      }
-      function isManagementEvent(r) {
-        if (r._action_code) return ['updated', 'created'].indexOf(r._action_code) >= 0;
-        var ev = eventName(r).toLowerCase();
-        return ev.indexOf('mÃƒÂ³dulo de curso atualizado') >= 0 ||
-               ev.indexOf('mÃƒÂ³dulo de curso criado') >= 0 ||
-               ev.indexOf('course module updated') >= 0 ||
-               ev.indexOf('course module created') >= 0;
-      }
+      function isH5PActivity(r) { return Store.classify.moduleType(r) === 'h5pactivity'; }
+      function isManagementEvent(r) { return r._component_code === 'core' && ['created','updated'].indexOf(Store.classify.actionCode(r)) >= 0; }
       function isCompletionEvent(r) { return Store.classify.isSubmission(r); }
     
       var CURRENT_FILTER = 'all';
@@ -189,60 +167,13 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         'imscp', 'wiki', 'label']);
 
       function getEventType(r) {
-        var comp = r._modtype ? Store.classify.moduleType(r) : componentName(r).toLowerCase();
-        var modtype = Store.classify.moduleType(r);
-        var ev   = eventName(r).toLowerCase();
-        if (modtype === 'label' || comp === 'label' ||
-            comp.indexOf('Ã¡rea de mÃ­dia e texto') >= 0 ||
-            comp.indexOf('area de midia e texto') >= 0 ||
-            comp.indexOf('text and media area') >= 0) {
-          return 'login';
-        }
-    
-        /* Non-module noise is discarded before anything else. */
-        if (r._component_code === 'core' || comp === 'system' || ev === 'user logged in' || ev === 'user logged out' || ev === 'course viewed') {
-          return 'login';
-        }
-
-        /* Post/entry based: the student contributes an item. */
-        if (MOD_FORUM[modtype] || MOD_FORUM[comp] ||
-            comp === 'fÃƒÂ³rum' || comp === 'glossÃƒÂ¡rio' || comp === 'base de dados' || comp === 'quadro')
-          return 'forum';
-
-        /* File/text submission based. */
-        if (MOD_TAREFA[modtype] || MOD_TAREFA[comp] ||
-            comp === 'tarefa' || comp === 'diÃƒÂ¡rio' || comp === 'laboraÃƒÂ³rio de avaliaÃƒÂ§ÃƒÂ£o' ||
-            comp === 'laboratÃƒÂ³rio virtual de programaÃƒÂ§ÃƒÂ£o')
-          return 'tarefa';
-
-        /* H5P has its own bucket, separate from quiz/lesson/SCORM. */
-        if (isH5PActivity(r) && !isManagementEvent(r))
-          return 'h5p';
-        if ((comp.indexOf('h5p') >= 0 || comp.indexOf('hvp') >= 0 ||
-             ev.indexOf('h5p') >= 0 || ev.indexOf('hvp') >= 0) && !isManagementEvent(r))
-          return 'h5p';
-
-        /* Attempt based. */
-        if (MOD_QUIZ[modtype] || MOD_QUIZ[comp] ||
-            comp === 'questionÃƒÂ¡rio' || comp === 'questionario' || comp === 'pacote h5p' ||
-            comp === 'scorm package' || comp === 'liÃƒÂ§ÃƒÂ£o' || comp === 'escolha' ||
-            comp === 'escolha um grupo' || comp === 'jogo' || comp === 'pesquisa' ||
-            comp === 'pesquisa de avaliaÃƒÂ§ÃƒÂ£o' || comp === 'presenÃƒÂ§a' || comp === 'questionÃƒÂ¡rio' ||
-            comp === 'sala de aula - webconf' ||
-            ev.indexOf('xapi') >= 0 || ev.indexOf('attempt') >= 0)
-          return 'quiz';
-
-        /* Consume-only resources. */
-        if (MOD_RESOURCE[modtype] || MOD_RESOURCE[comp] ||
-            comp === 'pÃƒÂ¡gina' || comp === 'livro' || comp === 'arquivo' || comp === 'pasta' || comp === 'rÃƒÂ³tulo')
-          return 'video';
-
-        /* Anything else that is still a real course module (a plugin we do not
-           know about) is shown as a resource rather than silently dropped. */
-        if (modtype || comp) {
-          return 'video';
-        }
-        return 'outro';
+        var mod = Store.classify.moduleType(r);
+        if (mod === 'label' || mod === 'core' || Store.classify.genericName(mod)) return 'login';
+        if (MOD_FORUM[mod]) return 'forum';
+        if (MOD_TAREFA[mod]) return 'tarefa';
+        if (mod === 'h5pactivity') return 'h5p';
+        if (MOD_QUIZ[mod]) return 'quiz';
+        return mod ? 'video' : 'outro';
       }
     
       function isCourseGeneral(name) { return Store.classify.genericName(name); }
@@ -1002,7 +933,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
             + '<summary>'
               + '<span class="act-name-section-title">' + esc(label) + '</span>'
               + '<span class="act-name-count">' + count + '</span>'
-              + '<span class="act-name-action">Ver nomes</span>'
+              + '<span class="act-name-action">' + tr('act_view_names') + '</span>'
             + '</summary>'
             + '<div class="act-tags-wrap">' + tags + '</div>'
           + '</details>';
@@ -1019,7 +950,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
             + '<button type="button" class="act-time-toggle" id="actToggleTime" aria-expanded="false">'
               + '<span class="act-time-title"><svg class="mwa-ui-icon" aria-hidden="true"><use href="#mwa-icon-clock"></use></svg><span>' + tr('act_modal_time_per_student') + '</span></span>'
               + '<span style="font-size:.72rem;color:var(--muted);">' + tr('act_modal_avg') + ': ' + fmtTime(d.avgMs) + '</span>'
-              + '<span class="act-name-action">Ver tempos</span>'
+              + '<span class="act-name-action">' + tr('act_view_times') + '</span>'
             + '</button>'
             + '<div class="act-time-list" id="actTimeList" hidden>'
             + d.timeRanking.map(function (entry) {

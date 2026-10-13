@@ -43,19 +43,30 @@ define(['block_mwa_dashboard/classify'], function(Classify) {
     };
 
     var locale = function() { return config.locale || 'es-MX'; };
+    var dateFormatters = {};
+    var partsFormatter = null;
+    var partsTimezone = '';
     var dateParts = function(date) {
         var result = {};
-        new Intl.DateTimeFormat('en-US', {timeZone: config.timezone || 'America/Merida',
-            year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit',
-            second: '2-digit', hourCycle: 'h23'}).formatToParts(date).forEach(function(part) {
+        var zone = config.timezone || 'America/Merida';
+        if (!partsFormatter || partsTimezone !== zone) {
+            partsTimezone = zone;
+            partsFormatter = new Intl.DateTimeFormat('en-US', {timeZone: zone,
+                year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit',
+                second: '2-digit', hourCycle: 'h23'});
+        }
+        partsFormatter.formatToParts(date).forEach(function(part) {
                 if (part.type !== 'literal') { result[part.type] = Number(part.value); }
             });
         result.weekday = new Date(Date.UTC(result.year, result.month - 1, result.day)).getUTCDay();
         return result;
     };
     var format = function(date, options, defaults) {
-        return new Intl.DateTimeFormat(locale(), Object.assign({}, defaults, options || {},
-            {timeZone: config.timezone || 'America/Merida', hour12: false})).format(date);
+        var settings = Object.assign({}, defaults, options || {},
+            {timeZone: config.timezone || 'America/Merida', hour12: false});
+        var key = locale() + JSON.stringify(settings);
+        if (!dateFormatters[key]) dateFormatters[key] = new Intl.DateTimeFormat(locale(), settings);
+        return dateFormatters[key].format(date);
     };
     var formatDate = function(date, options) { return format(date, options,
         options && (options.dateStyle || options.month || options.weekday) ? {} : {year: 'numeric', month: '2-digit', day: '2-digit'}); };
@@ -102,7 +113,7 @@ define(['block_mwa_dashboard/classify'], function(Classify) {
 
     var callAction = function(method, args) {
         if (!actionCaller) {
-            return Promise.reject(new Error('Dashboard AJAX bridge is not available.'));
+            return Promise.reject(new Error(tr('err_ajax_bridge')));
         }
         var actionArgs = args || {};
         var canRetry = false;
@@ -173,7 +184,7 @@ define(['block_mwa_dashboard/classify'], function(Classify) {
         text.textContent = String(message || '');
         var close = document.createElement('button');
         close.type = 'button';
-        close.setAttribute('aria-label', strings.close || 'Close');
+        close.setAttribute('aria-label', tr('close'));
         var closeIcon = document.createElementNS(svgNs, 'svg');
         closeIcon.setAttribute('class', 'mwa-ui-icon');
         closeIcon.setAttribute('aria-hidden', 'true');

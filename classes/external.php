@@ -43,7 +43,7 @@ class external extends \external_api {
         if ($groupid > 0) {
             $group = groups_get_group($groupid, 'id,courseid', MUST_EXIST);
             if ((int)$group->courseid !== $courseid) {
-                throw new \invalid_parameter_exception('The selected group does not belong to this course.');
+                throw new \invalid_parameter_exception(get_string('err_invalid_group', 'block_mwa_dashboard'));
             }
             if ($mode == SEPARATEGROUPS && !$accessall && !groups_is_member($groupid, $USER->id)) {
                 throw new \required_capability_exception($context, 'moodle/site:accessallgroups', 'nopermissions', '');
@@ -241,7 +241,7 @@ class external extends \external_api {
             'since' => (int)$params['since'],
         ]), DEBUG_DEVELOPER);
         if ((int)$params['courseid'] <= 0) {
-            throw new \invalid_parameter_exception('The courseid parameter must be a valid course id.');
+            throw new \invalid_parameter_exception(get_string('err_invalid_course', 'block_mwa_dashboard'));
         }
         $ctx    = \context_course::instance($params['courseid']);
         self::validate_context($ctx);
@@ -272,7 +272,7 @@ class external extends \external_api {
     public static function get_dashboard_strings(int $courseid): array {
         $params = self::validate_parameters(self::get_dashboard_strings_parameters(), compact('courseid'));
         if ($params['courseid'] <= 0) {
-            throw new \invalid_parameter_exception('The courseid parameter must be a valid course id.');
+            throw new \invalid_parameter_exception(get_string('err_invalid_course', 'block_mwa_dashboard'));
         }
         $context = \context_course::instance($params['courseid']);
         self::validate_context($context);
@@ -312,7 +312,7 @@ class external extends \external_api {
             'courseid' => (int)$params['courseid'], 'groupid' => (int)$params['groupid'],
         ]), DEBUG_DEVELOPER);
         if ((int)$params['courseid'] <= 0) {
-            throw new \invalid_parameter_exception('The courseid parameter must be a valid course id.');
+            throw new \invalid_parameter_exception(get_string('err_invalid_course', 'block_mwa_dashboard'));
         }
         $ctx    = \context_course::instance($params['courseid']);
         self::validate_context($ctx);
@@ -572,7 +572,7 @@ class external extends \external_api {
             'courseid' => (int)$params['courseid'], 'groupid' => (int)$params['groupid'],
         ]), DEBUG_DEVELOPER);
         if ((int)$params['courseid'] <= 0) {
-            throw new \invalid_parameter_exception('The courseid parameter must be a valid course id.');
+            throw new \invalid_parameter_exception(get_string('err_invalid_course', 'block_mwa_dashboard'));
         }
         $ctx    = \context_course::instance($params['courseid']);
         self::validate_context($ctx);

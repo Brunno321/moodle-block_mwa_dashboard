@@ -498,7 +498,7 @@ class api {
         foreach ($excluded as $cmid => $unused) {
             unset($namemap[$cmid]);
         }
-        // Always use the plugin's own table â€” populated by event observers.
+        // Always use the plugin's own table, populated by event observers.
         // Never query logstore_standard_log to avoid slow full-table scans.
         $groupjoin = '';
         $groupfilter = '';

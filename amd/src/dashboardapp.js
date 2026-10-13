@@ -348,7 +348,7 @@ define([
         function gradeEmail(row){var k=Object.keys(row).find(function(x){return lower(x)==='email'||lower(x).includes('email')});return k?norm(row[k]):''}
         function gradeName(row){var f=Object.keys(row).find(function(x){return lower(x).includes('first')||lower(x).includes('nome')});var l=Object.keys(row).find(function(x){return lower(x).includes('last')||lower(x).includes('sobrenome')});return [f?row[f]:'',l?row[l]:''].join(' ').trim()}
         function gradePicture(row){var k=Object.keys(row).find(function(x){var lx=lower(x);return lx==='picture url'||lx==='pictureurl'||lx.includes('profile image')||lx.includes('foto')});return k?norm(row[k]):''}
-        function gradeUserId(row){var k=Object.keys(row).find(function(x){var lx=lower(x);return lx==='user id'||lx==='userid'||lx==='id do usuario'||lx==='id do usuÃƒÆ’Ã‚Â¡rio'});var n=k?parseInt(row[k],10):0;return isNaN(n)?0:n}
+        function gradeUserId(row){var k=Object.keys(row).find(function(x){var lx=lower(x);return lx==='user id'||lx==='userid'||lx==='id do usuario'});var n=k?parseInt(row[k],10):0;return isNaN(n)?0:n}
         function logPicture(log){return norm(log.pictureurl||log.profileimageurl||log.userpictureurl)}
         function isSubmission(log) { return Store.classify.isSubmission(log); }
         function activityName(log){return norm(log.contextodoevento)||norm(log.context)||norm(log._modtype)||null}
@@ -708,7 +708,7 @@ define([
           };
           return map[c] || label;
         }
-        function renderChart(){var SKIP={System:1,Login:1,system:1,login:1,outro:1,Outro:1};var counts={};state.logs.forEach(function(l){var c=componentName(l);if(SKIP[c])return;counts[c]=(counts[c]||0)+1});var labels=Object.keys(counts);var displayLabels=labels.map(chartModuleLabel);var data=labels.map(function(k){return counts[k]});var ctx=$('eventChart');if(!ctx||!Chart)return; if(eventChart)eventChart.destroy();eventChart=new Chart(ctx,{type:'doughnut',data:{labels:displayLabels,datasets:[{data:data,backgroundColor:COLORS,borderWidth:0,hoverOffset:4}]},options:{cutout:'62%',onClick:function(evt,elements){if(!elements||!elements.length)return;goToChartBucket(labels[elements[0].index]);},onHover:function(evt,elements){if(evt&&evt.native&&evt.native.target)evt.native.target.style.cursor=(elements&&elements.length)?'pointer':'default';},plugins:{legend:{position:'bottom',onClick:function(evt,legendItem){if(!legendItem||typeof legendItem.index!=='number')return;goToChartBucket(labels[legendItem.index]);},labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,boxHeight:8,padding:14,color:'#66708a',font:{size:12}}}},maintainAspectRatio:false}})}
+        function renderChart(){var SKIP={System:1,Login:1,system:1,login:1,outro:1,Outro:1};var counts={};state.logs.forEach(function(l){var c=Store.classify.moduleType(l);if(c==='core'||SKIP[c])return;counts[c]=(counts[c]||0)+1});var labels=Object.keys(counts);var displayLabels=labels.map(chartModuleLabel);var data=labels.map(function(k){return counts[k]});var ctx=$('eventChart');if(!ctx||!Chart)return; if(eventChart)eventChart.destroy();eventChart=new Chart(ctx,{type:'doughnut',data:{labels:displayLabels,datasets:[{data:data,backgroundColor:COLORS,borderWidth:0,hoverOffset:4}]},options:{cutout:'62%',onClick:function(evt,elements){if(!elements||!elements.length)return;goToChartBucket(labels[elements[0].index]);},onHover:function(evt,elements){if(evt&&evt.native&&evt.native.target)evt.native.target.style.cursor=(elements&&elements.length)?'pointer':'default';},plugins:{legend:{position:'bottom',onClick:function(evt,legendItem){if(!legendItem||typeof legendItem.index!=='number')return;goToChartBucket(labels[legendItem.index]);},labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,boxHeight:8,padding:14,color:'#66708a',font:{size:12}}}},maintainAspectRatio:false}})}
         function badge(risk){var c=risk==='High'?'low':risk==='Medium'?'medium':'high';return '<span class="badge '+c+'">'+(risk==='High'?tr('risk_high', 'High risk'):risk==='Medium'?tr('risk_medium', 'Medium risk'):tr('risk_low', 'Low risk'))+'</span>'}
         function renderTables(){var list=state.students;var q=lower($('search').value);if(q){list=list.filter(function(s){return lower(s.name).includes(q)||lower(s.email).includes(q)})}var st=$('studentsTable');if(st)Store.renderHtml(st, '<thead><tr><th>'+tr('student','Student')+'</th><th>'+tr('email','Email')+'</th><th>'+tr('interactions', 'interactions')+'</th><th>'+tr('coverage')+'</th><th>'+tr('grade','Grade')+'</th><th>'+tr('score','Score')+'</th><th>'+tr('risk','Risk')+'</th></tr></thead><tbody>'+list.map(function(s){return '<tr><td>'+esc(s.name)+'</td><td>'+esc(s.email)+'</td><td>'+s.interactions+'</td><td>'+s.coverage+'%</td><td>'+(s.grade===null?'-':s.grade)+'</td><td>'+s.score+'%</td><td>'+badge(s.risk)+'</td></tr>'}).join('')+'</tbody>');var at=$('activitiesTable');if(at)Store.renderHtml(at, '<thead><tr><th>'+tr('activity','Activity')+'</th><th>'+tr('type','Type')+'</th><th>'+tr('accesses','Accesses')+'</th><th>'+tr('unique_students','Unique students')+'</th></tr></thead><tbody>'+state.activities.map(function(a){return '<tr><td>'+esc(a.name)+'</td><td>'+esc(a.type)+'</td><td>'+a.accesses+'</td><td>'+a.unique+'</td></tr>'}).join('')+'</tbody>');renderGradesTable()}
         function renderGradesTable(){var gt=$('gradesTable');if(!gt)return;if(!state.grades.length){Store.renderHtml(gt, '<tbody><tr><td class="empty">'+tr('no_grade_data_available','No grade data available.')+'</td></tr></tbody>');return}var keys=Object.keys(state.grades[0]).slice(0,12);Store.renderHtml(gt, '<thead><tr>'+keys.map(function(k){return '<th>'+esc(k)+'</th>'}).join('')+'</tr></thead><tbody>'+state.grades.map(function(r){return '<tr>'+keys.map(function(k){return '<td>'+esc(r[k])+'</td>'}).join('')+'</tr>'}).join('')+'</tbody>')}
@@ -721,6 +721,7 @@ define([
           return (state.students || []).filter(function(s) { return norm(s.name) === key; })[0] || null;
         }
         function hmResourceName(l) {
+          if (l && l._cmid && l.contextodoevento) return String(l.contextodoevento);
           var raw = l && (l.contextodoevento || l.eventcontext || l.context || l.target || l.nomedoevento || '');
           raw = String(raw || '').replace(/\s+/g, ' ').trim();
           var parts = raw.split(':');
@@ -730,21 +731,7 @@ define([
           }
           return raw || tr('unknown_activity');
         }
-        function hmIsGenericResourceName(name, l) {
-          if (l && l._action_code) return !l._cmid;
-          var text = String(name || '').toLowerCase();
-          var ev = String((l && l.nomedoevento) || '').toLowerCase();
-          return !text ||
-            text === 'course module viewed' ||
-            text === 'mÃƒÂ³dulo do curso visualizado' ||
-            text === 'modulo do curso visualizado' ||
-            text === 'submission graded' ||
-            text === 'submissÃƒÂ£o avaliada' ||
-            text === 'submissao avaliada' ||
-            ev === 'course module viewed' ||
-            ev === 'mÃƒÂ³dulo do curso visualizado' ||
-            ev === 'modulo do curso visualizado';
-        }
+        function hmIsGenericResourceName(name, l) { if (l && l._action_code) return !l._cmid; return Store.classify.genericName(name) || Store.classify.genericName(l && l.nomedoevento); }
         function hmResolvedResourceName(l, list) {
           var name = hmResourceName(l);
           if (!hmIsGenericResourceName(name, l)) return name;
@@ -777,7 +764,7 @@ define([
           var wantedMod = lower(modType);
           if (!targetLower || !links.length) return null;
           function cleanName(v) {
-            return lower(String(v || '').replace(/^(conteudo interativo|conteÃƒÂºdo interativo|h5p|hvp|quiz|questionario|questionÃƒÂ¡rio|forum|fÃƒÂ³rum|tarefa|assign|pagina|pÃƒÂ¡gina|page)\s*:\s*/i, '').trim());
+            return lower(String(v || '').trim());
           }
           var targetClean = cleanName(target);
           var best = null;
@@ -1230,7 +1217,7 @@ define([
               return '<button type="button" class="hm-chip" data-hm-profile="' + esc(s.name) + '" title="' + esc(s.name) + '">' + esc(firstName(s.name)) + '</button>';
             }).join('') : '<span class="hm-muted">' + tr('hm_detail_empty') + '</span>';
             var studentHtml = students.length
-              ? '<details class="hm-name-section"><summary><span>' + tr('hm_detail_students') + '</span><strong>' + students.length + '</strong><em>Ver nomes</em></summary><div class="hm-chip-row">' + studentChips + '</div></details>'
+              ? '<details class="hm-name-section"><summary><span>' + tr('hm_detail_students') + '</span><strong>' + students.length + '</strong><em>' + tr('act_view_names') + '</em></summary><div class="hm-chip-row">' + studentChips + '</div></details>'
               : '<span class="hm-muted">' + tr('hm_detail_empty') + '</span>';
             var resourceHtml = resources.length ? resources.map(function(r) {
               var label = esc(r.name);

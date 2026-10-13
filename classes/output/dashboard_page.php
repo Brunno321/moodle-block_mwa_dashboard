@@ -112,7 +112,7 @@ class dashboard_page implements renderable, templatable {
             'timezone' => \block_mwa_dashboard\api::display_timezone(),
             'locale' => \block_mwa_dashboard\api::display_locale(),
             ],
-            'strings' => [],
+            'strings' => $this->get_strings(),
         ];
     }
 
@@ -273,7 +273,7 @@ class dashboard_page implements renderable, templatable {
             if ($value !== '' && strpos($value, '[[') === false) {
                 $strings[$key] = $value;
             } else {
-                $strings[$key] = ucfirst(str_replace('_', ' ', $key));
+                $strings[$key] = $key;
             }
         }
         return $strings;
@@ -287,6 +287,8 @@ class dashboard_page implements renderable, templatable {
     protected function string_keys(): array {
         return [
             'pl_tag_night', 'pl_tag_afternoon', 'pl_tag_daytime',
+            'act_view_names', 'act_view_times', 'err_invalid_group', 'err_invalid_course', 'err_data_load', 'err_bootstrap', 'int_header_data', 'int_header_student', 'int_header_motivo', 'int_header_professor', 'int_header_status', 'int_header_acompanhamento',
+            'tf_static_label_1', 'tf_static_label_2', 'tf_static_label_3', 'tf_static_label_4', 'tf_static_label_5', 'tf_static_label_6', 'tf_static_label_7', 'tf_static_label_8', 'tf_static_label_9', 'tf_static_label_10', 'tf_static_label_11', 'tf_static_label_12', 'tf_static_label_13', 'tf_static_label_14', 'tf_static_label_15', 'tf_static_label_16', 'tf_static_label_17', 'tf_static_label_18', 'tf_static_label_19', 'tf_static_label_20', 'tf_static_label_21', 'tf_static_label_22', 'tf_static_label_23', 'tf_static_label_24', 'tf_static_label_25', 'tf_static_label_26', 'tf_static_label_27', 'tf_static_phrase_1', 'tf_static_phrase_2', 'tf_static_phrase_3', 'tf_static_phrase_4', 'tf_static_phrase_5', 'tf_static_phrase_6', 'tf_static_phrase_7', 'tf_static_phrase_8', 'tf_static_phrase_9', 'tf_static_phrase_10', 'tf_static_phrase_11', 'tf_static_phrase_12', 'tf_static_phrase_13', 'tf_static_phrase_14', 'tf_static_phrase_15', 'tf_static_phrase_16', 'tf_static_phrase_17', 'tf_static_phrase_18', 'tf_static_phrase_19', 'tf_static_phrase_20', 'tf_static_phrase_21', 'tf_static_phrase_22', 'tf_static_phrase_23', 'tf_static_phrase_24', 'tf_static_phrase_25', 'tf_static_phrase_26', 'tf_static_phrase_27', 'tf_static_phrase_28', 'tf_static_phrase_29', 'tf_static_phrase_30', 'tf_static_phrase_31', 'tf_static_phrase_32', 'tf_static_word_59', 'tf_static_word_60', 'tf_static_word_61', 'tf_static_word_62',
             'loading',
             'msg_bulk_skipped_no_pending',
             'msg_no_recipients_with_pending_items',

@@ -45,7 +45,7 @@ define([
     
     var deliverError = function(err) {
         var dashboard = Store.getModule('MWADashboard');
-        var message = (err && err.message) ? err.message : String(err || 'Data load failed');
+        var message = (err && err.message) ? err.message : String(err || Store.tr('err_data_load'));
         if (dashboard && typeof dashboard.receiveError === 'function') {
             dashboard.receiveError(message);
         }
@@ -140,7 +140,7 @@ define([
                 try {
                     strings = JSON.parse(result.strings || '{}');
                 } catch (error) {
-                    console.error('[MWA Dashboard] Could not parse localized strings:', error);
+                    throw error;
                 }
                 config.courseid = courseid;
                 config.groupid = groupid;
@@ -150,11 +150,14 @@ define([
                 config.reasonaliases = JSON.parse(result.reasonaliases || '{}');
                 Store.configure(config, strings, callAction);
                 DashboardApp.init(config);
+                return true;
             })
             .catch(function(error) {
                 console.error('[MWA Dashboard] String/config bootstrap failed:', error);
-                Store.configure(config, params.strings || {}, callAction);
+                Store.configure(config, params.strings, callAction);
                 DashboardApp.init(config);
+                deliverError(Store.tr('err_bootstrap'));
+                return false;
             });
 
         var refreshDashboardData = function(forceFresh) {
@@ -178,8 +181,8 @@ define([
             });
         }
 
-        bootstrap.then(function() {
-            refreshDashboardData();
+        bootstrap.then(function(ready) {
+            if (ready) refreshDashboardData();
         });
 
         

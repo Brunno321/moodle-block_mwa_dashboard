@@ -116,7 +116,7 @@ $dashboard = new dashboard_page($courseid);
 $dashboard->require_assets($PAGE);
 
 $PAGE->requires->js_call_amd('block_mwa_dashboard/dashboard', 'init', [
-    ['courseid' => $courseid],
+    $dashboard->export_for_amd(),
 ]);
 
 $renderer = $PAGE->get_renderer('block_mwa_dashboard');

@@ -559,8 +559,6 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates'], function(Store,
         var map = {
           'Baixo engajamento':  'msg_reason_low_eng',
           'Risco de evasão':     'msg_reason_risk',
-          'Risco de evasÃ£o':    'msg_reason_risk',
-          'Risco de evasÃƒÂ£o':   'msg_reason_risk',
           '7+ dias sem acesso': 'msg_reason_inactive',
           'Tarefa pendente':    'msg_reason_task',
           'Reengajamento':      'msg_reason_reeng',
@@ -917,7 +915,7 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates'], function(Store,
           return [
             fmtDate(d.timesent).slice(0,10),
             d.student_name || '',
-            (function(r){var m={'Baixo engajamento':'msg_reason_low_eng','Risco de evasão':'msg_reason_risk','Risco de evasÃ£o':'msg_reason_risk','Risco de evasÃƒÂ£o':'msg_reason_risk','7+ dias sem acesso':'msg_reason_inactive','Tarefa pendente':'msg_reason_task','Reengajamento':'msg_reason_reeng','Parabenizar':'msg_reason_praise','Outro':'msg_reason_other'};return m[r]?tr(m[r]):r||'';})(d.intervention_reason||''),
+            translateReason(d.intervention_reason || ''),
             d.teacher_name || '',
             effectLabel,
             d.send_type || 'moodle',
@@ -1371,14 +1369,14 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates'], function(Store,
         var tableHtml = filteredData.length
           ? '<table class="int2-table">'
             + '<thead><tr class="int2-thead-row">'
-            + '<th class="int2-th">DATA</th>'
-            + '<th class="int2-th">STUDENT</th>'
-            + '<th class="int2-th">MOTIVO</th>'
+            + '<th class="int2-th">' + esc(tr('int_header_data')) + '</th>'
+            + '<th class="int2-th">' + esc(tr('int_header_student')) + '</th>'
+            + '<th class="int2-th">' + esc(tr('int_header_motivo')) + '</th>'
             + '<th class="int2-th">SITUA\u00c7\u00c3O IDENTIFICADA</th>'
             + '<th class="int2-th">INTERVEN\u00c7\u00c3O REALIZADA</th>'
-            + '<th class="int2-th">PROFESSOR</th>'
-            + '<th class="int2-th">STATUS</th>'
-            + '<th class="int2-th">ACOMPANHAMENTO</th>'
+            + '<th class="int2-th">' + esc(tr('int_header_professor')) + '</th>'
+            + '<th class="int2-th">' + esc(tr('int_header_status')) + '</th>'
+            + '<th class="int2-th">' + esc(tr('int_header_acompanhamento')) + '</th>'
             + '<th class="int2-th"></th>'
             + '</tr></thead>'
             + '<tbody>' + tableRows + '</tbody>'
