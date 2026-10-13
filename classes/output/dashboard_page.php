@@ -282,6 +282,7 @@ class dashboard_page implements renderable, templatable {
      */
     protected function string_keys(): array {
         return [
+            'pl_tag_night', 'pl_tag_afternoon', 'pl_tag_daytime',
             'loading',
             'msg_bulk_skipped_no_pending',
             'msg_no_recipients_with_pending_items',

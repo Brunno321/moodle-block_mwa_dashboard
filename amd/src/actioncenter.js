@@ -40,11 +40,7 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates',
 
     function ctx(){ return window.MWADashboard || {}; }
     function $(id){ return (ctx().$ || function(x){return document.getElementById(x);})(id); }
-    function tr(key, fallback){
-      var f = ctx().tr || function(k){ return k; };
-      var value = f(key, key);
-      return value === key && fallback ? fallback : value;
-    }
+    var tr = Store.tr;
     function esc(v){ var f = ctx().esc || function(x){return String(x===undefined||x===null?'':x).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]});}; return f(v); }
     function norm(v){ var f = ctx().norm || function(x){return (x===undefined||x===null)?'':String(x).trim();}; return f(v); }
     function lower(v){ var f = ctx().lower || function(x){return norm(x).toLowerCase();}; return f(v); }

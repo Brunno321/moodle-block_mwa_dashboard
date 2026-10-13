@@ -31,6 +31,17 @@ define([], function() {
     var legacy = {};
     var facade = null;
 
+    var missingStrings = {};
+    var tr = function(key) {
+        var value = Object.prototype.hasOwnProperty.call(strings, key) ? strings[key] : '';
+        if (typeof value === 'string' && value && !/^\[\[.*\]\]$/.test(value)) { return value; }
+        if (!missingStrings[key]) {
+            missingStrings[key] = true;
+            console.warn('[block_mwa_dashboard] Missing language string:', key);
+        }
+        return key;
+    };
+
     var configure = function(newConfig, newStrings, caller) {
         config = newConfig || {};
         strings = newStrings || {};
@@ -344,6 +355,7 @@ define([], function() {
     };
 
     return {
+        tr: tr,
         configure: configure,
         register: register,
         getModule: getModule,

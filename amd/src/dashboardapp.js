@@ -58,11 +58,7 @@ define([
 
     var init = function(config) {
         var STRINGS = Store.getStrings();
-        function tr(key, fallback){
-          var value = Object.prototype.hasOwnProperty.call(STRINGS, key) ? STRINGS[key] : '';
-          if (typeof value === 'string' && value && !/^\[\[.*\]\]$/.test(value)) { return value; }
-          return (fallback !== undefined && fallback !== null) ? fallback : key;
-        }
+        var tr = Store.tr;
         function applyTranslations(){
           document.querySelectorAll('[data-i18n]').forEach(function(el){
             var key = el.getAttribute('data-i18n');

@@ -37,7 +37,7 @@ $string['privacy:metadata:course:enabled'] = 'Whether event capture is enabled f
 $string['privacy:metadata:course:excludedcmids'] = 'Course activities and resources intentionally excluded from dashboard indicators.';
 $string['privacy:metadata:course:timemodified'] = 'The date and time when the capture setting was last changed.';
 
-$string['pluginname'] = 'MWA Analytics Dashboard';
+$string['pluginname'] = "UADY Data Analytics Dashboard";
 $string['mwa_dashboard:view'] = 'View analytics dashboard';
 $string['mwa_dashboard:managecapture'] = 'Enable or disable dashboard data collection';
 $string['act_stop_tracking'] = 'Do not track';
@@ -1138,7 +1138,7 @@ $string['privacy:metadata:messages:teacher_note']        = 'Private note recorde
 $string['privacy:metadata:messages:teacher_note_updated'] = 'Unix timestamp of the last update to the teacher private note.';
 
 // ── I18N001 fixes ──
-$string['brand_name']                   = 'Moodle';
+$string['brand_name']                   = "UADY Data Analytics Dashboard";
 $string['int_time_lt1min']              = '< 1min';
 $string['int_time_min']                 = 'min';
 $string['int_time_hour']                = 'hour';
@@ -1760,3 +1760,7 @@ $string['capture_inactive_notice'] = 'Tracking for this course is inactive. Ask 
 $string['pl_tag_night'] = 'Night';
 $string['pl_tag_afternoon'] = 'Afternoon';
 $string['pl_tag_daytime'] = 'Daytime';
+$string['capture_status_active'] = 'Active';
+$string['capture_status_inactive'] = 'Inactive';
+
+$string['savechanges'] = 'Save changes';

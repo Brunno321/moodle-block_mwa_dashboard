@@ -35,12 +35,7 @@ define(['block_mwa_dashboard/dashboardstore', 'core/templates'], function(Store,
     (function () {
       'use strict';
 
-      function tr(key) {
-        var S = Store.getStrings() || {};
-        var v = Object.prototype.hasOwnProperty.call(S, key) ? S[key] : '';
-        if (typeof v === 'string' && v && !/^\[\[.*\]\]$/.test(v)) return v;
-        return key;
-      }
+      var tr = Store.tr;
       function icon(name) {
         return '<svg class="mwa-ui-icon" aria-hidden="true"><use href="#mwa-icon-' + name + '"></use></svg>';
       }

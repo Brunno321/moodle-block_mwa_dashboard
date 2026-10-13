@@ -45,12 +45,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
         return '<svg class="mwa-ui-icon" aria-hidden="true"><use href="#mwa-icon-' + esc(name) + '"></use></svg>';
       }
       
-      function tr(key, fallback) {
-        var S = Store.getStrings() || {};
-        var v = Object.prototype.hasOwnProperty.call(S, key) ? S[key] : '';
-        if (typeof v === 'string' && v && !/^\[\[.*\]\]$/.test(v)) return v;
-        return fallback || key;
-      }
+      var tr = Store.tr;
       function esc(v) {
         return String(v === undefined || v === null ? '' : v)
           .replace(/[&<>"']/g, function (c) {

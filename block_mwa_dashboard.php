@@ -173,10 +173,10 @@ class block_mwa_dashboard extends block_base {
                 ? 'right:3px;left:auto;'
                 : 'left:3px;right:auto;';
             $switchtext = $captureenabled
-                ? html_writer::tag('span', 'ON', [
+                ? html_writer::tag('span', get_string('capture_status_active', 'block_mwa_dashboard'), [
                     'style' => 'position:absolute;left:11px;top:50%;transform:translateY(-50%);',
                 ])
-                : html_writer::tag('span', 'OFF', [
+                : html_writer::tag('span', get_string('capture_status_inactive', 'block_mwa_dashboard'), [
                     'style' => 'position:absolute;right:9px;top:50%;transform:translateY(-50%);',
                 ]);
             $buttonlabel = html_writer::tag('span', get_string('capturedatalabel', 'block_mwa_dashboard'), [

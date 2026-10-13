@@ -44,12 +44,7 @@ define(['block_mwa_dashboard/dashboardstore', 'core/chartjs'], function(Store, C
 
 
     
-      function tr(key) {
-        var S = Store.getStrings() || {};
-        var v = Object.prototype.hasOwnProperty.call(S, key) ? S[key] : '';
-        if (typeof v === 'string' && v && !/^\[\[.*\]\]$/.test(v)) return v;
-        return key;
-      }
+      var tr = Store.tr;
       function esc(v) {
         return String(v === undefined || v === null ? '' : v)
           .replace(/[&<>"']/g, function (c) {

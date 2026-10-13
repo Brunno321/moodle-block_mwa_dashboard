@@ -21,12 +21,7 @@ define(['block_mwa_dashboard/dashboardstore'], function(Store) {
     var DAY = 86400;
     var REASONS = ['never', 'low', 'pending', 'difficult', 'other'];
 
-    function tr(key) {
-        var S = Store.getStrings() || {};
-        var v = Object.prototype.hasOwnProperty.call(S, key) ? S[key] : '';
-        if (typeof v === 'string' && v && !/^\[\[.*\]\]$/.test(v)) { return v; }
-        return key;
-    }
+    var tr = Store.tr;
 
     var REASON_META = {
         never: {label: function() { return tr('int_motivo_never'); }, icon: 'ban', color: '#9b5e5e'},

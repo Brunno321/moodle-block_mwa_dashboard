@@ -16,7 +16,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Panel de analítica MWA';
+$string['pluginname'] = "Dashboard de análisis de datos UADY";
 $string['group_filter_label'] = 'Grupo';
 $string['group_all'] = 'Todos los grupos';
 $string['loading_title'] = 'Cargando datos del curso...';
@@ -143,7 +143,7 @@ $string['opportunity'] = 'Oportunidad';
 $string['urgent_desc'] = 'Estudiantes con una entrega vencida, siete días sin participar o una calificación parcial inferior a 60 %.';
 $string['attention_desc'] = 'Actividades o recursos con poco alcance o pocas entregas. Conviene revisar las instrucciones, la fecha límite o su ubicación.';
 $string['opportunity_desc'] = 'Considere al estudiantado con alta participación como referente para el apoyo entre pares y para obtener información sobre el curso.';
-$string['no_critical_students'] = 'Ningón estudiante cumple actualmente los criterios de seguimiento.';
+$string['no_critical_students'] = 'Ningún estudiante cumple actualmente los criterios de seguimiento.';
 $string['good_engagement'] = 'Todas las actividades tienen buena participación.';
 $string['no_high_engagement'] = 'Aún no se ha identificado un grupo con alta participación.';
 $string['analyse_activities'] = 'Analizar actividades y recursos';
@@ -1102,7 +1102,7 @@ $string['privacy:metadata:messages:moodle_msgid'] = 'Identificador interno del m
 $string['privacy:metadata:messages:send_type'] = 'Medio utilizado para entregar el mensaje: mensajería interna de Moodle o correo electrónico.';
 $string['privacy:metadata:messages:teacher_note'] = 'Nota privada que el docente registró sobre la intervención.';
 $string['privacy:metadata:messages:teacher_note_updated'] = 'Marca de tiempo Unix de la última actualización de la nota privada del docente.';
-$string['brand_name'] = 'Moodle';
+$string['brand_name'] = "Dashboard de análisis de datos UADY";
 $string['int_time_lt1min'] = '< 1 min';
 $string['int_time_min'] = 'min';
 $string['int_time_hour'] = 'hora';
@@ -1179,8 +1179,8 @@ $string['tf_empty_eligible'] = 'No hay datos elegibles';
 $string['tf_empty_eligible_desc'] = 'El informe requiere intervenciones con un registro histórico en el periodo seleccionado.';
 $string['tf_students_approved'] = 'Estudiantes aprobados:';
 $string['tf_students_improved'] = 'Estudiantes que mejoraron:';
-$string['tf_no_student_approved'] = 'Ningón estudiante aprobó en este punto.';
-$string['tf_no_student_improved'] = 'Ningón estudiante mostró una mejora en esta serie para el punto seleccionado.';
+$string['tf_no_student_approved'] = 'Ningún estudiante aprobó en este punto.';
+$string['tf_no_student_improved'] = 'Ningún estudiante mostró una mejora en esta serie para el punto seleccionado.';
 $string['tf_no_student_counted'] = 'No se contabilizaron estudiantes para este indicador.';
 $string['tf_kpi_students_tracked_tip'] = 'Estudiantes distintos que recibieron una intervención con un registro histórico en el periodo seleccionado.';
 $string['tf_kpi_responded_tip'] = 'Estudiantes con evidencia de respuesta después de la intervención.';
@@ -1643,3 +1643,6 @@ $string['return_to_course'] = 'Volver al curso';
 $string['pl_tag_night'] = 'Noche';
 $string['pl_tag_afternoon'] = 'Tarde';
 $string['pl_tag_daytime'] = 'Durante el día';
+
+$string['capture_status_active'] = 'Activo';
+$string['capture_status_inactive'] = 'Inactivo';
