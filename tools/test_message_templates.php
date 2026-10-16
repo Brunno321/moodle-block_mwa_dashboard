@@ -1,4 +1,7 @@
 <?php
+if (PHP_SAPI !== 'cli') {
+    exit;
+}
 // Language-only regression: no Moodle bootstrap, database, cache or message sending.
 define('MOODLE_INTERNAL', true);
 $root = dirname(__DIR__);
