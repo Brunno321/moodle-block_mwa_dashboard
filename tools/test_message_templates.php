@@ -22,9 +22,9 @@ foreach (['es', 'es_mx', 'pt_br'] as $language) {
         foreach (['subject', 'body'] as $part) {
             $key = 'tpl_' . $kind . '_' . $part;
             $value = $catalogs[$language][$key] ?? '';
-            $valid = $value !== '' && $value === $catalogs['es'][$key];
+            $valid = $value !== '' && ($language === 'pt_br' ? $value !== $catalogs['es'][$key] && $value !== $catalogs['en'][$key] : $value === $catalogs['es'][$key]);
             if ($part === 'body') {
-                $valid = $valid && strpos($value, 'Hola {nome},') === 0 &&
+                $valid = $valid && strpos($value, $language === 'pt_br' ? 'Olá {nome},' : 'Hola {nome},') === 0 &&
                     strpos($value, "\n\n") !== false && strpos($value, '\n') === false;
                 $valid = $valid && $clientstrings[$key] === $value &&
                     strpos($clientstrings[$key], "\n\n") !== false;
